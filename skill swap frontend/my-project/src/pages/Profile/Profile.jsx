@@ -55,7 +55,7 @@ const Profile = () => {
                 <div id="right" className='flex pt-20 pl-10 flex-col ' >
                     <div className="flex items-center gap-2">
                                 <Button variant="secondary">Update Profile ✎</Button>
-<div>hii</div>
+
                             </div>
                 </div>
 
