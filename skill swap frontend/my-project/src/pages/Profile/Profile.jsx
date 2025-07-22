@@ -2,8 +2,9 @@ import React from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { Card } from 'react-bootstrap';
 import Header from '../../components/Navbar/Navbar';
-import { Mail, User ,SquareArrowUpRight } from 'lucide-react';
+import { Mail, User, SquareArrowUpRight } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion';
 
 const Profile = () => {
     const { user, loading } = useAuth();
@@ -49,18 +50,60 @@ const Profile = () => {
                             ))}
                         </div>
                     </div>
+                    <div className='text-2xl font-bold'>
+                        <div>
+
+                            <Accordion defaultActiveKey="0">
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Education</Accordion.Header>
+                                    <Accordion.Body>
+                                        {
+                                            user.education.map((field, index) => (
+                                                <div className='text-2xl flex flex-col gap-2 ' key={index} >
+                                                    Institute : {field.instituition}
+                                                    <div className='text-sm ' >Degree : {field.degree}</div>
+                                                    <div className='text-sm'> Duration :  {field.startDate} - {field.endDate}</div>
+                                                    <div className='text-sm'> Cgpa :  {field.score} </div>
+                                                    <div className='flex flex-row gap-2 text-md'>CourseWork:
+                                                    {
+                                                        field.learned.map((learn, index) => (
+                                                            < div className='text-sm' key={index}>
+                                                                <Button variant="success" > {learn}
+                                                                </Button> </div>
+                                                        ))
+
+                                                    }
+                                                    </div>
+
+
+                                                </div>
+
+                                            ))
+                                        }
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
+
+
+
+
+                        </div>
+
+
+
+                    </div>
                 </div>
 
 
                 <div id="right" className='flex pt-20 pl-10 flex-col ' >
                     <div className="flex items-center gap-2">
-                                <Button variant="secondary">Update Profile ✎</Button>
+                        <Button variant="secondary">Update Profile ✎</Button>
 
-                            </div>
+                    </div>
                 </div>
 
 
-            </div>
+            </div >
         </>
     )
 }

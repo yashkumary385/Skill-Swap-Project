@@ -2,12 +2,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import axios from "axios"
-import { User, Eye, Mail, Lock } from "lucide-react";
+import { User, Eye, Mail, Lock , ClipboardPenLine} from "lucide-react";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
+
 export const Signup = () => {
     const [form, setForm] = useState({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        skills:[],
+        bio:"",
+        eduaction:[
+            {
+                instituition:"",
+                degree:"",
+                startDate:"",
+                enddate:"",
+                learned:[],
+                score:""
+            }
+        ]
     })
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false)
@@ -24,7 +40,11 @@ export const Signup = () => {
             const res = await axios.post("http://localhost:8000/api/auth/register", {
                 name: form.name,
                 email: form.email,
-                password: form.password
+                password: form.password,
+                bio:form.bio,
+                skills:form.skills
+
+
             })
 
             console.log(res)
@@ -45,6 +65,18 @@ export const Signup = () => {
 
                 <div className="text-2xl font-bold">Signup</div>
                 <div className="flex items-center justify-center"><User className="w-6 h-6 text-gray-600" /></div>
+
+
+   <Tabs
+      defaultActiveKey="Details"
+      transition={false}
+      id="noanim-tab-example"
+      className="mb-3"
+    >
+      <Tab eventKey="home" title="Credentails">
+        Tab content for Home
+        
+
 
                 <form className="flex flex-col items-center justify-center gap-3 w-full" onSubmit={Signup} >
                     <div className="w-full relative">
@@ -80,10 +112,61 @@ export const Signup = () => {
                         />
                         <div className="absolute top-2 right-2" onClick={setVisibility}><Eye /></div>
                     </div>
+                    <div>
+                        <input type="file" name="" id="" />
+                    </div>
                     <Button type="submit" variant="outline-success" className="w-full">
                         Signup
                     </Button>
                 </form>
+      </Tab>
+      <Tab eventKey="Details" title="Details">
+        <form className="flex flex-col items-center justify-center gap-3 w-full">
+               <div className="w-full relative">
+                        <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6" /></div>
+                        <input type="text"
+                            value={form.bio}
+                            onChange={(e) => setForm({ ...form, bio: e.target.value })}
+                            placeholder="Bio"
+                            className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+
+                        />
+                    </div>
+               <div className="w-full relative">
+                        <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6" /></div>
+                        <form onSubmit={handleSkill} >
+                        <input type="text"
+                            value={form.skills}
+                            onChange={(e) => setForm({ ...form, skills: e.target.value })}
+                            placeholder="Skills"
+                            className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+
+                        />
+                        <button type="submit">Add</button>
+                        </form>
+                    </div>
+        </form>
+      </Tab>
+      <Tab eventKey="contact" title="Contact" disabled>
+        Tab content for Contact
+      </Tab>
+    </Tabs>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
 

@@ -23,7 +23,7 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
         if(!errors.isEmpty()){
              return res.status(400).json({ errors: errors.array() });
         }
-    const {name,email,password,bio,skills} = req.body;
+    const {name,email,password,bio,skills,education} = req.body;
     // const image = req.file ? req.file.path :undefined
     const image = req.file ? `upload/${req.file.filename}` : "upload/default.png";
 
@@ -41,7 +41,8 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
         password:hashedPassword,
         bio,
         skills,
-        image:image
+        image:image,
+        education
     })
     const createdUser = await User.findById(user._id).select("-password") // through this we hide the password in the api 
     // an error acn be throw here after chcecking createdYser
