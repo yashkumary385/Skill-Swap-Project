@@ -22,6 +22,7 @@ skills:[
     {
         "type":String,
         required:false
+
     }
 ],
 image:{
@@ -30,7 +31,7 @@ image:{
     
 }
 ,
-education:[
+education:
     {
         instituition:{
             "type":String,
@@ -60,7 +61,7 @@ education:[
 
         
     }
-],
+,
 
     
 
