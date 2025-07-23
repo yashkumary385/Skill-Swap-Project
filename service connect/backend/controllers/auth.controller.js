@@ -23,7 +23,7 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
         if(!errors.isEmpty()){
              return res.status(400).json({ errors: errors.array() });
         }
-    const {name,email,password,bio,skills,education,learned} = req.body;
+    const {name,username,email,password,bio,skills,education,learned} = req.body;
     // const image = req.file ? req.file.path :undefined
     const image = req.file ? `upload/${req.file.filename}` : "upload/default.png";
 
@@ -37,6 +37,7 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
 
     const user = await User.create({
         name,
+        username,
         email,
         password:hashedPassword,
         bio,

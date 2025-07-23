@@ -78,7 +78,7 @@ fetchUser()
 },[token])//token is null or empty for a moment — even if it exists in localStorage.
 return (
 
-    <AuthContext.Provider value={{login , user , setUser , logout ,loading}}>
+    <AuthContext.Provider value={{login , user , setUser , logout ,loading,token}}>
         {children}
         </AuthContext.Provider>
 )

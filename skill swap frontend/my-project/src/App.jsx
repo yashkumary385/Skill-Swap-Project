@@ -5,6 +5,7 @@ import { Signup } from "./pages/Signup/Signup"
 import AboutUs from "./pages/AboutUs/AboutUs";
 import { PrivateRoutes } from "./utils/PrivateRoutes";
 import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -17,6 +18,10 @@ export const router = createBrowserRouter(
         <Route path="/profile" element={<PrivateRoutes>
             <Profile/>
         </PrivateRoutes>}/>
+        <Route path="/editprofile" element={<EditProfile/>}/>
+                {/* <Route path="/editprofile" element={<PrivateRoutes>
+            <EditProfile/>
+        </PrivateRoutes>}/> */}
         
     </>
     )

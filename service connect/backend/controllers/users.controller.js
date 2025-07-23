@@ -19,12 +19,14 @@ import Service from "../models/Service.js";
   
  export const update = async(req,res)=>{
     const userId = req.user.id;
+    console.log("user update route hit")
     // const {email,name} = req.body;
     try {
            if(!userId){
     return res.status(404).json("user id is invalid")
     }
     const updateFields = req.body
+  
   
     const user = await User.findByIdAndUpdate(userId,updateFields,{
         new:true

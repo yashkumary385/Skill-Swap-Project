@@ -5,9 +5,15 @@ import Header from '../../components/Navbar/Navbar';
 import { Mail, User, SquareArrowUpRight } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
+import EditProfile from '../EditProfile/EditProfile';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const { user, loading } = useAuth();
+    const navigate = useNavigate()
+    const navigateTo = ()=>{
+       navigate('/editProfile')
+    }
     return (
         <>
             <Header />
@@ -57,19 +63,14 @@ const Profile = () => {
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Education</Accordion.Header>
                                     <Accordion.Body>
-                                        {
+                                        { 
                                             user.education.map((field, index) => (
                                                 <div className='text-2xl flex flex-col gap-2 ' key={index} >
                                                     Institute : {field.instituition}
                                                     <div className='text-sm ' >Degree : {field.degree}</div>
                                                     <div className='text-sm'> Duration :  {field.startDate} - {field.endDate}</div>
                                                     <div className='text-sm'> Cgpa :  {field.score} </div>
-
-
-
                                                 </div>
-
-
                                             ))
 
 
@@ -106,7 +107,7 @@ const Profile = () => {
 
                 <div id="right" className='flex pt-20 pl-10 flex-col ' >
                     <div className="flex items-center gap-2">
-                        <Button variant="secondary">Update Profile ✎</Button>
+                        <Button variant="secondary" onClick={navigateTo} >Update Profile ✎</Button>
 
                     </div>
                 </div>
