@@ -13,14 +13,13 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 export const Signup = () => {
 
 
-    const [education, SetEducation] = useState([])
-    const [educationForm, SetEducationForm] = useState(
+    const [education, SetEducation] = useState([]) // array state 
+    const [educationForm, SetEducationForm] = useState( // object state will insert into the array later 
         {
             instituition: "",
             degree: "",
             startDate: "",
             endDate: "",
-            learned: [],
             score: ""
         }
     )
@@ -30,7 +29,10 @@ export const Signup = () => {
         password: "",
         skills: [],
         bio: "",
-        education:[]
+        education: [],
+        learned: [],
+        image:""
+
 
     })
     const navigate = useNavigate();
@@ -40,6 +42,7 @@ export const Signup = () => {
         setShowPassword(!showPassword)
     }
     const [skills, setSkills] = useState("")
+    const [learned, setLearned] = useState("")
 
 
     const notify = () => toast.info('3 Skills Only!', {
@@ -66,7 +69,9 @@ export const Signup = () => {
                 password: form.password,
                 bio: form.bio,
                 skills: form.skills,
-                education: form.education
+                education: form.education,
+                learned: form.learned,
+                image: form.image
 
 
             })
@@ -96,21 +101,29 @@ export const Signup = () => {
         setSkills("")
     }
     // i ahve to see from here
-    
+
     const handleEducation = (e) => {
         e.preventDefault();
-        // const updatedEducation = [...education, educationForm];
-        // SetEducation(updatedEducation);
-        SetEducation((prev) => [...prev, educationForm])
-        setForm(prev => ({ ...prev, education: education }));
+        const updatedEducation = [...education, educationForm];
+        SetEducation(updatedEducation);
+        // SetEducation((prev)=>[...education , educationForm ])
+        // SetEducation((prev) => [{...prev, educationForm}])
+        setForm(prev => ({ ...prev, education: updatedEducation }));
         SetEducationForm({
             instituition: "",
             degree: "",
             startDate: "",
             endDate: "",
-            learned: [],
             score: ""
         });
+        console.log(educationForm)
+
+    }
+    const handleLearn = (e) => {
+        e.preventDefault();
+        setForm((prev) => ({ ...prev, learned: [...prev.learned, learned] }))
+        console.log(learned)
+        setLearned("")
 
     }
 
@@ -131,12 +144,12 @@ export const Signup = () => {
                     id="noanim-tab-example"
                     className="mb-3"
                 >
-                    <Tab eventKey="home" title="Credentails">
-                        Tab content for Home
+                    <Tab eventKey="Credentails" title="Credentails">
+                       
+             
 
 
-
-                        <form className="flex flex-col items-center justify-center gap-3 w-full" onSubmit={Signup} >
+                        <form className="flex flex-col items-center justify-center gap-3 w-full"  >
                             <div className="w-full relative">
                                 <div><User className="absolute top-2 left-2 w-6 h-6" /></div>
                                 <input type="text"
@@ -171,11 +184,17 @@ export const Signup = () => {
                                 <div className="absolute top-2 right-2" onClick={setVisibility}><Eye /></div>
                             </div>
                             <div>
-                                <input type="file" name="" id="" />
+                                <input
+                                 type="file"
+                                  placeholder="Select image" 
+                                  className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    accept="image/*"
+
+                                  onChange={(e)=> setForm({...form , image:e.target.files[0]})}
+                                  />
+                                
                             </div>
-                            <Button type="submit" variant="outline-success" className="w-full">
-                                Signup
-                            </Button>
+                           
                         </form>
                     </Tab>
                     <Tab eventKey="Details" title="Details">
@@ -314,9 +333,55 @@ export const Signup = () => {
 
                                 </div>
                             </div>
-                            <Button variant="outline-success" type="submit">Submit</Button>
+
+
+                            <div className="w-full relative ">
+                                <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
+
+                                <div className="flex flex-row gap-3 ">
+                                    <input
+                                        type="text "
+                                        value={learned}
+                                        onChange={(e) => setLearned(e.target.value)}
+
+                                        placeholder="Skills Learned"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+
+                                    />
+                                    <div> <Button variant="outline-success" onClick={handleLearn}>Add</Button></div>
+
+                                </div>
+                                <div className="">
+                                    <ul className="flex flex-row gap-2 pt-2 items-center justify-content">
+                                        {
+                                            form.learned.map((learn, index) => (
+                                                <li key={index}>   <Button variant="outline-success" >{learn}</Button></li>
+                                            ))
+                                        }
+
+
+
+                                    </ul>
+                                </div>
+
+
+                            </div>
+                            {/* { form.education.length === 0  && */}
+                            <Button variant="outline-success" type="submit" className="">Submit</Button>
+                            {/* } */}
+
+
+
+
+
+
+
                         </form>
+                        <Button onClick={Signup} variant="outline-success" className="w-full mt-4">
+                                Signup
+                            </Button>
                     </Tab>
+                     
                 </Tabs>
 
 
@@ -335,7 +400,9 @@ export const Signup = () => {
 
 
             </div>
+            
         </div>
+        
 
 
 

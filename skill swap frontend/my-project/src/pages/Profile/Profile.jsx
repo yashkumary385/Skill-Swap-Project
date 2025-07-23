@@ -64,22 +64,31 @@ const Profile = () => {
                                                     <div className='text-sm ' >Degree : {field.degree}</div>
                                                     <div className='text-sm'> Duration :  {field.startDate} - {field.endDate}</div>
                                                     <div className='text-sm'> Cgpa :  {field.score} </div>
-                                                    <div className='flex flex-row gap-2 text-md'>CourseWork:
-                                                    {
-                                                        field.learned.map((learn, index) => (
-                                                            < div className='text-sm' key={index}>
-                                                                <Button variant="success" > {learn}
-                                                                </Button> </div>
-                                                        ))
 
-                                                    }
-                                                    </div>
 
 
                                                 </div>
 
+
                                             ))
+
+
+
+
                                         }
+
+
+                                        <div className='flex flex-row gap-2 text-md'>CourseWork:
+
+
+                                            <div className="flex flex-wrap gap-3">
+                                                {user.learned.map((learned, index) => (
+                                                    <Button variant="success" key={index}>
+                                                        {learned}
+                                                    </Button>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </Accordion.Body>
                                 </Accordion.Item>
                             </Accordion>
