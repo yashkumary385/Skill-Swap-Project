@@ -2,7 +2,7 @@ import React from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { Card } from 'react-bootstrap';
 import Header from '../../components/Navbar/Navbar';
-import { Mail, User, SquareArrowUpRight } from 'lucide-react';
+import { Mail, User, SquareArrowUpRight , UserCircle } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import EditProfile from '../EditProfile/EditProfile';
@@ -11,8 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const Profile = () => {
     const { user, loading } = useAuth();
     const navigate = useNavigate()
-    const navigateTo = ()=>{
-       navigate('/editProfile')
+    const navigateTo = () => {
+        navigate('/editProfile')
     }
     return (
         <>
@@ -29,20 +29,24 @@ const Profile = () => {
                             />
                         </Card>
 
-                        <div className="flex flex-col justify-center gap-3 text-xl">
+                        <div className="flex flex-col justify-center gap-3 text-xl font-bold">
+                            <div className='flex items-center gap-2'>
+                               <UserCircle/> {user?.username}
+                            </div>
                             <div className="flex items-center gap-2">
                                 <User /> {user.name}
                             </div>
                             <div className="flex items-center gap-2">
                                 <Mail /> {user.email}
                             </div>
+
                         </div>
                     </div>
 
                     {/* Bio Section */}
                     <div className="pt-4">
                         <div className="text-2xl font-bold mb-2">Bio</div>
-                        <div className="text-lg font-light">{user.bio}</div>
+                        <div className="text-lg font-md">{user.bio}</div>
                     </div>
 
                     {/* Skills Section */}
@@ -63,7 +67,7 @@ const Profile = () => {
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Education</Accordion.Header>
                                     <Accordion.Body>
-                                        { 
+                                        {
                                             user.education.map((field, index) => (
                                                 <div className='text-2xl flex flex-col gap-2 ' key={index} >
                                                     Institute : {field.instituition}

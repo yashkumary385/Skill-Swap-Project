@@ -6,7 +6,6 @@ import { User, Eye, Mail, Lock, ClipboardPenLine } from "lucide-react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
@@ -61,6 +60,10 @@ export const Signup = () => {
 
     const Signup = async (e) => {
         e.preventDefault();
+        if(!form.name || !form.email ){
+          toast.warning("Name and Password are required")
+          return 
+        }
         console.log(form)
         try {
             const res = await axios.post("http://localhost:8000/api/auth/register", {
@@ -80,6 +83,7 @@ export const Signup = () => {
             setTimeout(() => {
                 navigate("/login")
             }, 1500)
+            
 
         } catch (error) {
             console.log(error)
@@ -227,20 +231,7 @@ export const Signup = () => {
 
 
                                 {/* } */}
-                                <ToastContainer
-                                    position="top-right"
-                                    autoClose={5000}
-                                    hideProgressBar={false}
-                                    newestOnTop
-                                    closeOnClick
-                                    rtl={false}
-                                    pauseOnFocusLoss
-                                    draggable
-                                    pauseOnHover
-                                    theme="dark"
-                                    transition={Bounce}
-                                />
-
+                              
 
                                 <div className="">
                                     <ul className="flex flex-row gap-2 pt-3 items-center justify-content">
@@ -367,7 +358,7 @@ export const Signup = () => {
 
                             </div>
                             {/* { form.education.length === 0  && */}
-                            <Button variant="outline-success" type="submit" className="">Submit</Button>
+                            <Button variant="outline-success" type="submit" className="">Submit Details</Button>
                             {/* } */}
 
 

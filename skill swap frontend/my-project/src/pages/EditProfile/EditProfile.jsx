@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EditProfile = () => {
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const { user, setUser, token } = useAuth();
   const [form, setForm] = useState({
     name: "",
@@ -25,7 +25,7 @@ const navigate = useNavigate();
   });
 
 
-  const [educationForm, SetEducationForm] = useState(
+  const [educationForm, setEducationForm] = useState( // setting this through input .
     {
       instituition: "",
       degree: "",
@@ -37,7 +37,7 @@ const navigate = useNavigate();
   )
   const [skills, setSkills] = useState("")
   const [learned, setLearned] = useState("")
-  const [education, setEducation] = useState([])
+  // const [education, setEducation] = useState([])
 
 
 
@@ -53,12 +53,14 @@ const navigate = useNavigate();
       skills: user?.skills || [],
       image: user?.image || "",
       learned: user?.learned || [],
+      education: user?.education || [],
       bio: user?.bio || ""
     })
-    setEducation(
-      user?.education || []
-    )
-  }, [])
+
+    // setEducation(
+    //   user?.education || []
+    // )
+  }, [user])
 
   const handleSkill = () => {
     //  if(form.skills.length) notify();
@@ -69,47 +71,60 @@ const navigate = useNavigate();
     setForm((prev) => ({ ...prev, learned: [...prev.learned, learned] }))
     setLearned("")
   }
-// here look here please 
-const handleEducation = ()=>{
-  const updatedEducation  = [...education , educationForm]
-  setEducation(updatedEducation)
-  setForm((prev)=> ({...prev , education:updatedEducation}))
-   // i am nesting another array in eduactoion You're nesting arrays: education: [...prev.education, updatedEducation] adds the entire updatedEducation array inside another array — it should be education: updatedEducation.
-      SetEducationForm({
-            instituition: "",
-            degree: "",
-            startDate: "",
-            endDate: "",
-            score: ""
-        });
-}
+  // here look here please 
 
 
-const handleSubmit = async()=>{
-  try {
-    const res = await axios.put("http://localhost:8000/updateUser",{
-      name:form.name,
-      username:form.username,
-      email:form.email,
-      skills:form.skills,
-      bio:form.bio,
-      education:form.education,
-      learned:form.learned,
-      image:form.image
-    },{
-      headers:{
-              Authorization: `Bearer ${token}`,
-      }
+  const handleEducation = () => {
+    if (!educationForm.instituition || !educationForm.degree) {
+      alert("Please fill in institution and degree fields.");
+      return;
     }
-  )
-  console.log(res);
-  setUser(res.data)
-  // toast.success("Profile updated successfully!");
-      setTimeout(() => navigate("/profile"), 1500);
-  } catch (error) {
-    console.log(error)
+
+    // const updatedEducation = [...form.education, educationForm];
+
+    setForm((prev) => ({
+      ...prev,
+      education:[educationForm]
+    }));
+    // i am nesting another array in eduactoion You're nesting arrays: education: [...prev.education, updatedEducation] adds the entire updatedEducation array inside another array — it should be education: updatedEducation.
+    setEducationForm({
+      instituition: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
+      score: ""
+    });
+    console.log(educationForm)
+
   }
-}
+
+
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.put("http://localhost:8000/updateUser", {
+        name: form.name,
+        username: form.username,
+        email: form.email,
+        skills: form.skills,
+        bio: form.bio,
+        education: form.education,
+        learned: form.learned,
+        image: form.image
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      )
+      console.log(form.education)
+      console.log(res);
+      setUser(res.data)
+      // toast.success("Profile updated successfully!");
+      setTimeout(() => navigate("/profile"), 1500);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
 
@@ -164,28 +179,28 @@ const handleSubmit = async()=>{
           <Tab eventKey="contact" title="Education">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Instituition</Form.Label>
-              <Form.Control type="text" value={educationForm.instituition} onChange={(e) => SetEducationForm((prev) => ({ ...prev, instituition: e.target.value }))} />
+              <Form.Control type="text" value={educationForm.instituition} onChange={(e) => setEducationForm((prev) => ({ ...prev, instituition: e.target.value }))} />
 
               <Form.Label>Degree</Form.Label>
-              <Form.Control type="text" value={educationForm.degree} onChange={(e) => SetEducationForm((prev) => ({ ...prev, degree: e.target.value }))} />
+              <Form.Control type="text" value={educationForm.degree} onChange={(e) => setEducationForm((prev) => ({ ...prev, degree: e.target.value }))} />
 
               <Form.Label>Start Date</Form.Label>
-              <Form.Control type="date"value={educationForm.startDate} onChange={(e) => SetEducationForm((prev) => ({ ...prev, startDate: e.target.value }))} />
+              <Form.Control type="date" value={educationForm.startDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, startDate: e.target.value }))} />
 
               <Form.Label>End Date</Form.Label>
-              <Form.Control type="date" value={educationForm.endDate} onChange={(e) => SetEducationForm((prev) => ({ ...prev, endDate: e.target.value }))} />
+              <Form.Control type="date" value={educationForm.endDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, endDate: e.target.value }))} />
 
               <Form.Label>CGPA</Form.Label>
-              <Form.Control type="text" onChange={(e) => SetEducationForm((prev) => ({ ...prev, score: e.target.value }))} />
+              <Form.Control type="text" onChange={(e) => setEducationForm((prev) => ({ ...prev, score: e.target.value }))} />
               <label >Learned</label>
               <form className='flex flex-row gap-2'>
                 <input type="text"
-                value={learned}
-                onChange={(e)=>setLearned(e.target.value)}
-                placeholder='Skills learned'
-                className='p-2 bg-white mb-2 rounded-lg'
+                  value={learned}
+                  onChange={(e) => setLearned(e.target.value)}
+                  placeholder='Skills learned'
+                  className='p-2 bg-white mb-2 rounded-lg'
                 />
-                <Button  variant="outline-success" onClick={handleLearn}>Add</Button>
+                <Button variant="outline-success" onClick={handleLearn}>Add</Button>
               </form>
               <Button ariant="outline-success " onClick={handleEducation}>Add Education</Button>
 

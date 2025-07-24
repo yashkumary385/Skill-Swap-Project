@@ -62,9 +62,6 @@ const userSchema = new mongoose.Schema({
             }
 
         ],
-
-
-
     learned: [
         {
             "type": String,
