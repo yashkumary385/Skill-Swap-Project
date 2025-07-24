@@ -40,7 +40,7 @@ user ?
         <Nav className="ms-auto align-items-center flex gap-3">
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="/profile">Profile</Nav.Link>
-          <Nav.Link href="/services">Discover</Nav.Link>
+          <Nav.Link href="/services">Services</Nav.Link>
        
           <Nav.Link className="mr-10" onClick={handleLogout} >Logout</Nav.Link>
           

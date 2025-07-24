@@ -6,6 +6,8 @@ import AboutUs from "./pages/AboutUs/AboutUs";
 import { PrivateRoutes } from "./utils/PrivateRoutes";
 import Profile from "./pages/Profile/Profile";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import Discover from "./pages/Discover/Discover";
+import Services from "./pages/Services.jsx/Services";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,6 +21,8 @@ export const router = createBrowserRouter(
             <Profile/>
         </PrivateRoutes>}/>
         <Route path="/editprofile" element={<EditProfile/>}/>
+        <Route path="/discover" element={<Discover/>}/>
+        <Route path="/services" element={<Services/>}/>
                 {/* <Route path="/editprofile" element={<PrivateRoutes>
             <EditProfile/>
         </PrivateRoutes>}/> */}

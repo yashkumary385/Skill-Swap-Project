@@ -1,0 +1,39 @@
+import React from 'react'
+import Form from 'react-bootstrap/Form';
+
+const Services = () => {
+  return (
+    <div className='h-[100vh] bg-[#4CAF50] flex justify-center items-center'> 
+    <div className='min-h-[80.0vh] flex flex-col justify-center items-center'>
+        Create Services
+        <div>
+                  <Form.Group controlId="formFile" className="mb-3">
+        <Form.Label>Default file input example</Form.Label>
+        <Form.Control type="file" />
+      </Form.Group>
+      <Form.Group controlId="formFileMultiple" className="mb-3">
+        <Form.Label>Multiple files input example</Form.Label>
+        <Form.Control type="file" multiple />
+      </Form.Group>
+      <Form.Group controlId="formFileDisabled" className="mb-3">
+        <Form.Label>Disabled file input example</Form.Label>
+        <Form.Control type="file" disabled />
+      </Form.Group>
+      <Form.Group controlId="formFileSm" className="mb-3">
+        <Form.Label>Small file input example</Form.Label>
+        <Form.Control type="file" size="sm" />
+      </Form.Group>
+      <Form.Group controlId="formFileLg" className="mb-3">
+        <Form.Label>Large file input example</Form.Label>
+        <Form.Control type="file" size="lg" />
+      </Form.Group>
+
+        </div>
+    </div>
+
+     
+    </div>
+  )
+}
+
+export default Services
