@@ -29,7 +29,7 @@ export const createService = async(req,res)=>{
         type,
         cateogory :cateogory.toLowerCase(),
         email:userEmail.email,
-        image:`/upload/${image}`
+       
     });
     return res.status(200).json({message:"service created",createdService})
 }

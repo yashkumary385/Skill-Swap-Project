@@ -24,10 +24,7 @@ const serviceSchema = new mongoose.Schema({
         type:String,
         default:"genreal"
     },
-    image:{
-        type:String,
-          required: false,
-    },
+   
     email:{
         type:String,
         required:false
