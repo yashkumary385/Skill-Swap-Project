@@ -22,9 +22,9 @@ export const createSwapRequest = async(req,res)=>{
             recepientService:recepientServiceId
         })
          
-        // if(existingService){
-        //     return res.status(404).json({message:"request for same service not possible"})
-        // }
+        if(existingService){
+            return res.status(404).json({message:"request for same service not possible"})
+        }
 
 
 
@@ -90,7 +90,8 @@ export const getSwap = async(req,res)=>{
       .populate('recepient', 'name email')
       .populate('requesterService', 'title')
       .populate('recipientService', 'title')
-           res.status(200).json({ swap  })
+
+    res.status(200).json({ swap  })
     } catch (error) {
         return res.status(404).json({error:error.message})
         
@@ -118,7 +119,7 @@ export const myReq = async(req,res)=>{
 
 }
 
-export const setUpdates = async(req,res)=>{
+export const setUpdates = async(req,res)=>{ //status update
     try {
         const  serviceId = req.params.id;
 const { status } = req.body;

@@ -60,6 +60,11 @@ import getUserServiceRoute from "./routes/service.routes.js"
 app.use("/getUserService",getUserServiceRoute)
 
 
+import getNotUserServiceRoute from "./routes/service.routes.js"
+app.use("/get",getNotUserServiceRoute)
+
+
+
 import updateServiceRoute from  "./routes/service.routes.js"
 app.use("/updateService",updateServiceRoute)
 

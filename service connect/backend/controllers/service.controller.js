@@ -194,3 +194,27 @@ export const getService = async(req,res)=>{
     }
 
 }
+
+
+
+export const getNotUserService = async(req,res)=>{
+  const user_id = req.user.id;
+       let sortBy ={createdAt : -1}; 
+
+  try {
+      if(!user_id){
+    console.log("error occured")
+    return res.status(404).json({message:"there is some problem"})
+  }
+  // const userServices = await Service.find({user_id})
+  const services = await Service.find({
+    user: { $ne: user_id }}).populate("user","email name").sort(sortBy)
+    return res.status(200).json({message:"The services dosent contain users services",services})
+
+
+  } catch (error) {
+    return res.status(404).json({message:"there is a problem",error:error.message})
+    
+  }
+ 
+}

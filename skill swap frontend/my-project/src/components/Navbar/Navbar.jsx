@@ -42,7 +42,7 @@ user ?
           <Nav.Link href="/profile">Profile</Nav.Link>
           <Nav.Link href="/services">Services</Nav.Link>
        
-          <Nav.Link className="mr-10" onClick={handleLogout} >Logout</Nav.Link>
+          <Nav.Link className="mr-10" href="/discover" >Discover</Nav.Link>
           
           
         </Nav>

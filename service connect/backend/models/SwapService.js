@@ -26,5 +26,5 @@ const swapSchema = new mongoose.Schema({
         enum:["pending","accepted","rejected"] ,
         default:"pending"
     }
-},{ strictPopulate: false })
+},{ timestamps:true ,strictPopulate: false })
 export default mongoose.model("Swap",swapSchema)
