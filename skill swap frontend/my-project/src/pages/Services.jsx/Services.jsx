@@ -16,7 +16,7 @@ const Services = () => {
     cateogory: "",
     type: ""
   })
-  // const[currentService , setCurrentService] // set this up  and procced tomorrwow set a state for current service to extract id out of it .
+  const [currentUpdateService, setCurrentUpdateService] = useState(null) // set this up  and procced tomorrwow set a state for current service to extract id out of it .
   const [services, setServices] = useState([]) // for the fetched service
   const [serviceUpdate, setServiceUpdate] = useState(false)
   const [servicesUpdateForm, setServicesUpdateForm] = useState({
@@ -78,50 +78,66 @@ const Services = () => {
   }, [])
 
 
-  const handleEdit = (id) => {
+  const handleEdit = (service) => {
     setServiceUpdate(true);
-  setServicesUpdateForm({
-    title:form?.title || "",
-    description:form?.description || "",
-    cateogory:form?.cateogory || "",
-    type:form?.type || ""
-  })
-  }
-  const handleUpdate =async ()=>{
- try {
-            const res = await axios.put(`http://localhost:8000/updateService/${id}`, {
-                title: servicesUpdateForm.title,
-                description: servicesUpdateForm.description,
-                cateogory: servicesUpdateForm.cateogory,
-                type:servicesUpdateForm.type
-                // editForm
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            console.log(res);
-            fetchServices()
-            setServices((prev)=> [ ...prev ,res.data.service]) // beacuse we are adding the service here
-            // useServices();
-        } catch (error) {
-            console.log(error)
+    setCurrentUpdateService(service);
 
-        }
+    setServicesUpdateForm({
+      title: service?.title || "",
+      description: service?.description || "",
+      cateogory: service?.cateogory || "",
+      type:service?.type || ""
+    })
+    console.log(currentUpdateService)
+
   }
 
 
+  const handleUpdate = async (currentUpdateservice) => {
+    try {
+      const res = await axios.put(`http://localhost:8000/updateService/${currentUpdateservice._id}`, {
+        title: servicesUpdateForm.title,
+        description: servicesUpdateForm.description,
+        cateogory: servicesUpdateForm.cateogory,
+        type: servicesUpdateForm.type
+        // editForm
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log(res);
+      fetchServices()
+      setServices((prev) => [...prev, res.data.service]) // beacuse we are adding the service here
+      toast.info("Service Updated Successfully");
+      // useServices();
+    } catch (error) {
+      console.log(error)
+      toast.warn("There was some error")
 
-  const handleDelete = async(id) => {
-  try {
-            const res = await axios.delete(`http://localhost:8000/deleteService/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            console.log(res);
-          
-            fetchServices()
-        } catch (error) {
-            console.log(error)
+    }
+    setServiceUpdate(false);
+    setServicesUpdateForm({
+      title: "",
+      description: "",
+      cateogory: "",
+      type: ""
+    })
+    setCurrentUpdateService(null)
+  }
 
-        }
+
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`http://localhost:8000/deleteService/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log(res);
+
+      fetchServices()
+    } catch (error) {
+      console.log(error)
+
+    }
   }
   return (
     <>
@@ -194,11 +210,11 @@ const Services = () => {
                           </Card.Text>
                           <div className='flex flex-row gap-3'>
                             <div>
-                              <Button variant="outline-success" onClick={()=>handleEdit(service._id)}>Edit</Button>
+                              <Button variant="outline-success" onClick={() => handleEdit(service)}>Edit</Button>
 
                             </div>
                             <div>
-                              <Button variant="outline-danger" onClick={()=>handleDelete(service._id)}>Delete</Button>
+                              <Button variant="outline-danger" onClick={() => handleDelete(service._id)}>Delete</Button>
 
                             </div>
                           </div>
@@ -213,49 +229,54 @@ const Services = () => {
 
 
             </div>
-            { serviceUpdate && 
-            <div >
-               <Form.Group controlId="formFile" className="mb-3 ">
-              <Form.Label>Title</Form.Label>
-              <Form.Control type="text" className='border-2 border-black'
-                onChange={(e) =>   setServicesUpdateForm({ ...servicesUpdateForm, title: e.target.value })} value={servicesUpdateForm.title} />
-            </Form.Group>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" className='border-2 border-black'
-                onChange={(e) =>   setServicesUpdateForm({ ...servicesUpdateForm, description: e.target.value })} value={servicesUpdateForm.description} />
-            </Form.Group>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Cateogory</Form.Label>
-              <Form.Control type="text" className='border-2 border-black'
-                onChange={(e) =>   setServicesUpdateForm({ ...servicesUpdateForm, cateogory: e.target.value })}
-                value={servicesUpdateForm.cateogory} />
-            </Form.Group>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Type</Form.Label>
-              {/* <Form.Control type="" className='border-2 border-black'
+            {serviceUpdate &&
+
+              <div >
+                <h3 className='pb-4 border-2 border-black bg-gray-200 p-3 pt-4 rounded-lg'>Update Service</h3>
+                <div className='flex justify-center items-center flex-col h-[70vh] border-5 border-black rounded-2xl w-[30vw] bg-gray-200 text-black '  >
+                  <Form.Group controlId="formFile" className="mb-3 ">
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text" className='border-2 border-black'
+                      onChange={(e) => setServicesUpdateForm({ ...servicesUpdateForm, title: e.target.value })} value={servicesUpdateForm.title} />
+                  </Form.Group>
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control type="text" className='border-2 border-black'
+                      onChange={(e) => setServicesUpdateForm({ ...servicesUpdateForm, description: e.target.value })} value={servicesUpdateForm.description} />
+                  </Form.Group>
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Cateogory</Form.Label>
+                    <Form.Control type="text" className='border-2 border-black'
+                      onChange={(e) => setServicesUpdateForm({ ...servicesUpdateForm, cateogory: e.target.value })}
+                      value={servicesUpdateForm.cateogory} />
+                  </Form.Group>
+                  <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Type : </Form.Label>
+                    {/* <Form.Control type="" className='border-2 border-black'
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
                 value={form.type} /> */}
-              <select id="myDropdown" name="mySelection" onChange={(e) =>  setServicesUpdateForm({ ...servicesUpdateForm, type: e.target.value })}>
-                <option value="request">Request</option>
-                <option value="offer">Offer</option>
-              </select>
-            </Form.Group>
+                    <select id="myDropdown" value={servicesUpdateForm.type} onChange={(e) => setServicesUpdateForm({ ...servicesUpdateForm, type: e.target.value })}>
+                      <option value="request">Request</option>
+                      <option value="offer">Offer</option>
+                    </select>
+                  </Form.Group>
 
-            <Button variant="outline-success" onClick={()=>handleUpdate}>Create request</Button>
-            </div>
+                  <Button variant="outline-success" onClick={() => handleUpdate(currentUpdateService)}>Complete</Button>
+                </div>
+                 </div>
 }
-          </div>
+              </div>
+             
 
 
         </div>
 
-      </div>
+        </div>
 
 
 
-    </>
-  )
+      </>
+      )
 }
 
-export default Services
+      export default Services
