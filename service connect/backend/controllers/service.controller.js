@@ -81,6 +81,7 @@ export const getService = async(req,res)=>{
 
     const total = await Service.countDocuments(services); 
     const totalPages = Math.ceil(total/limit)
+
     console.log(total);
         
 
@@ -180,12 +181,13 @@ export const getService = async(req,res)=>{
       // console.log(userId)
     
     const services = await Service.find({user:userId}).populate("user","email name").sort(sortBy)
+    const total = await Service.countDocuments(services); 
 
    
     //A Service.find({}) means: if nothins passed query remains empty and return all services
     // const services = await Service.find({})
 
-    return res.status(200).json({message:"The services are",services})
+    return res.status(200).json({message:"The services are",total,services})
     }
 
     catch(error){
@@ -198,7 +200,11 @@ export const getService = async(req,res)=>{
 
 
 export const getNotUserService = async(req,res)=>{
+  console.log("not users route")
   const user_id = req.user.id;
+   const page = parseInt(req.query.page);
+   const limit = parseInt(req.query.limit);
+
        let sortBy ={createdAt : -1}; 
 
   try {
@@ -207,9 +213,16 @@ export const getNotUserService = async(req,res)=>{
     return res.status(404).json({message:"there is some problem"})
   }
   // const userServices = await Service.find({user_id})
-  const services = await Service.find({
-    user: { $ne: user_id }}).populate("user","email name").sort(sortBy)
-    return res.status(200).json({message:"The services dosent contain users services",services})
+    const skip = (page - 1 )*limit; // skips the number of results before 
+
+  const Notservices = await Service.find({
+    user: { $ne: user_id }}).populate("user","email name").sort(sortBy).skip(skip).limit(limit)
+
+    const total = await Service.countDocuments(  {user: { $ne: user_id }}); 
+    const totalPages = Math.ceil(total/limit)
+
+
+    return res.status(200).json({message:"The services dosent contain users services",total,totalPages,Notservices})
 
 
   } catch (error) {

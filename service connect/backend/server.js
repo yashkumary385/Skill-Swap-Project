@@ -48,6 +48,10 @@ app.use("/getAll",getAllRoute)
 import getSpecificUserRoute from "./routes/userRoutes.routes.js"
 app.use("/users",getSpecificUserRoute)
 
+
+import getOtherUserRoute from "./routes/userRoutes.routes.js"
+app.use("/get/other",getOtherUserRoute)
+
 import createRoute from "./routes/service.routes.js"
 app.use("/api/service",createRoute)
 
@@ -60,8 +64,12 @@ import getUserServiceRoute from "./routes/service.routes.js"
 app.use("/getUserService",getUserServiceRoute)
 
 
+
+
 import getNotUserServiceRoute from "./routes/service.routes.js"
 app.use("/get",getNotUserServiceRoute)
+
+
 
 
 

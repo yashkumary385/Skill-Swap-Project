@@ -2,18 +2,20 @@ import React from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { Card } from 'react-bootstrap';
 import Header from '../../components/Navbar/Navbar';
-import { Mail, User, SquareArrowUpRight , UserCircle } from 'lucide-react';
+import { Mail, User, SquareArrowUpRight, UserCircle } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import EditProfile from '../EditProfile/EditProfile';
 import { useNavigate } from 'react-router-dom';
 
-const Profile = () => {
-    const { user, loading } = useAuth();
+const Profile = ({ externalUser }) => {
+    const { user: authUser, loading } = useAuth();
+    const user = externalUser || authUser
     const navigate = useNavigate()
     const navigateTo = () => {
         navigate('/editProfile')
     }
+    const isOwnProfile = !externalUser;
     return (
         <>
             <Header />
@@ -24,20 +26,20 @@ const Profile = () => {
                         <Card style={{ width: '150px', height: '150px' }}>
                             <Card.Img
                                 variant="top"
-                                src={`http://localhost:8000/${user.image}`}
+                                src={`http://localhost:8000/${user?.image}`}
                                 className="object-cover w-full h-full"
                             />
                         </Card>
 
                         <div className="flex flex-col justify-center gap-3 text-xl font-bold">
                             <div className='flex items-center gap-2'>
-                               <UserCircle/> {user?.username}
+                                <UserCircle /> {user?.username}
                             </div>
                             <div className="flex items-center gap-2">
-                                <User /> {user.name}
+                                <User /> {user?.name}
                             </div>
                             <div className="flex items-center gap-2">
-                                <Mail /> {user.email}
+                                <Mail /> {user?.email}
                             </div>
 
                         </div>
@@ -46,14 +48,14 @@ const Profile = () => {
                     {/* Bio Section */}
                     <div className="pt-4">
                         <div className="text-2xl font-bold mb-2">Bio</div>
-                        <div className="text-lg font-md">{user.bio}</div>
+                        <div className="text-lg font-md">{user?.bio}</div>
                     </div>
 
                     {/* Skills Section */}
                     <div>
                         <div className="text-2xl font-bold mb-2">Skills</div>
                         <div className="flex flex-wrap gap-3">
-                            {user.skills.map((skill, index) => (
+                            {user?.skills.map((skill, index) => (
                                 <Button variant="success" key={index}>
                                     {skill}
                                 </Button>
@@ -68,7 +70,7 @@ const Profile = () => {
                                     <Accordion.Header>Education</Accordion.Header>
                                     <Accordion.Body>
                                         {
-                                            user.education.map((field, index) => (
+                                            user?.education.map((field, index) => (
                                                 <div className='text-2xl flex flex-col gap-2 ' key={index} >
                                                     Institute : {field.instituition}
                                                     <div className='text-sm ' >Degree : {field.degree}</div>
@@ -87,7 +89,7 @@ const Profile = () => {
 
 
                                             <div className="flex flex-wrap gap-3">
-                                                {user.learned.map((learned, index) => (
+                                                {user?.learned.map((learned, index) => (
                                                     <Button variant="success" key={index}>
                                                         {learned}
                                                     </Button>
@@ -107,7 +109,7 @@ const Profile = () => {
 
                     </div>
                 </div>
-
+{isOwnProfile &&
 
                 <div id="right" className='flex pt-20 pl-10 flex-col ' >
                     <div className="flex items-center gap-2">
@@ -115,7 +117,7 @@ const Profile = () => {
 
                     </div>
                 </div>
-
+}
 
             </div >
         </>

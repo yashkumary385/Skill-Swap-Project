@@ -63,13 +63,12 @@ export const getAllUsers = async(req,res)=>{
      const userId = req.user.id;
     try{
     if(!userId){
-    return res.status(404).json("user id is invalid")
+    return res.status(404).json("user id is invalid");
     }
     const user = await User.find({}).select("-password")
     return res.status(200).json({message:"here are all the users",user})
    }catch(error){
-    return res.status(404).json({message:"something went wrong",error:error.message})
-   
+    return res.status(404).json({message:"something went wrong",error:error.message});
    }
 }
 
@@ -82,6 +81,23 @@ export const getUser = async(req,res)=>{
     return res.status(404).json("user id is invalid")
     }
     const user = await User.findById(userId).select("-password")
+    return res.status(200).json(user)
+   }catch(error){
+    return res.status(404).json({message:"something went wrong",error:error.message})
+   
+   }
+
+ 
+}
+export const getOtherUser = async(req,res)=>{
+   console.log("personal route hit ")
+   const {id} = req.params
+     try{
+   
+    const user = await User.findById(id).select("-password")
+     if(!user){
+    return res.status(404).json("user id is invalid")
+    }
     return res.status(200).json(user)
    }catch(error){
     return res.status(404).json({message:"something went wrong",error:error.message})
