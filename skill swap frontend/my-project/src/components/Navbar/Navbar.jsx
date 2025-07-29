@@ -41,7 +41,7 @@ user ?
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="/profile">Profile</Nav.Link>
           <Nav.Link href="/services">Services</Nav.Link>
-       
+       <button onClick={handleLogout}>Logout</button>
           <Nav.Link className="mr-10" href="/discover" >Discover</Nav.Link>
           
           

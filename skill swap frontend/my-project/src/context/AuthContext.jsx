@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 import axios from "axios"
+import { toast } from "react-toastify";
 
 
 
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             })
-            console.log(res);
+            // console.log(res);
             const { token, user } = res.data
             setUser(user)
             setToken(token)
@@ -29,11 +30,15 @@ export const AuthProvider = ({ children }) => {
             return {success : true}
         } catch (error) {
             console.log(error)
+                      if (error.response?.data) {
+          toast.error(error.response.data);
+        } else {
+          toast.error("Something went wrong");
+        }
             return {
                 success: false,
                 error: error.res?.data?.message || "Login failed",
             };
-
         }
     }
 
@@ -60,7 +65,7 @@ const fetchUser = async ()=>{
             Authorization: `Bearer ${token}`,
           },
     })
-    console.log(res);
+    // console.log(res);
 
     setUser(res.data)
 

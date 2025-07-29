@@ -32,22 +32,10 @@ export const createSwapRequest = async(req,res)=>{
     if(!requesterServiceId || !recepientServiceId){
     return res.status(404).json("incorrect input either requesterid is incorrect or recepientid")
     }
-
-
-    // console.log(requesterService);
-    // console.log(recepientService);
-    
-//    const swapRequest = await SwapService.create({
-//     requesterServiceId,
-//     recepientServiceId,
-//     requesterService,
-//     recepientService
-//    })
-    // console.log(requesterService);
     
     const swap = await SwapService.create({
       requester: req.user.id, // 
-      recepient: recepientService.user// this is the users id whose recpient request is this 
+      recepient: recepientService.user._id// this is the users id whose recpient request is this 
       , // intailly service conatoned the user id which was created by the user so both the ids requester and recepient were same .
       requesterService, // full service api 
       recepientService,status
@@ -148,7 +136,7 @@ const  userId = req.user.id;
       await sendEmail(
         swap.requester.email,
         'Your Request Was Accepted!',
-        `Great news! Your request to swap your service "${swap.requesterService.title}" for "${swap.recipientService.title}" was accepted.`
+        `Great news! Your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was accepted.`
       );
     }
 

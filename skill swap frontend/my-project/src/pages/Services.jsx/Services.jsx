@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect , useRef } from 'react'
 import Form from 'react-bootstrap/Form';
 import Header from '../../components/Navbar/Navbar';
 import Card from 'react-bootstrap/Card';
@@ -25,7 +25,8 @@ const Services = () => {
     cateogory: "",
     type: ""
   })
-
+  const [serviceId , setServiceId] = useState("")
+  const serviceRef = useRef(null)
   const fetchServices = async () => {
     try {
       const res = await axios.get("http://localhost:8000/getUserService/users", {
@@ -139,6 +140,11 @@ const Services = () => {
 
     }
   }
+  const handleCopy = ()=>{
+    const text = serviceRef.current.innerText;
+    navigator.clipboard.writeText(text).then(()=>toast.success("service id copied succesfully"))
+
+  }
   return (
     <>
       <Header />
@@ -208,6 +214,10 @@ const Services = () => {
                           <Card.Text>
                             Cateogory : {service.cateogory}
                           </Card.Text>
+                          <Card.Text >
+
+                            Service Id : <span ref={serviceRef}> {service._id}</span>     <Button variant="success" onClick={()=> handleCopy()}>Copy</Button>
+                          </Card.Text> 
                           <div className='flex flex-row gap-3'>
                             <div>
                               <Button variant="outline-success" onClick={() => handleEdit(service)}>Edit</Button>

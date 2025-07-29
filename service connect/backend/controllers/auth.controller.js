@@ -66,7 +66,7 @@ export const loginUser =async(req,res)=>{
         // const userid = await User.findById()
         const existingUser = await User.findOne({email}) // this field has password stored in it whole user shema is being founded .
         if(!existingUser){
-            return res.status(404).json("user doesn't exist")
+            return res.status(404).json("user doesn't exist or wrong username ")
         }
 
         const isValid = await bcrypt.compare(password,existingUser.password) // esxisting user pasword is the password of whos email is given password is the one stored in the schema 
