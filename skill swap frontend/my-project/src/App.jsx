@@ -9,6 +9,7 @@ import EditProfile from "./pages/EditProfile/EditProfile";
 import Discover from "./pages/Discover/Discover";
 import Services from "./pages/Services.jsx/Services";
 import UserProfileWrapper from "./pages/Profile/UserProfileWrapper";
+import SwapRequest from "./components/SwapRequest/SwapRequest";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -25,6 +26,7 @@ export const router = createBrowserRouter(
         <Route path="/discover" element={<Discover/>}/>
         <Route path="/services" element={<Services/>}/>
         <Route path="/users/:id" element={<UserProfileWrapper/>}/>
+        <Route path="/swaprequests" element={<SwapRequest/>}/>
                 {/* <Route path="/editprofile" element={<PrivateRoutes>
             <EditProfile/>
         </PrivateRoutes>}/> */}

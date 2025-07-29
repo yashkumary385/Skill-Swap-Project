@@ -6,7 +6,7 @@ export const notify = async(req,res)=>{
             
     const notification = await Notification.find({user:userId}); //actually returns an array of documents, not a single object.
     const arraynotify = Object.values(notification)
-    // console.log(arraynotify);
+    console.log(arraynotify);
     
 
     res.status(200).json({message:"here are your notification" , notification})

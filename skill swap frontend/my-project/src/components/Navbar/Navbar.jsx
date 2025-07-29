@@ -43,6 +43,7 @@ user ?
           <Nav.Link href="/services">Services</Nav.Link>
        <button onClick={handleLogout}>Logout</button>
           <Nav.Link className="mr-10" href="/discover" >Discover</Nav.Link>
+          <Nav.Link className="mr-10" href="/swaprequests" >Swap Requests</Nav.Link>
           
           
         </Nav>

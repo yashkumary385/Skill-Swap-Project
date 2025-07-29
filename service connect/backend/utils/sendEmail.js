@@ -19,15 +19,15 @@ const info=  await transporter.sendMail(mailOptions);
 console.log(info);
 
 
-//    if (info.accepted.length > 0) {
-//       return res.status(200).json({ message: 'Email sent successfully', info });
-//     } else {
-//       return res.status(500).json({ message: 'Email not accepted by server', info });
-//     }
+   if (info.accepted.length > 0) {
+      return res.status(200).json({ message: 'Email sent successfully', info });
+    } else {
+      return res.status(500).json({ message: 'Email not accepted by server', info });
+    }
 
 }
 
-
+/// this is the example 
 // {
 //   accepted: [ 'ayush@gmail.com' ],
 //   rejected: [],

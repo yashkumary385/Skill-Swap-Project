@@ -77,7 +77,7 @@ export const getSwap = async(req,res)=>{
         const swap= await SwapService.find({}) .populate('requester', 'name email')
       .populate('recepient', 'name email')
       .populate('requesterService', 'title')
-      .populate('recipientService', 'title')
+      .populate('recepientService', 'title')
 
     res.status(200).json({ swap  })
     } catch (error) {
@@ -94,8 +94,9 @@ export const myReq = async(req,res)=>{
      const incomingReq = await SwapService.find({recepient: userId}).populate('requester', 'name email')
       .populate('recepient', 'name email')
       .populate('requesterService', 'title')
-      .populate('recipientService', 'title')
-    res.status(200).json({ incomingReq  })
+      .populate('recepientService', 'title')
+
+   return res.status(200).json({ incomingReq  })
 
     }
 
@@ -109,16 +110,18 @@ export const myReq = async(req,res)=>{
 
 export const setUpdates = async(req,res)=>{ //status update
     try {
-        const  serviceId = req.params.id;
+        const  swapId = req.params.id;
 const { status } = req.body;
 const  userId = req.user.id;
 
 
-    console.log(serviceId);
+
+    console.log(swapId);
     console.log(userId ,"hii");
     
     
-    const swap = await SwapService.findById(serviceId)
+    const swap = await SwapService.findById(swapId)
+    console.log(swap);
     if (!swap) return res.status(404).json({ message: "Swap not found" });
 
     if (swap.recepient.toString() !== userId) // userid is from the jwt so it is a string
@@ -132,7 +135,7 @@ const  userId = req.user.id;
 
    await swap.save();
 
-    if (status === 'accepted') {
+    if (status === 'accepted') { // i am sending the requester mail i am the recepient 
       await sendEmail(
         swap.requester.email,
         'Your Request Was Accepted!',
@@ -144,7 +147,7 @@ const  userId = req.user.id;
       await sendEmail(
         swap.requester.email,
         'Your Request Was Declined',
-        `Unfortunately, your request to swap your service "${swap.requesterService.title}" for "${swap.recipientService.title}" was declined.`
+        `Unfortunately, your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was declined.`
       );
     }
 
@@ -157,17 +160,26 @@ const  userId = req.user.id;
 
 }
 
-
+// request that i send 
 export const outReq = async(req,res)=>{
     // console.log("bitttchh");
-    
+       const page = parseInt(req.query.page);
+
+       const limit = parseInt(req.query.limit);
+         const skip = (page - 1 )*limit;
+       let sortBy ={createdAt : -1}; 
     try{
      const userId = req.user.id;
-     const incomingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
+     const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
       .populate('recepient', 'name email')
       .populate('requesterService', 'title')
-      .populate('recipientService', 'title')
-    res.status(200).json({ incomingReq  })
+      .populate('recipientService', 'title').sort(sortBy).skip(skip).limit(limit)
+       const total = await SwapService.countDocuments({requester : userId}); 
+          const totalPages = Math.ceil(total/limit)
+      
+    console.log(total);
+        
+   return res.status(200).json({outgoingReq,total,totalPages })
 
     }
 

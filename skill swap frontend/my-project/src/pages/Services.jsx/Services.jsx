@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Form from 'react-bootstrap/Form';
 import Header from '../../components/Navbar/Navbar';
 import Card from 'react-bootstrap/Card';
@@ -25,7 +25,7 @@ const Services = () => {
     cateogory: "",
     type: ""
   })
-  const [serviceId , setServiceId] = useState("")
+  const [serviceId, setServiceId] = useState("")
   const serviceRef = useRef(null)
   const fetchServices = async () => {
     try {
@@ -87,7 +87,7 @@ const Services = () => {
       title: service?.title || "",
       description: service?.description || "",
       cateogory: service?.cateogory || "",
-      type:service?.type || ""
+      type: service?.type || ""
     })
     console.log(currentUpdateService)
 
@@ -140,9 +140,9 @@ const Services = () => {
 
     }
   }
-  const handleCopy = ()=>{
+  const handleCopy = () => {
     const text = serviceRef.current.innerText;
-    navigator.clipboard.writeText(text).then(()=>toast.success("service id copied succesfully"))
+    navigator.clipboard.writeText(text).then(() => toast.success("service id copied succesfully"))
 
   }
   return (
@@ -216,8 +216,8 @@ const Services = () => {
                           </Card.Text>
                           <Card.Text >
 
-                            Service Id : <span ref={serviceRef}> {service._id}</span>     <Button variant="success" onClick={()=> handleCopy()}>Copy</Button>
-                          </Card.Text> 
+                            Service Id : <span ref={serviceRef}> {service._id}</span>     <Button variant="success" onClick={() => handleCopy()}>Copy</Button>
+                          </Card.Text>
                           <div className='flex flex-row gap-3'>
                             <div>
                               <Button variant="outline-success" onClick={() => handleEdit(service)}>Edit</Button>
@@ -273,20 +273,20 @@ const Services = () => {
 
                   <Button variant="outline-success" onClick={() => handleUpdate(currentUpdateService)}>Complete</Button>
                 </div>
-                 </div>
-}
               </div>
-             
+            }
+          </div>
+
 
 
         </div>
 
-        </div>
+      </div>
 
 
 
-      </>
-      )
+    </>
+  )
 }
 
-      export default Services
+export default Services
