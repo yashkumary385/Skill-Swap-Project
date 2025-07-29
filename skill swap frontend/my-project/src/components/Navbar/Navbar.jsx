@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Profile from '../../pages/Profile/Profile';
+import { Bell } from 'lucide-react';
 
 
 import React from 'react'
@@ -42,8 +43,9 @@ user ?
           <Nav.Link href="/profile">Profile</Nav.Link>
           <Nav.Link href="/services">Services</Nav.Link>
        <button onClick={handleLogout}>Logout</button>
-          <Nav.Link className="mr-10" href="/discover" >Discover</Nav.Link>
-          <Nav.Link className="mr-10" href="/swaprequests" >Swap Requests</Nav.Link>
+          <Nav.Link className="" href="/discover" >Discover</Nav.Link>
+          <Nav.Link  href="/swaprequests" >Swap Requests</Nav.Link>
+          <Nav.Link  href="/notifications" ><div><Bell/></div></Nav.Link>
           
           
         </Nav>

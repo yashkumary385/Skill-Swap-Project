@@ -80,7 +80,7 @@ const SwapRequest = () => {
             <div className='min-h-screen bg-[#4CAF50] flex flex-row'>
                 <div id="left" className='w-[50vw] mt-10' >
                     <div className='flex items-center justify-center'>
-                        <div className='flex items-center flex-col h-[85vh] border-5 border-black rounded-2xl w-[30vw] bg-gray-200 text-black gap-3'>
+                    <div className='flex flex-col h-[85vh] border-4 border-black rounded-2xl w-[40vw] bg-gray-200 text-black gap-3 overflow-y-auto p-4'>
                             <h1 className='pt-3'>Incoming Requests</h1>
                             <ul>
                                 {

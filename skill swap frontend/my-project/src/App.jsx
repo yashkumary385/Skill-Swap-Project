@@ -10,6 +10,7 @@ import Discover from "./pages/Discover/Discover";
 import Services from "./pages/Services.jsx/Services";
 import UserProfileWrapper from "./pages/Profile/UserProfileWrapper";
 import SwapRequest from "./components/SwapRequest/SwapRequest";
+import Notify from "./pages/Notification/Notify";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -27,6 +28,8 @@ export const router = createBrowserRouter(
         <Route path="/services" element={<Services/>}/>
         <Route path="/users/:id" element={<UserProfileWrapper/>}/>
         <Route path="/swaprequests" element={<SwapRequest/>}/>
+        <Route path="/notifications" element={<Notify/>}/>
+
                 {/* <Route path="/editprofile" element={<PrivateRoutes>
             <EditProfile/>
         </PrivateRoutes>}/> */}

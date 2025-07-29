@@ -1,5 +1,5 @@
 import Notification from "../models/Notification.js";
-export const notify = async(req,res)=>{
+export const notify = async(req,res)=>{ // to get the notifications 
     try {
             const userId= req.user.id;
             console.log(userId);

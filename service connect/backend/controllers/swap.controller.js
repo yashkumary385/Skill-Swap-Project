@@ -43,9 +43,13 @@ export const createSwapRequest = async(req,res)=>{
 //    console.log(swapRequest);
 console.log(recepientService.email);
 
-    const notify=  await Notification.create({
+    const notify =  await Notification.create({
     user : recepientService.user ,
-    message:`The request made by you for the service ${recepientServiceId} `,
+    message:`The request made by you for the service ${recepientService.title} `,
+   })  
+    const notify1 =  await Notification.create({
+    user : requesterService.user ,
+    message:`The request made to you for the service ${recepientService.title} by ${requesterService.name} inexchange of you service ${requesterService.title} `,
    })  
 
 
@@ -172,13 +176,13 @@ export const outReq = async(req,res)=>{
      const userId = req.user.id;
      const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
       .populate('recepient', 'name email')
-      .populate('requesterService', 'title')
+      // .populate('requesterService', 'title')
       .populate('recipientService', 'title').sort(sortBy).skip(skip).limit(limit)
        const total = await SwapService.countDocuments({requester : userId}); 
           const totalPages = Math.ceil(total/limit)
       
     console.log(total);
-        
+  
    return res.status(200).json({outgoingReq,total,totalPages })
 
     }
