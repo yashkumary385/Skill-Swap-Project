@@ -5,9 +5,11 @@ import { useAuth } from '../../context/AuthContext'
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const SwapRequest = () => {
     const [outReq, setOutReq] = useState([])
+    const navigate = useNavigate()
     const [incomingReq, setIncomingtReq] = useState([])
     const { token } = useAuth();
     const [acceptedReq, setAcceptedReq] = useState([])
@@ -59,7 +61,7 @@ const SwapRequest = () => {
         console.log(id);
         try {
             const res = await axios.put(`http://localhost:8000/update/${id}`, {
-                status: "rejected"
+                status: "accepted"
             },
                 {
                     headers: { Authorization: `Bearer ${token}` }
@@ -67,9 +69,12 @@ const SwapRequest = () => {
             )
             console.log(res);
             console.log(res.data.swap);
+            const chatId = res.data.chatId // from the data from the backend
             toast.success("Swap Accepted")
             setAcceptedReq((prev) => [...prev, res.data.swap._id])
             handleIncomingRequest()
+            navigate(`/chat/${chatId}`)
+            
         } catch (error) {
             console.log(error)
         }

@@ -11,6 +11,7 @@ import Services from "./pages/Services.jsx/Services";
 import UserProfileWrapper from "./pages/Profile/UserProfileWrapper";
 import SwapRequest from "./components/SwapRequest/SwapRequest";
 import Notify from "./pages/Notification/Notify";
+import Chat from "./pages/Chat/Chat";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -29,6 +30,8 @@ export const router = createBrowserRouter(
         <Route path="/users/:id" element={<UserProfileWrapper/>}/>
         <Route path="/swaprequests" element={<SwapRequest/>}/>
         <Route path="/notifications" element={<Notify/>}/>
+        <Route path="/chat/:chatId" element={<Chat/>}/>
+
 
                 {/* <Route path="/editprofile" element={<PrivateRoutes>
             <EditProfile/>

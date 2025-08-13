@@ -20,10 +20,11 @@ dotenv.config({
 export const io = new Server(server,{
     cors:{origin :"*"}
 })
+app.set("io",io)
 io.on("connection",(socket)=>{
     console.log(`User Connected With Socket Id : ${socket.id}`)
      
-    socket.on("register_user", (userId)=>{
+    socket.on("register-user", (userId)=>{
         socket.join(userId) // this is a room and name of the room is userId
 
     })
@@ -33,7 +34,7 @@ try {
            if(!chat) return;
            chat.messages.push({sender , content}) // messages inside chat schema already store messageSchema
            chat.users.forEach((user)=>{
-            io.to(user.toString()).emit("recieve_message",{ //sending to all the users 
+            io.to(user.toString()).emit("recieve-message",{ //sending to all the users 
                 sender,
                 chatId,
                 content

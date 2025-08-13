@@ -117,9 +117,7 @@ export const setUpdates = async(req,res,io)=>{ //status update
         const  swapId = req.params.id;
 const { status } = req.body;
 const  userId = req.user.id;
-
-
-
+const io = req.app.get("io");
     console.log(swapId);
     console.log(userId ,"hii");
     
@@ -140,7 +138,7 @@ const  userId = req.user.id;
    await swap.save();
 
     if (status === 'accepted') { // i am sending the requester mail i am the recepient 
-      let chat = await Chat.findOne({swapId : swap._id}) // find the chat via the swap id which chat is belongd to this swap id 
+      const chat = await Chat.findOne({swapId : swap._id}) // find the chat via the swap id which chat is belongd to this swap id 
       // we are creatin chat here if chat is not already present 
       if(!chat){
       await Chat.create({
@@ -154,7 +152,7 @@ const  userId = req.user.id;
         'Your Request Was Accepted!',
         `Great news! Your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was accepted.`
       );
-     
+      // send the chat id to the fronend 
       [swap.requester , swap.recepient].forEach((user)=>{
       io.to(user.toString()).emit("swap-accepted",{
       chat:chat._id,
@@ -162,7 +160,7 @@ const  userId = req.user.id;
       message:"Chat Created Between Users"
       })
       })
-    
+       res.status(200).json({ message: `Request ${status}`, swap , chat:chat._id});
 
     }
      
@@ -172,9 +170,9 @@ const  userId = req.user.id;
         'Your Request Was Declined',
         `Unfortunately, your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was declined.`
       );
+      res.status(200).json({message:`Request ${status}`})
     }
-
-       res.status(200).json({ message: `Request ${status}`, swap });
+  
         
     } catch (error) {
             res.status(500).json({ message: error.message });
