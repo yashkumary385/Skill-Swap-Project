@@ -45,6 +45,7 @@ const SwapRequest = () => {
                 )
                 console.log(res);
                 setOutReq(res.data.outgoingReq)
+                console.log(outReq)
                 setTotalPages(res.data.totalPages)
             } catch (error) {
 
@@ -91,14 +92,14 @@ const SwapRequest = () => {
                                                     <Card.Title>Swap Request</Card.Title>
 
                                                     <Card.Subtitle className="mb-2 text-muted">
-                                                        From: {request.requester.name}
+                                                        From: {request.requester?.name}
                                                     </Card.Subtitle>
 
                                                     <Card.Text>
-                                                        <strong>Email:</strong> {request.requester.email} <br />
-                                                        <strong>They Offered:</strong> {request.requesterService.title} <br />
-                                                        <strong>Requested Your Service:</strong> {request.recepientService.title || request.recepientService} <br />
-                                                        <strong>Status:</strong> {request.status} <br />
+                                                        <strong>Email:</strong> {request.requester?.email} <br />
+                                                        <strong>They Offered:</strong> {request.requesterService?.title} <br />
+                                                        <strong>Requested Your Service:</strong> {request.recepientService?.title || request.recepientService} <br />
+                                                        <strong>Status:</strong> {request?.status} <br />
                                                         <strong>Date:</strong> {new Date(request.createdAt).toLocaleString()}
                                                     </Card.Text>
 
@@ -137,13 +138,13 @@ const SwapRequest = () => {
                                             <Card.Body>
                                                 <Card.Title>Swap Request</Card.Title>
                                                 <Card.Subtitle className="mb-2 text-muted">
-                                                    From: {request.requester.name}
+                                                    From: {request.requester?.name}
                                                 </Card.Subtitle>
                                                 <Card.Text>
-                                                    <strong>They Offered:</strong> {request.requesterService.title} <br />
-                                                    <strong>Requested Your Service:</strong> {request.recepientService.title || request.recepientService} <br />
-                                                    <strong>Status:</strong> {request.status} <br />
-                                                    <strong>Date:</strong> {new Date(request.createdAt).toLocaleString()}
+                                                    <strong>They Offered:</strong> {request.requesterService?.title} <br />
+                                                    <strong>Requested Your Service:</strong> {request.recepientService?.title || request.recepientService} <br />
+                                                    <strong>Status:</strong> {request?.status} <br />
+                                                    <strong>Date:</strong> {new Date(request?.createdAt).toLocaleString()}
                                                 </Card.Text>
                                             </Card.Body>
                                         </Card>

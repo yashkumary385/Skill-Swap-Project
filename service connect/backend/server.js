@@ -3,16 +3,58 @@ import connectDb from "./config/db.js"
 import dotenv from "dotenv"
 import errorHandler from "./middlewares/errorHandler.midlleware.js"
 import cors from  "cors"
-import path from "path"
-
+import Chat from "./models/Chat.js"
+import { Server } from "socket.io"
+import http from "http"
 dotenv.config({
      path:"./.env" 
 })
  connectDb();
 
-// import path from "path"
+ 
  const app = express();
-//  app(express.json());
+
+
+ // server setup
+ const server= http.createServer(app)
+export const io = new Server(server,{
+    cors:{origin :"*"}
+})
+io.on("connection",(socket)=>{
+    console.log(`User Connected With Socket Id : ${socket.id}`)
+     
+    socket.on("register_user", (userId)=>{
+        socket.join(userId) // this is a room and name of the room is userId
+
+    })
+    socket.on("send-message", async({chatId , sender ,content})=>{
+try {
+     const chat = await Chat.findById(chatId)
+           if(!chat) return;
+           chat.messages.push({sender , content}) // messages inside chat schema already store messageSchema
+           chat.users.forEach((user)=>{
+            io.to(user.toString()).emit("recieve_message",{ //sending to all the users 
+                sender,
+                chatId,
+                content
+            })
+           })
+} catch (error) {
+    console.log(error)
+}
+          
+        
+    })
+     
+
+socket.on("disconnect",()=>{
+        console.log(`User Disconnected with Socket Id : ${socket.id}`)
+    
+})
+})
+
+
+//
 app.use(express.json());
 
 app.use(
@@ -22,6 +64,9 @@ app.use(
     })
 )
 
+
+
+// Routes
 app.use('/upload', express.static((process.cwd(), 'upload')));
 //register route 
 import  registerRoute from "./routes/auth.routes.js"
@@ -119,7 +164,7 @@ app.use(errorHandler)
 
  const PORT = process.env.PORT || 3001;
 try {
-    app.listen(PORT,(req,res)=>{
+    server.listen(PORT,(req,res)=>{
     console.log(`server is running on port ${PORT}`);
 })
 } catch (error) {

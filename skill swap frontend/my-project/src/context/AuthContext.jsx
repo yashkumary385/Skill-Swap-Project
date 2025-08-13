@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             })
-            // console.log(res);
+            console.log(res);
             const { token, user } = res.data
             setUser(user)
             setToken(token)
@@ -65,7 +65,7 @@ const fetchUser = async ()=>{
             Authorization: `Bearer ${token}`,
           },
     })
-    // console.log(res);
+    console.log(res);
 
     setUser(res.data)
 

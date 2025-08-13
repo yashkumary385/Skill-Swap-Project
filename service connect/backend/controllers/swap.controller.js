@@ -2,7 +2,7 @@ import SwapService from "../models/SwapService.js";
 import Service from "../models/Service.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import Notification from "../models/Notification.js";
-
+import Chat from "../models/Chat.js";
 
 
 
@@ -90,7 +90,7 @@ export const getSwap = async(req,res)=>{
     }
 }
 // get incoming request 
-export const myReq = async(req,res)=>{
+export const myReq = async(req,res)=>{ 
     console.log("bitttchh");
     
     try{
@@ -112,7 +112,7 @@ export const myReq = async(req,res)=>{
 
 }
 
-export const setUpdates = async(req,res)=>{ //status update
+export const setUpdates = async(req,res,io)=>{ //status update
     try {
         const  swapId = req.params.id;
 const { status } = req.body;
@@ -140,13 +140,32 @@ const  userId = req.user.id;
    await swap.save();
 
     if (status === 'accepted') { // i am sending the requester mail i am the recepient 
+      let chat = await Chat.findOne({swapId : swap._id}) // find the chat via the swap id which chat is belongd to this swap id 
+      // we are creatin chat here if chat is not already present 
+      if(!chat){
+      await Chat.create({
+        swapId:swapId,
+        users:[swap.recepient , swap.requester],
+        messages:[],
+      })
+    }
       await sendEmail(
         swap.requester.email,
         'Your Request Was Accepted!',
         `Great news! Your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was accepted.`
       );
-    }
+     
+      [swap.requester , swap.recepient].forEach((user)=>{
+      io.to(user.toString()).emit("swap-accepted",{
+      chat:chat._id,
+      swap:swap._id,
+      message:"Chat Created Between Users"
+      })
+      })
+    
 
+    }
+     
     if (status === 'declined') {
       await sendEmail(
         swap.requester.email,
@@ -174,10 +193,14 @@ export const outReq = async(req,res)=>{
        let sortBy ={createdAt : -1}; 
     try{
      const userId = req.user.id;
+    //  const requesterServiceDetails = await Service.findById(requesterService) // we take the services id of the request and recepient 
+    // const recepientServiceDetails = await Service.findById(recepientService)
      const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
       .populate('recepient', 'name email')
-      // .populate('requesterService', 'title')
-      .populate('recipientService', 'title').sort(sortBy).skip(skip).limit(limit)
+      // .populate("requesterServiceDetails" ,"recepientServiceDetails" )
+      .populate('requesterService', 'title') 
+      // .populate('recepientService', 'title')
+      .populate('recepientService', 'title').sort(sortBy).skip(skip).limit(limit)
        const total = await SwapService.countDocuments({requester : userId}); 
           const totalPages = Math.ceil(total/limit)
       
