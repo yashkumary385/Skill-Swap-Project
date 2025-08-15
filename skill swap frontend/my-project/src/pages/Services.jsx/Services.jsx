@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Form from 'react-bootstrap/Form';
 import Header from '../../components/Navbar/Navbar';
 import Card from 'react-bootstrap/Card';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';

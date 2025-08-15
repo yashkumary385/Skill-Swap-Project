@@ -1,18 +1,17 @@
-import { createContext, useContext, useEffect, useState } from "react";
-const AuthContext = createContext();
+import { createContext, useEffect, useState } from "react";
+export const AuthContext = createContext();
 import axios from "axios"
 import { toast } from "react-toastify";
+import { joinUserRoom } from "../Socket";
 
 
 
-export const useAuth  =()=> useContext(AuthContext)
 
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true)
     const [token , setToken] = useState(()=>localStorage.getItem("token") || null)
-
 
     const login = async (email , password) => {
 
@@ -68,6 +67,7 @@ const fetchUser = async ()=>{
     console.log(res);
 
     setUser(res.data)
+    // console.log(user)
 
     return {success :true}
     } catch (error) {
@@ -81,6 +81,10 @@ const fetchUser = async ()=>{
 }
 fetchUser()
 },[token])//token is null or empty for a moment — even if it exists in localStorage.
+
+// useEffect(()=>{
+//     console.log(user);
+// })
 return (
 
     <AuthContext.Provider value={{login , user , setUser , logout ,loading,token}}>

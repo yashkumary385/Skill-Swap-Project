@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Navbar/Navbar'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth.js';
 import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
@@ -64,6 +64,7 @@ useEffect(() => {
 
   const handleAccept = async (id) => {
     setRecepientId(id);
+    console.log(id)
     setAccept(true)
     // console.log(recepientId);
   }

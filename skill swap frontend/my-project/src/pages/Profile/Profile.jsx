@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth.js';
 import { Card } from 'react-bootstrap';
 import Header from '../../components/Navbar/Navbar';
 import { Mail, User, SquareArrowUpRight, UserCircle } from 'lucide-react';

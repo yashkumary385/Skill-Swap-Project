@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from '../../context/useAuth.js';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import { Lock ,Mail } from "lucide-react";
@@ -14,7 +14,9 @@ export const Login = () => {
     e.preventDefault();
     const result = await login(email, password)
     console.log(result); // this result is success that we add 
+    
     if (result.success) {
+      
       navigate("/")
     }
     else {

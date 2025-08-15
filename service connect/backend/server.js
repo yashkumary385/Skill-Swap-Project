@@ -24,20 +24,21 @@ app.set("io",io)
 io.on("connection",(socket)=>{
     console.log(`User Connected With Socket Id : ${socket.id}`)
      
-    socket.on("register-user", (userId)=>{
+    socket.on("register-user", (userId)=>{ // as soon as the user loads int the authcontext  from the frontend 
         socket.join(userId) // this is a room and name of the room is userId
 
     })
-    socket.on("send-message", async({chatId , sender ,content})=>{
+    socket.on("send-message", async({chatId , sender ,input})=>{
 try {
      const chat = await Chat.findById(chatId)
+     console.log(chatId,sender,input)
            if(!chat) return;
-           chat.messages.push({sender , content}) // messages inside chat schema already store messageSchema
+           chat.messages.push({sender , input}) // messages inside chat schema already store messageSchema
            chat.users.forEach((user)=>{
-            io.to(user.toString()).emit("recieve-message",{ //sending to all the users 
+            io.to(user.toString()).emit("recieve-message",{ //sending to all the users  // in recieve this msg is taken 
                 sender,
                 chatId,
-                content
+                input
             })
            })
 } catch (error) {
@@ -147,7 +148,7 @@ import outRoute from "./routes/swap.routes.js"
 app.use("/outRequest",outRoute)
 
 import reqUpdate from "./routes/swap.routes.js"
-app.use("/update",reqUpdate)
+app.use("/update",reqUpdate) // to accept
 
 
 // notication
@@ -159,6 +160,12 @@ app.use("/notification",notifyRoute)
 import markReadRoute from  "./routes/notification.routes.js"
 // import errorHandler from "./middlewares/errorHandler.midlleware.js";
 app.use("/markasread",markReadRoute)
+
+
+
+// chat routes
+import chatRoutes from "./routes/chat.routes.js"
+app.use("/",chatRoutes)
 
 app.use(errorHandler)
 

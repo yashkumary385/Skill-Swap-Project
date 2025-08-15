@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Navbar/Navbar'
 import axios from 'axios'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/useAuth.js';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useFetcher, useNavigate } from 'react-router-dom';
 
 const SwapRequest = () => {
     const [outReq, setOutReq] = useState([])
     const navigate = useNavigate()
     const [incomingReq, setIncomingtReq] = useState([])
-    const { token } = useAuth();
+    const { token , user } = useAuth();
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
@@ -56,7 +56,9 @@ const SwapRequest = () => {
         }
         handleOutgoingRequest()
     }, [currentPage])
-
+// useEffect(()=>{
+//     console.log(user);
+// })
     const handleAccept = async (id) => {
         console.log(id);
         try {
@@ -69,17 +71,15 @@ const SwapRequest = () => {
             )
             console.log(res);
             console.log(res.data.swap);
-            const chatId = res.data.chatId // from the data from the backend
+            const chatId = res.data.chat // from the data from the backend
             toast.success("Swap Accepted")
             setAcceptedReq((prev) => [...prev, res.data.swap._id])
             handleIncomingRequest()
-            navigate(`/chat/${chatId}`)
-            
+            navigate(`/chat/${chatId}`) // to the chatId page 
         } catch (error) {
             console.log(error)
         }
     }
-
     return (
         <>
             <Header />

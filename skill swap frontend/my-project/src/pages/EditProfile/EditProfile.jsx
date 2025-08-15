@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
