@@ -48,7 +48,13 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
            // setToken("")
 }
+useEffect(()=>{
+    if(user?._id){
+    joinUserRoom(user._id)
+    
+    }
 
+},[user])
 
 useEffect(()=>{ // this runs an autoloads if the token is present in localstorage . 
 const fetchUser = async ()=>{
@@ -67,7 +73,6 @@ const fetchUser = async ()=>{
     console.log(res);
 
     setUser(res.data)
-    // console.log(user)
 
     return {success :true}
     } catch (error) {
@@ -84,7 +89,7 @@ fetchUser()
 
 // useEffect(()=>{
 //     console.log(user);
-// })
+// },[user])
 return (
 
     <AuthContext.Provider value={{login , user , setUser , logout ,loading,token}}>

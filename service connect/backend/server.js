@@ -4,6 +4,8 @@ import dotenv from "dotenv"
 import errorHandler from "./middlewares/errorHandler.midlleware.js"
 import cors from  "cors"
 import Chat from "./models/Chat.js"
+import Message from "./models/Messages.js"
+
 import { Server } from "socket.io"
 import http from "http"
 dotenv.config({
@@ -28,24 +30,31 @@ io.on("connection",(socket)=>{
         socket.join(userId) // this is a room and name of the room is userId
 
     })
-    socket.on("send-message", async({chatId , sender ,input})=>{
+    socket.on("send-message", async({chatId, sender,content})=>{
 try {
      const chat = await Chat.findById(chatId)
-     console.log(chatId,sender,input)
+     console.log(chatId,sender,content)
+     console.log(chat ,'this is chat')
            if(!chat) return;
-           chat.messages.push({sender , input}) // messages inside chat schema already store messageSchema
-           chat.users.forEach((user)=>{
-            io.to(user.toString()).emit("recieve-message",{ //sending to all the users  // in recieve this msg is taken 
-                sender,
-                chatId,
-                input
+        //    chat.messages.push({sender , content}) // messages inside chat schema already store messageSchema
+            await Message.create({
+                sender:sender,
+                content:content,
+                chatId:chatId
             })
-           })
+             chat.users.forEach((user) => {
+                if (user.toString() !== sender) {
+                    socket.to(user.toString()).emit("receive-message", {
+                        sender,
+                        chatId,
+                        content
+                    });
+                }
+            });
+     console.log(chat ,'this is chat')
 } catch (error) {
     console.log(error)
-}
-          
-        
+}  
     })
      
 

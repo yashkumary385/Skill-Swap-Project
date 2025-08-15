@@ -2,9 +2,8 @@ import SwapService from "../models/SwapService.js";
 import Service from "../models/Service.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import Notification from "../models/Notification.js";
-import Chat from "../models/Chat.js";
-
-
+import Chat from "../models/Chat.js"// adjust path to your folder
+// import Cha
 
 export const createSwapRequest = async(req,res)=>{
     const {requesterServiceId , recepientServiceId ,status} = req.body; // here we are taking the service's id 
@@ -106,7 +105,7 @@ const { status } = req.body;
 const  userId = req.user.id;
 const io = req.app.get("io");
     console.log(swapId);
-    console.log(userId ,"hii"); // who is accepting or rejecting is the recepent 
+    console.log(userId ,"this is the user id "); // who is accepting or rejecting is the recepent 
     
     
     const swap = await SwapService.findById(swapId)

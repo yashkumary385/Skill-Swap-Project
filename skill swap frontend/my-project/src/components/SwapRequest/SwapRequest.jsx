@@ -15,6 +15,11 @@ const SwapRequest = () => {
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
+    const [acceptedChats , setAcceptedChats] = useState({});
+    const [chat , setChat] = useState("")
+
+
+
     const handleIncomingRequest = async () => {
         try {
             const res = await axios.get("http://localhost:8000/requests/incoming",
@@ -26,13 +31,14 @@ const SwapRequest = () => {
             )
             console.log(res);
             setIncomingtReq(res.data.incomingReq)
+       
         } catch (error) {
 
         }
     }
     useEffect(() => {
-
         handleIncomingRequest()
+             console.log(incomingReq)
     }, [])
 
     useEffect(() => {
@@ -73,13 +79,20 @@ const SwapRequest = () => {
             console.log(res.data.swap);
             const chatId = res.data.chat // from the data from the backend
             toast.success("Swap Accepted")
-            setAcceptedReq((prev) => [...prev, res.data.swap._id])
+            setAcceptedReq((prev) => [...prev, id])
+            console.log(id);
+            setAcceptedChats((prev) => [{...prev,[id]:chatId}]) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
+            setChat(chatId)
             handleIncomingRequest()
-            navigate(`/chat/${chatId}`) // to the chatId page 
+            // navigate(`/chat/${chatId}`) // to the chatId page 
         } catch (error) {
             console.log(error)
         }
     }
+            console.log(acceptedReq)
+
+            console.log(acceptedChats)
+
     return (
         <>
             <Header />
@@ -107,8 +120,12 @@ const SwapRequest = () => {
                                                         <strong>Status:</strong> {request?.status} <br />
                                                         <strong>Date:</strong> {new Date(request.createdAt).toLocaleString()}
                                                     </Card.Text>
-
-
+                                                    { acceptedReq.includes(request._id) ? (
+                                                         <Button variant="success"
+                                                        className="me-2"
+                                               onClick={() => navigate(`/chat/${chat}`)}
+                                                    >Go to Chats</Button>
+                                                    ) : <>
                                                     <Button variant="success"
                                                         disabled={acceptedReq.includes(request._id)}
                                                         className="me-2"
@@ -118,6 +135,9 @@ const SwapRequest = () => {
                                                     <Button variant="danger"
                                                         disabled={acceptedReq.includes(request._id)}
                                                     >Reject</Button>
+                                                    </>
+                                                    
+}
 
                                                 </Card.Body>
                                             </Card>
