@@ -170,6 +170,11 @@ import markReadRoute from  "./routes/notification.routes.js"
 // import errorHandler from "./middlewares/errorHandler.midlleware.js";
 app.use("/markasread",markReadRoute)
 
+import acceptedReqRoute from "./routes/swap.routes.js"
+app.use("/",acceptedReqRoute)
+
+import outAcceptedReqRoute from "./routes/swap.routes.js"
+app.use("/",outAcceptedReqRoute)
 
 
 // chat routes

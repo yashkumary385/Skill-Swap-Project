@@ -3,12 +3,9 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth.js';
 import { useNavigate } from 'react-router-dom';
-import Profile from '../../pages/Profile/Profile';
 import { Bell } from 'lucide-react';
 
 
@@ -46,6 +43,7 @@ user ?
           <Nav.Link className="" href="/discover" >Discover</Nav.Link>
           <Nav.Link  href="/swaprequests" >Swap Requests</Nav.Link>
           <Nav.Link  href="/notifications" ><div><Bell/></div></Nav.Link>
+          <Nav.Link  href="/acceptedReq" ><div>Accepted REquest</div></Nav.Link>
           
           
         </Nav>

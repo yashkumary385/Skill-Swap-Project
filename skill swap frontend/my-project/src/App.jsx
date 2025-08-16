@@ -12,6 +12,7 @@ import UserProfileWrapper from "./pages/Profile/UserProfileWrapper";
 import SwapRequest from "./components/SwapRequest/SwapRequest";
 import Notify from "./pages/Notification/Notify";
 import Chat from "./pages/Chat/Chat";
+import AcceptedReq from "./pages/AcceptedReq/AcceptedReq";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
         <Route path="/swaprequests" element={<SwapRequest/>}/>
         <Route path="/notifications" element={<Notify/>}/>
         <Route path="/chat/:chatId" element={<Chat/>}/>
+        <Route path="/acceptedReq" element={<AcceptedReq/>}/>
 
 
                 {/* <Route path="/editprofile" element={<PrivateRoutes>

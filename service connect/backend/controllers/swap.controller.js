@@ -86,6 +86,7 @@ export const myReq = async(req,res)=>{
       .populate('requesterService', 'title')
       .populate('recepientService', 'title')
 
+
    return res.status(200).json({ incomingReq  })
 
     }
@@ -148,7 +149,6 @@ if (!chat) {
       })
       })
        res.status(200).json({ message: `Request ${status}`, swap , chat:chat._id});
-
     }
      
     // if (status === 'rejected') {
@@ -199,6 +199,64 @@ export const outReq = async(req,res)=>{
         return res.status(404).json({error:error.message})
      
      }
+
+
+}
+
+
+export const acceptedReq = async(req,res)=>{
+      try {
+           const userId = req.user.id;
+          let acceptedReq=[];
+     const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
+     const incomingReq = await SwapService.find({recepient: userId})
+     .populate('recepient', 'name email')
+      .populate('requesterService', 'title')
+      .populate('recepientService', 'title')
+
+     console.log(incomingReq)
+ 
+    for (const swap of incomingReq) {
+      if (swap.status === "accepted") {
+        const chat = await Chat.find({ swapId: swap._id });
+        console.log(chat);
+        acceptedReq.push({ swap, chat });
+      }
+    }
+res.status(200).json({acceptedReq})
+      } catch (error) {
+        return res.status(404).json({error:error.message})
+        
+      }
+}
+
+
+export const outAccepted = async(req,res)=>{
+           const userId = req.user.id;
+          let outAcceptedReq=[];
+
+           try {
+             const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
+      .populate('recepient', 'name email')
+      // .populate("requesterServiceDetails" ,"recepientServiceDetails" )
+      .populate('requesterService', 'title') 
+      // .populate('recepientService', 'title')
+      .populate('recepientService', 'title')
+
+   for (const swap of outgoingReq) {
+      if (swap.status === "accepted") {
+        const chat = await Chat.find({ swapId: swap._id });
+        console.log(chat);
+        outAcceptedReq.push({ swap, chat });
+      }
+    }
+res.status(200).json({outAcceptedReq})
+
+           } catch (error) {
+        return res.status(404).json({error:error.message})
+            
+            
+           }
 
 
 }

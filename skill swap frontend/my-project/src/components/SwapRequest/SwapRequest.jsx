@@ -15,8 +15,7 @@ const SwapRequest = () => {
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
-    const [acceptedChats , setAcceptedChats] = useState({});
-    const [chat , setChat] = useState("")
+    const [acceptedChats , setAcceptedChats] = useState({}); // keeping the request id of the sawp as the key nand chatID as the value 
 
 
 
@@ -31,6 +30,11 @@ const SwapRequest = () => {
             )
             console.log(res);
             setIncomingtReq(res.data.incomingReq)
+            incomingReq.forEach((req)=>{
+                if(req.status === "accepted"){
+            setAcceptedChats((prev) =>( {...prev,[id]:chatId})) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
+                }
+            })
        
         } catch (error) {
 
@@ -81,16 +85,12 @@ const SwapRequest = () => {
             toast.success("Swap Accepted")
             setAcceptedReq((prev) => [...prev, id])
             console.log(id);
-            setAcceptedChats((prev) => [{...prev,[id]:chatId}]) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
-            setChat(chatId)
             handleIncomingRequest()
-            // navigate(`/chat/${chatId}`) // to the chatId page 
         } catch (error) {
             console.log(error)
         }
     }
-            console.log(acceptedReq)
-
+            // console.log(acceptedReq)
             console.log(acceptedChats)
 
     return (
@@ -120,10 +120,10 @@ const SwapRequest = () => {
                                                         <strong>Status:</strong> {request?.status} <br />
                                                         <strong>Date:</strong> {new Date(request.createdAt).toLocaleString()}
                                                     </Card.Text>
-                                                    { acceptedReq.includes(request._id) ? (
+                                                    { request.status === "accepted" ? (
                                                          <Button variant="success"
                                                         className="me-2"
-                                               onClick={() => navigate(`/chat/${chat}`)}
+                                               onClick={() => navigate(`/chat/${acceptedChats[request._id]}`)}
                                                     >Go to Chats</Button>
                                                     ) : <>
                                                     <Button variant="success"

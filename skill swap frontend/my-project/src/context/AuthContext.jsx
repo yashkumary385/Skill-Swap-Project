@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }) => {
 useEffect(()=>{
     if(user?._id){
     joinUserRoom(user._id)
-    
     }
 
 },[user])
