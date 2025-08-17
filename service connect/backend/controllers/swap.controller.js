@@ -14,6 +14,7 @@ export const createSwapRequest = async(req,res)=>{
     try {
      const requesterService = await Service.findById(requesterServiceId) // we take the services id of the request and recepient 
     const recepientService = await Service.findById(recepientServiceId)
+  
     
         const existingService = await SwapService.findOne({
             requester:userId,
@@ -42,7 +43,7 @@ export const createSwapRequest = async(req,res)=>{
    })  
     const notify1 =  await Notification.create({
     user : requesterService.user._id ,
-    message:`The request made to you for the service ${recepientService.title} by ${requesterService.name} inexchange of you service ${requesterService.title} `,
+    message:`The request made to you for the service ${recepientService.title} by ${requesterService.user.name} and email ${requesterService.email}  inexchange of you service ${requesterService.title} `,
    })  
    await sendEmail(
   recepientService.email,
@@ -78,6 +79,7 @@ export const getSwap = async(req,res)=>{
 // get incoming request 
 export const myReq = async(req,res)=>{ 
     console.log("bitttchh");
+    let request =[]
     
     try{
      const userId = req.user.id;
@@ -85,9 +87,12 @@ export const myReq = async(req,res)=>{
       .populate('recepient', 'name email')
       .populate('requesterService', 'title')
       .populate('recepientService', 'title')
+     for( const req of incomingReq){
+      if(req.status === "pending" )
+        request.push(req);
+     }
 
-
-   return res.status(200).json({ incomingReq  })
+   return res.status(200).json({request})
 
     }
 
@@ -208,8 +213,8 @@ export const acceptedReq = async(req,res)=>{
       try {
            const userId = req.user.id;
           let acceptedReq=[];
-     const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
-     const incomingReq = await SwapService.find({recepient: userId})
+    //  const outgoingReq = await SwapService.find({requester: userId})
+     const incomingReq = await SwapService.find({recepient: userId}).populate('requester', 'name email')
      .populate('recepient', 'name email')
       .populate('requesterService', 'title')
       .populate('recepientService', 'title')

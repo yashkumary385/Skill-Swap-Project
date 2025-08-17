@@ -17,27 +17,27 @@ function Discover() {
   const [currentPage, setCurrentPage] = useState(1); // for pagination
   const [totalPages, setTotalPages] = useState(1);
   const [accept, setAccept] = useState(false);
-  const [recepientId , setRecepientId] = useState("")
-  const [requesterId , setRequesterId] = useState("")
+  const [recepientId, setRecepientId] = useState("")
+  const [requesterId, setRequesterId] = useState("")
 
-  const [requestedServices , setRequestedServices] = useState([])
+  const [requestedServices, setRequestedServices] = useState([])
   const [myServices, setMyServices] = useState([]);
 
-useEffect(() => {
+  useEffect(() => {
 
-  const fetchMyServices = async () => {
-    try {
-      const res = await axios.get("http://localhost:8000/getUserService/users", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setMyServices(res.data.services);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const fetchMyServices = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/getUserService/users", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setMyServices(res.data.services);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  fetchMyServices();
-}, []);
+    fetchMyServices();
+  }, []);
 
   useEffect(() => { // implement pagination tommorrow
     console.log("services fetch");
@@ -68,36 +68,36 @@ useEffect(() => {
     setAccept(true)
     // console.log(recepientId);
   }
-   
-// console.log(requesterId) // requester is my id because i am making a request 
-// console.log(recepientId)
 
-  const handleRequest = async()=>{
+  // console.log(requesterId) // requester is my id because i am making a request 
+  // console.log(recepientId)
+
+  const handleRequest = async () => {
     console.log()
     try {
-      const res = await axios.post("http://localhost:8000/api/swap/create",{
-         requesterServiceId:requesterId,
-        recepientServiceId:recepientId, // both the services are being checked it you have made swap for a service you cant make swap for  it again 
-        status:"pending"
+      const res = await axios.post("http://localhost:8000/api/swap/create", {
+        requesterServiceId: requesterId,
+        recepientServiceId: recepientId, // both the services are being checked it you have made swap for a service you cant make swap for  it again 
+        status: "pending"
 
       },
-    {
-        headers:{Authorization:`Bearer ${token}`}
+        {
+          headers: { Authorization: `Bearer ${token}` }
 
-    }
+        }
 
-  )
-  setRequestedServices((prev)=> [...prev , recepientId]);
-  console.log(res);
-  toast.success("Swap Created Succesfully")
+      )
+      setRequestedServices((prev) => [...prev, recepientId]);
+      console.log(res);
+      toast.success("Swap Created Succesfully")
     } catch (error) {
       console.log(error)
-        if (error.response?.data?.message) {
-    toast.error(error.response.data.message);
-  } else {
-    toast.error("Something went wrong while creating the swap.");
-  }
-      
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong while creating the swap.");
+      }
+
     }
 
   }
@@ -121,8 +121,8 @@ useEffect(() => {
                       <Card.Text>{service.cateogory}</Card.Text>
                       <Card.Text>{service.type}</Card.Text>
                       <div className="flex gap-2">
-                        <Button variant={requestedServices.includes(service._id) ? "secondary" : "success"} 
-                        disabled={requestedServices.includes(service._id)} onClick={() => handleAccept(service._id)}>{requestedServices.includes(service._id)? "Requested" : "Accept"}</Button>
+                        <Button variant={requestedServices.includes(service._id) ? "secondary" : "success"}
+                          disabled={requestedServices.includes(service._id)} onClick={() => handleAccept(service._id)}>{requestedServices.includes(service._id) ? "Requested" : "Accept"}</Button>
                       </div>
                     </Card.Body>
                     <div className="flex flex-col justify-center gap-2 text-md font-bold pr-2">
@@ -167,34 +167,36 @@ useEffect(() => {
 
         {/* Right side - Info Panel */}
         <div className="w-[30%] pt-14">
+{ accept && <>
           <div className=" p-4 rounded-xl  text-white text-left w-full">
-                  <Card className="text-center bg-gray-200 text-black" style={{height:"400px"}}>
-      <Card.Header >Service Swap</Card.Header>
-      <Card.Body>
-        <Card.Title>Create Swap Request</Card.Title>
-        <Card.Text>
-          Enter the Service Id of your request for which you want to swap :
-        </Card.Text>
-        <div className='flex flex-col justify-center items-center gap-2'>
-       <select
-  onChange={(e) => setRequesterId(e.target.value)}
-  className="border-2 border-black w-3/4 pl-2 text-black"
->
-  <option value="">Select your service</option>
-  {myServices.map((service) => (
-    <option key={service._id} value={service._id}>
-      {service.title}
-    </option>
-  ))}
-</select>
+            <Card className="text-center bg-gray-200 text-black" style={{ height: "400px" }}>
+              <Card.Header >Service Swap</Card.Header>
+              <Card.Body>
+                <Card.Title>Create Swap Request</Card.Title>
+                <Card.Text>
+                  Enter the Service Id of your request for which you want to swap :
+                </Card.Text>
+                <div className='flex flex-col justify-center items-center gap-2'>
+                  <select
+                    onChange={(e) => setRequesterId(e.target.value)}
+                    className="border-2 border-black w-3/4 pl-2 text-black"
+                  >
+                    <option value="">Select your service</option>
+                    {myServices.map((service) => (
+                      <option key={service._id} value={service._id}>
+                        {service.title}
+                      </option>
+                    ))}
+                  </select>
 
-      <Button variant="primary" className='w-1/2'onClick={handleRequest}>Create Request</Button>
-</div>
-      </Card.Body>
-      {/* <Card.Footer className="text-muted">2 days ago</Card.Footer> */}
+                  <Button variant="primary" className='w-1/2' onClick={handleRequest}>Create Request</Button>
+                </div>
+              </Card.Body>
+              {/* <Card.Footer className="text-muted">2 days ago</Card.Footer> */}
 
-    </Card>
+            </Card>
           </div>
+        </>  }
         </div>
       </div>
     </>

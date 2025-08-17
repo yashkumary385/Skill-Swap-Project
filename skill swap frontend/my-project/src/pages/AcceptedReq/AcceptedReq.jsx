@@ -11,7 +11,7 @@ import Spinner from 'react-bootstrap/Spinner';
 const AcceptedReq = () => {
     // Dummy notifications for layout demo
     const [acceptedReq, setAcceptedReq] = useState([]);
-    const [outAcceptedReq, setOutAcceptedReq] = useState([]);
+    const [outAcceptedReq, setOutAcceptedReq] = useState([]); 
     const { token } = useAuth();
 
     const navigate = useNavigate()
@@ -39,7 +39,7 @@ const AcceptedReq = () => {
                         headers: { Authorization: `Bearer ${token}` }
                     }
                 )
-                setOutAcceptedReq(res.data.outgoingReq)
+                setOutAcceptedReq(res.data.outAcceptedReq)
                 console.log(res);
             } catch (error) {
                 console.log(error)
@@ -117,7 +117,6 @@ const AcceptedReq = () => {
                                             <strong>Status:</strong> {request?.swap?.status} <br />
                                             <strong>Date:</strong> {new Date(request.swap.createdAt).toLocaleString()}
                                         </Card.Text>
-
                                         <Button variant="success"
                                             className="me-2"
                                             onClick={() => navigate(`/chat/${request.chat.map((chat) => (

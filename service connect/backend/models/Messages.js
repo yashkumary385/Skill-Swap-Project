@@ -15,6 +15,7 @@ import mongoose, { Schema } from "mongoose"
             ref:"Chat"
           
         },
+        readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
         timestamp: { type: Date, default: Date.now }
     }
 )

@@ -15,10 +15,8 @@ const SwapRequest = () => {
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
-    const [acceptedChats , setAcceptedChats] = useState({}); // keeping the request id of the sawp as the key nand chatID as the value 
-
-
-
+    const [acceptedChats , setAcceptedChats] = useState({}); // keeping the request id of the sawp as the key nand chatID as the value
+    
     const handleIncomingRequest = async () => {
         try {
             const res = await axios.get("http://localhost:8000/requests/incoming",
@@ -29,11 +27,11 @@ const SwapRequest = () => {
                 }
             )
             console.log(res);
-            setIncomingtReq(res.data.incomingReq)
+            setIncomingtReq(res.data.request)
             incomingReq.forEach((req)=>{
-                if(req.status === "accepted"){
-            setAcceptedChats((prev) =>( {...prev,[id]:chatId})) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
-                }
+            //     if(req.status === "accepted"){
+            // setAcceptedChats((prev) =>( {...prev,[id]:chatId})) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
+            //     }
             })
        
         } catch (error) {
@@ -81,9 +79,36 @@ const SwapRequest = () => {
             )
             console.log(res);
             console.log(res.data.swap);
-            const chatId = res.data.chat // from the data from the backend
+        // from the data from the backend
             toast.success("Swap Accepted")
             setAcceptedReq((prev) => [...prev, id])
+            console.log(id);
+            handleIncomingRequest()
+           
+          socket.emit("swap-accepted", ({message})=>{
+            toast.success(message);
+          })
+    
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleReject = async (id) => {
+        const confirm = window.confirm("YOU WONT SEE THIS REQUEST IN FUTURE ?")
+        if(!confirm) return;
+        console.log(id);
+        try {
+            const res = await axios.put(`http://localhost:8000/update/${id}`, {
+                status: "rejected"
+            },
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            )
+            console.log(res);
+            console.log(res.data.swap);
+            toast.success("Swap Rejected")
             console.log(id);
             handleIncomingRequest()
         } catch (error) {
@@ -134,6 +159,7 @@ const SwapRequest = () => {
                                                     >Accept</Button>
                                                     <Button variant="danger"
                                                         disabled={acceptedReq.includes(request._id)}
+                                                        onClick={()=>handleReject(request._id)}
                                                     >Reject</Button>
                                                     </>
                                                     

@@ -42,8 +42,8 @@ user ?
        <button onClick={handleLogout}>Logout</button>
           <Nav.Link className="" href="/discover" >Discover</Nav.Link>
           <Nav.Link  href="/swaprequests" >Swap Requests</Nav.Link>
+          <Nav.Link  href="/acceptedReq" ><div> Requests</div></Nav.Link>
           <Nav.Link  href="/notifications" ><div><Bell/></div></Nav.Link>
-          <Nav.Link  href="/acceptedReq" ><div>Accepted REquest</div></Nav.Link>
           
           
         </Nav>
