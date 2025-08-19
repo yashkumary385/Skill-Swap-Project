@@ -8,6 +8,18 @@ import { useAuth } from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const validateEmail = (email) => {
+  const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+  return re.test(String(email).toLowerCase());
+};
+
+const validatePassword = (password) => {
+  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return re.test(password);
+};
 
 const EditProfile = () => {
 
@@ -37,13 +49,7 @@ const EditProfile = () => {
   )
   const [skills, setSkills] = useState("")
   const [learned, setLearned] = useState("")
-  // const [education, setEducation] = useState([])
-
-
-
-
-
-
+  const [password, setPassword] = useState(""); // New state for password
 
   useEffect(() => {
     setForm({
@@ -56,37 +62,35 @@ const EditProfile = () => {
       education: user?.education || [],
       bio: user?.bio || ""
     })
-
-    // setEducation(
-    //   user?.education || []
-    // )
   }, [user])
 
   const handleSkill = () => {
-    //  if(form.skills.length) notify();
+    if (!skills.trim()) {
+      toast.warning("Skill cannot be empty!");
+      return;
+    }
     setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }))
     setSkills("")
   }
   const handleLearn = () => {
+    if (!learned.trim()) {
+      toast.warning("Learned skill cannot be empty!");
+      return;
+    }
     setForm((prev) => ({ ...prev, learned: [...prev.learned, learned] }))
     setLearned("")
   }
-  // here look here please 
-
 
   const handleEducation = () => {
-    if (!educationForm.instituition || !educationForm.degree) {
-      alert("Please fill in institution and degree fields.");
+    if (!educationForm.instituition || !educationForm.degree || !educationForm.startDate || !educationForm.endDate || !educationForm.score) {
+      toast.warning("Please fill in all education fields.");
       return;
     }
 
-    // const updatedEducation = [...form.education, educationForm];
-
     setForm((prev) => ({
       ...prev,
-      education:[educationForm]
+      education: [...prev.education, educationForm]
     }));
-    // i am nesting another array in eduactoion You're nesting arrays: education: [...prev.education, updatedEducation] adds the entire updatedEducation array inside another array — it should be education: updatedEducation.
     setEducationForm({
       instituition: "",
       degree: "",
@@ -94,17 +98,35 @@ const EditProfile = () => {
       endDate: "",
       score: ""
     });
-    console.log(educationForm)
-
   }
 
-
   const handleSubmit = async () => {
+    if (!form.name || !form.username || !form.email) {
+      toast.warning("Name, Username, and Email are required!");
+      return;
+    }
+
+    if (form.name.length < 3) {
+      toast.warning("Name must be at least 3 characters long.");
+      return;
+    }
+
+    if (!validateEmail(form.email)) {
+      toast.warning("Please enter a valid email address!");
+      return;
+    }
+
+    if (password && !validatePassword(password)) {
+      toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+      return;
+    }
+
     try {
       const res = await axios.put("http://localhost:8000/updateUser", {
         name: form.name,
         username: form.username,
         email: form.email,
+        password: password || undefined, // Only send password if it's updated
         skills: form.skills,
         bio: form.bio,
         education: form.education,
@@ -114,25 +136,27 @@ const EditProfile = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         }
-      }
-      )
-      console.log(form.education)
+      })
       console.log(res);
       setUser(res.data)
-      // toast.success("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       setTimeout(() => navigate("/profile"), 1500);
     } catch (error) {
-      console.log(error)
+      console.error("Profile update error:", error);
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else if (error.request) {
+        toast.error("Network error. Please check your internet connection.");
+      } else {
+        toast.error("An unexpected error occurred during profile update.");
+      }
     }
   }
-
-
 
   return (
     <div className='min-h-[100vh] bg-[#4CAF50] flex justify-center items-center flex-col'>
       <h1 className='mb-4'>Update User Details</h1>
       <div className='flex justify-center items-center flex-col h-[80.8vh] border-3 border-black rounded-2xl w-[30vw] bg-gray-200 text-black'>
-
 
 
         <Tabs
@@ -148,13 +172,14 @@ const EditProfile = () => {
 
 
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <Form.Control type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
 
 
               <Form.Label>Name</Form.Label>
               <Form.Control type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
 
-
+              <Form.Label>New Password (optional)</Form.Label>
+              <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Leave blank if not changing" />
 
               <Form.Label>Profile Picture</Form.Label>
               <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} />
@@ -164,16 +189,17 @@ const EditProfile = () => {
 
 
 
+
           </Tab>
           <Tab eventKey="profile" title="Profile">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Skills</Form.Label>
-              <Form.Control type="text" onChange={(e) => setSkills(e.target.value)} />
+              <Form.Control type="text" value={skills} onChange={(e) => setSkills(e.target.value)} />
               <Button onClick={handleSkill}>Add</Button>
             </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Bio</Form.Label>
-              <Form.Control type="text" onChange={(e) => setForm({ ...form, bio: e.target.value })} />
+              <Form.Control type="text" value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
             </Form.Group>
           </Tab>
           <Tab eventKey="contact" title="Education">
@@ -191,7 +217,7 @@ const EditProfile = () => {
               <Form.Control type="date" value={educationForm.endDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, endDate: e.target.value }))} />
 
               <Form.Label>CGPA</Form.Label>
-              <Form.Control type="text" onChange={(e) => setEducationForm((prev) => ({ ...prev, score: e.target.value }))} />
+              <Form.Control type="text" value={educationForm.score} onChange={(e) => setEducationForm((prev) => ({ ...prev, score: e.target.value }))} />
               <label >Learned</label>
               <form className='flex flex-row gap-2'>
                 <input type="text"
@@ -207,6 +233,7 @@ const EditProfile = () => {
             </Form.Group>
           </Tab>
         </Tabs>
+
 
 
 

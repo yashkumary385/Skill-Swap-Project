@@ -1,0 +1,22 @@
+[33ma5db8b7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: commit: added chat functionality and typing indicators
+[33m6fe58ee[m HEAD@{1}: commit: added accepted page nd other controllers
+[33mb583ba8[m HEAD@{2}: commit: added messages model removed from chat model and rendered real time messages
+[33m816fb28[m HEAD@{3}: commit: added chat Room (work left though)
+[33mfdc8e94[m HEAD@{4}: commit: Client side socket implementation start
+[33m7599721[m HEAD@{5}: commit: started adding chat
+[33m870599b[m HEAD@{6}: commit: added notification page and some functionality still left
+[33m836b4d8[m HEAD@{7}: commit: completed swapRequest page notification left
+[33m35a64d6[m HEAD@{8}: commit: completed discover
+[33mf2170da[m HEAD@{9}: commit: added userProfileWrapper
+[33m4880318[m HEAD@{10}: commit: started discover services pagination left to implement
+[33m04598aa[m HEAD@{11}: commit: completed services
+[33m21a8092[m HEAD@{12}: commit: updated services and rendered them just updating left
+[33m4d695c9[m HEAD@{13}: commit: Added Services
+[33m5dfd8d2[m HEAD@{14}: commit: Completed Update user (still some left)
+[33mb751bf1[m HEAD@{15}: commit: added user update : EditProfil.jsx
+[33m4a6d95f[m HEAD@{16}: commit: signup completed : image left
+[33mff154ff[m HEAD@{17}: commit: use state updated
+[33m1bd3460[m HEAD@{18}: commit: added user properties
+[33meb0b95d[m HEAD@{19}: commit: testing
+[33m8921b39[m HEAD@{20}: commit: some updates
+[33m166d5e1[m HEAD@{21}: commit (initial): Initial commit

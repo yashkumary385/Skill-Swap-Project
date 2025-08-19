@@ -1,13 +1,13 @@
 import React from 'react'
 import { Computer } from 'lucide-react'
 import { Header } from '../../components/Navbar/Navbar';
-
 import Card from 'react-bootstrap/Card';
 
 export function LandingPage() {
   return (
     <>
       <Header />
+       
       <div className='min-h-[100vh] bg-[#4CAF50] flex items-center justify-center flex-col gap-3'>
         <div className='w-[400px]  bg-[#F9FAFB] flex flex-col items-center justify-center border-4 border-black text-bold'>
           <p className='text-7xl font-serif  '>Skill Swap</p>

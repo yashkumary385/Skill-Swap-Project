@@ -8,8 +8,31 @@ import Tabs from 'react-bootstrap/Tabs';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
+const validateEmail = (email) => {
+    // Regular expression for a basic email validation
+    // It checks for:
+    // ^[\w.-]+ : Starts with one or more word characters, dots, or hyphens
+    // @ : Followed by an '@' symbol
+    // [\w.-]+ : Then one or more word characters, dots, or hyphens (for the domain name)
+    // \. : Followed by a dot
+    // [A-Za-z]{2,}$: Ends with 2 or more letters (for the top-level domain)
+    const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+};
 
-export const Signup = () => {
+const validatePassword = (password) => {
+    // Regular expression for password validation
+    // It checks for:
+    // (?=.*[a-z]) : At least one lowercase letter
+    // (?=.*[A-Z]) : At least one uppercase letter
+    // (?=.*\d) : At least one digit
+    // (?=.*[@$!%*?&]) : At least one special character from the set @$!%*?&
+    // [A-Za-z\d@$!%*?&]{8,} : Minimum of 8 characters, consisting of letters, digits, and the allowed special characters
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+};
+
+function Signup() {
 
 
     const [education, SetEducation] = useState([]) // array state 
@@ -58,12 +81,29 @@ export const Signup = () => {
     ;
 
 
-    const Signup = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
-        if(!form.name || !form.email ){
-          toast.warning("Name and Password are required")
-          return 
+
+        if (!form.name || !form.email || !form.password) {
+            toast.warning("Name, Email, and Password are required!");
+            return;
         }
+
+        if (form.name.length < 3) {
+            toast.warning("Name must be at least 3 characters long.");
+            return;
+        }
+
+        if (!validateEmail(form.email)) {
+            toast.warning("Please enter a valid email address!");
+            return;
+        }
+
+        if (!validatePassword(form.password)) {
+            toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            return;
+        }
+
         console.log(form)
         try {
             const res = await axios.post("http://localhost:8000/api/auth/register", {
@@ -80,13 +120,21 @@ export const Signup = () => {
             })
 
             console.log(res)
+            toast.success("Signup successful!");
             setTimeout(() => {
                 navigate("/login")
             }, 1500)
             
 
         } catch (error) {
-            console.log(error)
+            console.error("Signup error:", error);
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            } else if (error.request) {
+                toast.error("Network error. Please check your internet connection.");
+            } else {
+                toast.error("An unexpected error occurred during signup.");
+            }
 
         }
 
@@ -130,6 +178,7 @@ export const Signup = () => {
         setLearned("")
 
     }
+
 
 
 
@@ -366,9 +415,8 @@ export const Signup = () => {
 
 
 
-
                         </form>
-                        <Button onClick={Signup} variant="outline-success" className="w-full mt-4">
+                        <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4">
                                 Signup
                             </Button>
                     </Tab>
@@ -385,15 +433,12 @@ export const Signup = () => {
 
 
 
-
-
-
-
-
             </div>
-            
         </div>
         
+
+
+
 
 
 
@@ -403,3 +448,5 @@ export const Signup = () => {
     )
 
 }
+
+export default Signup;

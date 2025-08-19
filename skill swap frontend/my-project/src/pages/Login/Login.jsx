@@ -3,25 +3,76 @@ import { useAuth } from '../../context/useAuth.js';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import { Lock ,Mail } from "lucide-react";
-export const Login = () => {
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const validateEmail = (email) => {
+    // Regular expression for a basic email validation
+    // It checks for:
+    // ^[\w.-]+ : Starts with one or more word characters, dots, or hyphens
+    // @ : Followed by an '@' symbol
+    // [\w.-]+ : Then one or more word characters, dots, or hyphens (for the domain name)
+    // \. : Followed by a dot
+    // [A-Za-z]{2,}$: Ends with 2 or more letters (for the top-level domain)
+    const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const validatePassword = (password) => {
+    // Regular expression for password validation
+    // It checks for:
+    // (?=.*[a-z]) : At least one lowercase letter
+    // (?=.*[A-Z]) : At least one uppercase letter
+    // (?=.*\d) : At least one digit
+    // (?=.*[@$!%*?&]) : At least one special character from the set @$!%*?&
+    // [A-Za-z\d@$!%*?&]{8,} : Minimum of 8 characters, consisting of letters, digits, and the allowed special characters
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return re.test(password);
+};
+
+function Login() {
   const { login } = useAuth();
   const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = async (e) => {
-    console.log("hahah")
     e.preventDefault();
-    const result = await login(email, password)
-    console.log(result); // this result is success that we add 
-    
-    if (result.success) {
+
+    // if (!email || !password) {
+    //   toast.warning("Email and Password are required!");
+    //   return;
+    // }
+
+    // if (!validateEmail(email)) {
+    //     toast.warning("Please enter a valid email address!");
+    //     return;
+    // }
+
+    // if (!validatePassword(password)) {
+    //     toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    //     return;
+    // }
+
+    try {
+      const result = await login(email, password)
+      console.log(result); 
       
-      navigate("/")
-    }
-    else {
-      console.log("error")
-       
+      if (result.success) {
+        toast.success("Login successful!");
+        navigate("/");
+      } else {
+        toast.error(result.message || "Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+        console.error("Login error:", error);
+        if (error.response && error.response.data && error.response.data.message) {
+            toast.error(error.response.data.message);
+        } else if (error.request) {
+            toast.error("Network error. Please check your internet connection.");
+        } else {
+            toast.error("An unexpected error occurred during login.");
+        }
     }
   }
   return (
@@ -78,3 +129,5 @@ export const Login = () => {
   )
 
 }
+
+export default Login;
