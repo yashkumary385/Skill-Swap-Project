@@ -26,7 +26,7 @@ const navigate = useNavigate()
       }
     }
   return (
-    <Navbar className="bg-body-tertiary mb-2 relative">
+    <Navbar className="bg-body-tertiary mb-2 relative font-serif">
       <Container fluid>
         {/* Brand title aligned to the left */}
         <Navbar.Brand className="font-serif px-10">Skill Swap</Navbar.Brand>

@@ -53,7 +53,7 @@ function Signup() {
         bio: "",
         education: [],
         learned: [],
-        image:""
+        image: ""
 
 
     })
@@ -124,7 +124,7 @@ function Signup() {
             setTimeout(() => {
                 navigate("/login")
             }, 1500)
-            
+
 
         } catch (error) {
             console.error("Signup error:", error);
@@ -156,6 +156,12 @@ function Signup() {
 
     const handleEducation = (e) => {
         e.preventDefault();
+
+        if (educationForm.score !== null && isNaN(Number(educationForm.score))) {
+            toast.warning("Please enter a valid number for Marks Obtained in Cgpa.");
+            return;
+        }
+
         const updatedEducation = [...education, educationForm];
         SetEducation(updatedEducation);
         // SetEducation((prev)=>[...education , educationForm ])
@@ -168,7 +174,7 @@ function Signup() {
             endDate: "",
             score: ""
         });
-        console.log(educationForm)
+        
 
     }
     const handleLearn = (e) => {
@@ -183,7 +189,7 @@ function Signup() {
 
 
     return (
-        <div className="min-h-[100vh] bg-[#4CAF50] flex justify-center items-center">
+        <div className="min-h-[100vh] bg-[#4CAF50] flex justify-center items-center font-serif">
             <div className="w-[350px] p-6 flex flex-col items-center rounded-lg bg-[#F9FAFB] gap-6">
 
                 <div className="text-2xl font-bold">Signup</div>
@@ -195,11 +201,11 @@ function Signup() {
 
                     transition={false}
                     id="noanim-tab-example"
-                    className="mb-3"
+                    className="mb-3 flex flex-row"
                 >
                     <Tab eventKey="Credentails" title="Credentails">
-                       
-             
+
+
 
 
                         <form className="flex flex-col items-center justify-center gap-3 w-full"  >
@@ -237,17 +243,18 @@ function Signup() {
                                 <div className="absolute top-2 right-2" onClick={setVisibility}><Eye /></div>
                             </div>
                             <div>
+                                <label>Profile Image</label>
                                 <input
-                                 type="file"
-                                  placeholder="Select image" 
-                                  className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    type="file"
+                                    placeholder="Select image"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
                                     accept="image/*"
 
-                                  onChange={(e)=> setForm({...form , image:e.target.files[0]})}
-                                  />
-                                
+                                    onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+                                />
+
                             </div>
-                           
+
                         </form>
                     </Tab>
                     <Tab eventKey="Details" title="Details">
@@ -280,7 +287,7 @@ function Signup() {
 
 
                                 {/* } */}
-                              
+
 
                                 <div className="">
                                     <ul className="flex flex-row gap-2 pt-3 items-center justify-content">
@@ -330,9 +337,9 @@ function Signup() {
 
                                 <div className="flex flex-row gap-3 ">
                                     <input
-                                        type="text"
+                                        type="number"
                                         value={educationForm.score}
-                                        onChange={(e) => SetEducationForm({ ...educationForm, score: e.target.value })}
+                                        onChange={(e) => SetEducationForm({ ...educationForm, score: e.target.value === '' ? '' : Number(e.target.value) })}
 
                                         placeholder="Marks Obtained in Cgpa"
                                         className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
@@ -417,10 +424,10 @@ function Signup() {
 
                         </form>
                         <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4">
-                                Signup
-                            </Button>
+                            Signup
+                        </Button>
                     </Tab>
-                     
+
                 </Tabs>
 
 
@@ -435,7 +442,7 @@ function Signup() {
 
             </div>
         </div>
-        
+
 
 
 

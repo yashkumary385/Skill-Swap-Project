@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from '../../context/useAuth.js';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Lock ,Mail } from "lucide-react";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -78,7 +78,7 @@ function Login() {
   return (
 
     <div
-      className="flex justify-center items-center min-h-[100vh]"
+      className="flex justify-center items-center min-h-[100vh] "
       style={{ backgroundColor: "#4CAF50" }}
     >
       <div
@@ -122,6 +122,9 @@ function Login() {
             Login
           </Button>
         </form>
+        <div className="mt-4 text-center">
+          Don't have an account? <Link to="/signup" className="text-[#4CAF50] font-bold">Sign Up</Link>
+        </div>
       </div>
     </div>
 

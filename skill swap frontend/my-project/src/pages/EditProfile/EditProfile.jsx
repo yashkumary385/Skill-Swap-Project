@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { useAuth } from '../../context/useAuth.js';
+import { useAuth} from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +22,7 @@ const validatePassword = (password) => {
 };
 
 const EditProfile = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const { user, setUser, token } = useAuth();
@@ -122,6 +123,7 @@ const EditProfile = () => {
     }
 
     try {
+      setIsLoading(true);
       const res = await axios.put("http://localhost:8000/updateUser", {
         name: form.name,
         username: form.username,
@@ -150,6 +152,8 @@ const EditProfile = () => {
       } else {
         toast.error("An unexpected error occurred during profile update.");
       }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -184,7 +188,7 @@ const EditProfile = () => {
               <Form.Label>Profile Picture</Form.Label>
               <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} />
             </Form.Group>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleSubmit} disabled={isLoading}>{isLoading ? "Submitting..." : "Submit"} </Button>
 
 
 
@@ -226,9 +230,9 @@ const EditProfile = () => {
                   placeholder='Skills learned'
                   className='p-2 bg-white mb-2 rounded-lg'
                 />
-                <Button variant="outline-success" onClick={handleLearn}>Add</Button>
+                <Button variant="outline-success" onClick={handleLearn} disabled={isLoading}>{isLoading ? "Adding..." : "Add"}</Button>
               </form>
-              <Button ariant="outline-success " onClick={handleEducation}>Add Education</Button>
+              <Button ariant="outline-success " onClick={handleEducation} disabled={isLoading}>{isLoading ? "Adding..." : "Add Education"}</Button>
 
             </Form.Group>
           </Tab>
