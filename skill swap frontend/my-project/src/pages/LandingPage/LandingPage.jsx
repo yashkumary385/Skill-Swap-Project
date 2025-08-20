@@ -3,14 +3,16 @@ import { Computer } from 'lucide-react'
 import { Header } from '../../components/Navbar/Navbar'
 import Card from 'react-bootstrap/Card'
 import CardGroup from 'react-bootstrap/CardGroup';
+import { useAuth } from '../../context/useAuth.js';
 
 export function LandingPage() {
+  const {user} = useAuth();
   return (
     <>
       <Header />
 
       {/* Hero Section */}
-      <div className="min-h-[60vh] bg-[#4CAF50] flex items-center justify-start flex-col gap-3">
+      <div className="min-h-[45vh] bg-[#4CAF50] flex items-center justify-start flex-col gap-3">
         <div className="w-[400px] bg-[#F9FAFB] flex flex-col items-center justify-center border-4 border-black text-bold mt-18">
           <p className="text-7xl font-serif pt-4">Skill Swap</p>
           <div className="text-4xl font-serif">
@@ -18,7 +20,17 @@ export function LandingPage() {
           </div>
         </div>
       </div>
+      <div className='bg-[#4CAF50] flex items-center justify-center pb-6'>
+            <Card className="text-center">
+      <Card.Body>
+        <Card.Title>Hello {user?.name} 👋</Card.Title>
+        <Card.Text>
+Ready to swap skills and grow together?” 
+</Card.Text>
+      </Card.Body>
+    </Card>
 
+      </div>
       {/* About Us Section */}
       <div className="flex justify-start min-h-screen bg-[#4CAF50] pl-10 flex-col font-serif">
         <h1 className="mb-5">About Us</h1>

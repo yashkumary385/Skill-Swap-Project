@@ -84,41 +84,54 @@ function Signup() {
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        if (!form.name || !form.email || !form.password) {
-            toast.warning("Name, Email, and Password are required!");
-            return;
-        }
+        // if (!form.name || !form.email || !form.password) {
+        //     toast.warning("Name, Email, and Password are required!");
+        //     return;
+        // }
 
-        if (form.name.length < 3) {
-            toast.warning("Name must be at least 3 characters long.");
-            return;
-        }
+        // if (form.name.length < 3) {
+        //     toast.warning("Name must be at least 3 characters long.");
+        //     return;
+        // }
 
-        if (!validateEmail(form.email)) {
-            toast.warning("Please enter a valid email address!");
-            return;
-        }
+        // if (!validateEmail(form.email)) {
+        //     toast.warning("Please enter a valid email address!");
+        //     return;
+        // }
 
-        if (!validatePassword(form.password)) {
-            toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
-            return;
-        }
+        // if (!validatePassword(form.password)) {
+        //     toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        //     return;
+        // }
 
         console.log(form)
         try {
-            const res = await axios.post("http://localhost:8000/api/auth/register", {
-                name: form.name,
-                email: form.email,
-                password: form.password,
-                bio: form.bio,
-                skills: form.skills,
-                education: form.education,
-                learned: form.learned,
-                image: form.image
+            const formData = new FormData();
+            formData.append("name",form.name)
+            formData.append("email",form.email)
+            formData.append("password",form.password)
+            formData.append("bio",form.bio)
+            formData.append("skills",form.skills)
+            formData.append("education",JSON.stringify(form.education))
+            formData.append("learned",form.learned)
+            // formData.append("education",form.education)
+            formData.append("image", form.image)
+            for (let pair of formData.entries()) {
+  console.log(pair[0] + ': ' + pair[1]);
+}
 
 
-            })
-
+            const res = await axios.post("http://localhost:8000/api/auth/register", 
+                // name: form.name,
+                // email: form.email,
+                // password: form.password,
+                // bio: form.bio,
+                // skills: form.skills,
+                // education: form.education,
+                // learned: form.learned,
+                // image: form.image
+                formData
+            )
             console.log(res)
             toast.success("Signup successful!");
             setTimeout(() => {
@@ -157,10 +170,10 @@ function Signup() {
     const handleEducation = (e) => {
         e.preventDefault();
 
-        if (educationForm.score !== null && isNaN(Number(educationForm.score))) {
-            toast.warning("Please enter a valid number for Marks Obtained in Cgpa.");
-            return;
-        }
+        // if (educationForm.score !== null && isNaN(Number(educationForm.score))) {
+        //     toast.warning("Please enter a valid number for Marks Obtained in Cgpa.");
+        //     return;
+        // }
 
         const updatedEducation = [...education, educationForm];
         SetEducation(updatedEducation);
@@ -250,7 +263,7 @@ function Signup() {
                                     className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
                                     accept="image/*"
 
-                                    onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
+                                    onChange={(e) => setForm({ ...form , image: e.target.files[0] })}
                                 />
 
                             </div>

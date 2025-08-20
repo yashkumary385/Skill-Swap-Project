@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt"
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken"
-
+import uploadOnCloudinary from "../utils/cloudinary.js";
 // function to generate web token 
 
 function generateWebToken (userId){
@@ -15,17 +15,34 @@ function generateWebToken (userId){
 }
 
 
-export const registerUSer =async(req,res)=>{ // bcoz this is a post request it has a json body
+export const registerUser =async(req,res)=>{ // bcoz this is a post request it has a json body
    
     
-    // try{
+    try{
         const errors = validationResult(req)
         if(!errors.isEmpty()){
-             return res.status(400).json({ errors: errors.array() });
+             return res.status(400).json({ errors: errors.array() }); // image not cmong from the multer but multre hitt occurs 
         }
     const {name,username,email,password,bio,skills,education,learned} = req.body;
+console.log(name,username,email,password,bio,skills,education,learned)
     // const image = req.file ? req.file.path :undefined
-    const image = req.file ? `upload/${req.file.filename}` : "upload/default.png";
+    console.log(req.file, "this is req file") // file is not coing to undesfined is getting printed 
+const localPath = req.file.path.replace(/\\/g, "/");
+
+console.log(req.file.path, " this is file path");
+// const upload = await uploadOnCloudinary(localPath);
+
+if (!req.file || !req.file.path) {
+  return res.status(404).json({ message: "Image is missing" });
+}
+// Upload local file to Cloudinary
+
+const upload = await uploadOnCloudinary(localPath);
+if (!upload) {
+  return res.status(404).json({ message: "Image upload failed" });
+}
+    // console.log(image,"this is image")
+
 
     const existuser = await User.findOne({ email   }) // first we check tht if th user exixts or not whetgher he already a login user
     if(existuser){
@@ -33,8 +50,9 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
     res.status(404);
     throw new Error("user already present ")
     }
+    console.log(upload,"this is upload")
     const hashedPassword = await bcrypt.hash(password,10);
-
+  const educationObj = JSON.parse(education);
     const user = await User.create({
         name,
         username,
@@ -42,17 +60,18 @@ export const registerUSer =async(req,res)=>{ // bcoz this is a post request it h
         password:hashedPassword,
         bio,
         skills,
-        image:image,
-        education,
+        image:upload.secure_url, 
+        educationObj,
         learned
     })
+    console.log(user,"this is user")
     const createdUser = await User.findById(user._id).select("-password") // through this we hide the password in the api 
     // an error acn be throw here after chcecking createdYser
    return res.status(200).json({message:"user created succesfully",user:createdUser})
-// }
-// catch(error){
-//     return res.status(404).json({message:"user not created",error:error.message})
-// }
+}
+catch(error){
+    return res.status(404).json({error:error.message})
+}
 
 }
 
