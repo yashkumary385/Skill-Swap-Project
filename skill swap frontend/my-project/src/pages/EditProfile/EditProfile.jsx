@@ -11,18 +11,25 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const validateEmail = (email) => {
-  const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
-  return re.test(String(email).toLowerCase());
-};
+// const validateEmail = (email) => {
+//   const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+//   return re.test(String(email).toLowerCase());
+// };
 
-const validatePassword = (password) => {
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return re.test(password);
-};
+// const validatePassword = (password) => {
+//   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//   return re.test(password);
+// };
 
 const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
+    const [educationForm, setEducationForm] = useState( {
+          instituition:"",
+      degree:"",
+      startDate:"",
+      endDate:"",
+      score:""
+    })// setting this through input .
 
   const navigate = useNavigate();
   const { user, setUser, token } = useAuth();
@@ -33,26 +40,28 @@ const EditProfile = () => {
     image: "",
     skills: [],
     bio: "",
-    education: [],
+    education:[],
     learned: []
   });
-
-
-  const [educationForm, setEducationForm] = useState( // setting this through input .
-    {
-      instituition: "",
-      degree: "",
-      startDate: "",
-      endDate: "",
-      score: ""
+useEffect(()=>{
+   setEducationForm( {
+      instituition:user?.education[0].instituition || "",
+      degree: user?.education[0].degree || "",
+      startDate: user?.education[0].startDate || "",
+      endDate: user?.education[0].endDate || "",
+      score: user?.education[0].score || ""
     }
+   )
+  
+},[user])
 
-  )
+
   const [skills, setSkills] = useState("")
   const [learned, setLearned] = useState("")
   const [password, setPassword] = useState(""); // New state for password
 
   useEffect(() => {
+    console.log(user)
     setForm({
       username: user?.username || "",
       email: user?.email || "",
@@ -88,10 +97,14 @@ const EditProfile = () => {
       return;
     }
 
-    setForm((prev) => ({
-      ...prev,
-      education: [...prev.education, educationForm]
-    }));
+  setForm((prev) => ({
+  ...prev,
+  education: [
+    { ...prev.education[0], ...educationForm } // merge updates into existing object
+  ],
+}));
+
+    console.log(educationForm)
     setEducationForm({
       instituition: "",
       degree: "",
@@ -102,39 +115,46 @@ const EditProfile = () => {
   }
 
   const handleSubmit = async () => {
-    if (!form.name || !form.username || !form.email) {
-      toast.warning("Name, Username, and Email are required!");
-      return;
-    }
+    // if (!form.name || !form.username || !form.email) {
+    //   toast.warning("Name, Username, and Email are required!");
+    //   return;
+    // }
 
-    if (form.name.length < 3) {
-      toast.warning("Name must be at least 3 characters long.");
-      return;
-    }
+    // if (form.name.length < 3) {
+    //   toast.warning("Name must be at least 3 characters long.");
+    //   return;
+    // }
 
-    if (!validateEmail(form.email)) {
-      toast.warning("Please enter a valid email address!");
-      return;
-    }
+    // if (!validateEmail(form.email)) {
+    //   toast.warning("Please enter a valid email address!");
+    //   return;
+    // }
 
-    if (password && !validatePassword(password)) {
-      toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
-      return;
-    }
+    // if (password && !validatePassword(password)) {
+    //   toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+    //   return;
+    // }
 
     try {
+      console.log(form.education)
       setIsLoading(true);
-      const res = await axios.put("http://localhost:8000/updateUser", {
-        name: form.name,
-        username: form.username,
-        email: form.email,
-        password: password || undefined, // Only send password if it's updated
-        skills: form.skills,
-        bio: form.bio,
-        education: form.education,
-        learned: form.learned,
-        image: form.image
-      }, {
+      const formData = new FormData();
+      formData.append("name",form.name)
+      formData.append("username",form.username)
+      formData.append("email",form.email)
+      formData.append("password",form.password)
+      formData.append("skills",form.skills)
+      formData.append("bio",form.bio)
+      formData.append("education",JSON.stringify(form.education))
+      formData.append("image",form.image)
+      formData.append("learned",form.learned)
+      // formData.append("education",form.education)
+          for (let pair of formData.entries()) {
+  console.log(pair[0] + ': ' + pair[1]);
+}
+      const res = await axios.put("http://localhost:8000/updateUser", 
+        formData
+      , {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -145,8 +165,8 @@ const EditProfile = () => {
       setTimeout(() => navigate("/profile"), 1500);
     } catch (error) {
       console.error("Profile update error:", error);
-      if (error.response && error.response.data && error.response.data.message) {
-        toast.error(error.response.data.message);
+      if (error.response && error.response.data && error.response.data) {
+        toast.error(error.response.data.error);
       } else if (error.request) {
         toast.error("Network error. Please check your internet connection.");
       } else {
@@ -191,15 +211,17 @@ const EditProfile = () => {
             <Button onClick={handleSubmit} disabled={isLoading}>{isLoading ? "Submitting..." : "Submit"} </Button>
 
 
-
-
-
           </Tab>
           <Tab eventKey="profile" title="Profile">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Skills</Form.Label>
               <Form.Control type="text" value={skills} onChange={(e) => setSkills(e.target.value)} />
               <Button onClick={handleSkill}>Add</Button>
+              <div>{user?.skills.map((skill)=>(
+                <ul>
+                  <li class="inline-block border border-2 bg-[#4CAF50] rounded-lg px-2 py-1" key = {skill} >{skill} X</li>
+                </ul>
+              ))}</div>
             </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Bio</Form.Label>
@@ -233,7 +255,6 @@ const EditProfile = () => {
                 <Button variant="outline-success" onClick={handleLearn} disabled={isLoading}>{isLoading ? "Adding..." : "Add"}</Button>
               </form>
               <Button ariant="outline-success " onClick={handleEducation} disabled={isLoading}>{isLoading ? "Adding..." : "Add Education"}</Button>
-
             </Form.Group>
           </Tab>
         </Tabs>

@@ -1,5 +1,8 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
+import path from "path"
+import uploadOnCloudinary from "../utils/cloudinary.js";
+import bcrypt from "bcrypt"
 
 //  export const getProfile = async(req,res)=>{
 //     console.log('user route hit');
@@ -21,13 +24,40 @@ import Service from "../models/Service.js";
     const userId = req.user.id;
     console.log("user update route hit")
     // const {email,name} = req.body;
+
     try {
            if(!userId){
     return res.status(404).json("user id is invalid")
     }
-    const updateFields = req.body
-  
-  
+    console.log(req.file,"this is file")
+    if( req.file){
+      // console.log(req.file.path)
+         const localFilePath = req.file.path;
+         console.log(localFilePath)
+  const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
+if (!upload) {
+  return res.status(404).json({ message: "Image upload failed" });
+}else{
+    if("image" in req.body){
+      updateFields.image = upload.secure_url
+    }
+}
+console.log(upload)
+    }
+    const updateFields = req.body;
+      //   console.log(req.body,"old");
+      //   console.log(req.body.education);
+    if("password" in req.body ){
+        const hashedPassword = await bcrypt.hash(req.body.password,10);
+        updateFields.password = hashedPassword
+    }
+    if("education" in req.body){
+      const educationObj = JSON.parse(req.body.education);
+      // console.log(educationObj, "this is obj ")
+      updateFields.education = educationObj
+    }
+   
+   //  console.log(req.body,"new");
     const user = await User.findByIdAndUpdate(userId,updateFields,{
         new:true
     })

@@ -26,11 +26,10 @@ const Profile = ({ externalUser }) => {
                         <Card style={{ width: '150px', height: '150px' }}>
                             <Card.Img
                                 variant="top"
-                                src={`http://localhost:8000/${user?.image}`}
+                                src={`${user?.image}`}
                                 className="object-cover w-full h-full"
                             />
                         </Card>
-
                         <div className="flex flex-col justify-center gap-3 text-xl font-bold">
                             <div className='flex items-center gap-2'>
                                 <UserCircle /> {user?.username}
