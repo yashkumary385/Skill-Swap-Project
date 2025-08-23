@@ -7,6 +7,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { Link } from "react-router-dom";
 
 const validateEmail = (email) => {
     // Regular expression for a basic email validation
@@ -111,9 +112,9 @@ function Signup() {
             formData.append("email",form.email)
             formData.append("password",form.password)
             formData.append("bio",form.bio)
-            formData.append("skills",form.skills)
+         formData.append("skills", JSON.stringify(form.skills));
             formData.append("education",JSON.stringify(form.education))
-            formData.append("learned",form.learned)
+            formData.append("learned",JSON.stringify(form.learned))
             // formData.append("education",form.education)
             formData.append("image", form.image)
             for (let pair of formData.entries()) {
@@ -122,14 +123,7 @@ function Signup() {
 
 
             const res = await axios.post("http://localhost:8000/api/auth/register", 
-                // name: form.name,
-                // email: form.email,
-                // password: form.password,
-                // bio: form.bio,
-                // skills: form.skills,
-                // education: form.education,
-                // learned: form.learned,
-                // image: form.image
+               
                 formData
             )
             console.log(res)
@@ -137,6 +131,7 @@ function Signup() {
             setTimeout(() => {
                 navigate("/login")
             }, 1500)
+
 
 
         } catch (error) {
@@ -151,6 +146,16 @@ function Signup() {
 
         }
 
+
+
+
+
+
+
+
+
+
+
     }
     const handleSkill = (e) => {
         e.preventDefault();
@@ -160,7 +165,8 @@ function Signup() {
             notify();
             return;
         } else {
-            setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }));
+            // setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }));
+            setForm((prev) => ({ ...prev, skills: [...prev.skills,skills] }))
 
         }
         setSkills("")
@@ -180,15 +186,13 @@ function Signup() {
         // SetEducation((prev)=>[...education , educationForm ])
         // SetEducation((prev) => [{...prev, educationForm}])
         setForm(prev => ({ ...prev, education: updatedEducation }));
-        SetEducationForm({
-            instituition: "",
-            degree: "",
-            startDate: "",
-            endDate: "",
-            score: ""
-        });
-        
-
+        // SetEducationForm({
+        //     instituition: "",
+        //     degree: "",
+        //     startDate: "",
+        //     endDate: "",
+        //     score: ""
+        // }); // i will see about this if any error occurs 
     }
     const handleLearn = (e) => {
         e.preventDefault();
@@ -197,10 +201,6 @@ function Signup() {
         setLearned("")
 
     }
-
-
-
-
     return (
         <div className="min-h-[100vh] bg-[#4CAF50] flex justify-center items-center font-serif">
             <div className="w-[350px] p-6 flex flex-col items-center rounded-lg bg-[#F9FAFB] gap-6">
@@ -269,6 +269,9 @@ function Signup() {
                             </div>
 
                         </form>
+                                                     <div className="mt-4 text-center">
+          Have An Account ? <Link to="/Login" className="text-[#4CAF50] font-bold">Login</Link>
+        </div>
                     </Tab>
                     <Tab eventKey="Details" title="Details">
                         <form className="flex flex-col items-center justify-center gap-3 w-full">
@@ -316,6 +319,7 @@ function Signup() {
                                 </div>
                             </div>
                         </form>
+
                     </Tab>
                     <Tab eventKey="Education" title="Education"  >
                         <form className="flex flex-col items-center justify-center gap-3 w-full" onSubmit={handleEducation}>
@@ -427,7 +431,7 @@ function Signup() {
 
                             </div>
                             {/* { form.education.length === 0  && */}
-                            <Button variant="outline-success" type="submit" className="">Submit Details</Button>
+                            <Button variant="outline-success" type="submit" className="">Add Details</Button>
                             {/* } */}
 
 
@@ -440,6 +444,7 @@ function Signup() {
                             Signup
                         </Button>
                     </Tab>
+         
 
                 </Tabs>
 

@@ -24,15 +24,11 @@ const userSchema = new mongoose.Schema({
         "required": false
     },
     skills: [
-        {
-            "type": String,
-            required: false
-
-        }
+      String
     ],
     image: {
-        "type": String,
-        // default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ",
+         url: String,
+    public_id: String,
 
     }
     ,
@@ -63,13 +59,11 @@ const userSchema = new mongoose.Schema({
 
         ],
     learned: [
-        {
-            "type": String,
-            "required":false
-        }
+     String
     ]
 
 
 }, { timestamps: true })
 
 export default mongoose.model("User", userSchema)
+

@@ -197,10 +197,10 @@ const Services = () => {
         </Card>
         <div>
           <div className='flex flex-row gap-4'>
-            <div className=' flex items-start  justify-start ml-10 mt-10  flex-col border-2 border-black bg-gray-200 mr-10 pr-5'>
+            <div className=' flex items-start  justify-start ml-10 mt-10 pt-4  flex-col border-2 border-black bg-gray-200 mr-10 pr-5'>
               <ul>
 
-                {
+                { services.length > 0 ? (
                   services.map((service) => (
                     <li key={service._id}>
                       {/* <div>{service.title}</div> */}
@@ -234,7 +234,11 @@ const Services = () => {
                       </Card>
                     </li>
                   ))
-                }
+                ) : (
+                  <div>
+                    <h3>No services found</h3>
+                  </div>
+                )}
               </ul>
 
 

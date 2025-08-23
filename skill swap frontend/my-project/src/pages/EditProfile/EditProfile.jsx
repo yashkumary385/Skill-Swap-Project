@@ -23,6 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
+  
     const [educationForm, setEducationForm] = useState( {
           instituition:"",
       degree:"",
@@ -37,7 +38,7 @@ const EditProfile = () => {
     name: "",
     username: "",
     email: "",
-    image: "",
+    // image: "",
     skills: [],
     bio: "",
     education:[],
@@ -45,11 +46,11 @@ const EditProfile = () => {
   });
 useEffect(()=>{
    setEducationForm( {
-      instituition:user?.education[0].instituition || "",
-      degree: user?.education[0].degree || "",
-      startDate: user?.education[0].startDate || "",
-      endDate: user?.education[0].endDate || "",
-      score: user?.education[0].score || ""
+      instituition:user?.education[0]?.instituition || "",
+      degree: user?.education[0]?.degree || "",
+      startDate: user?.education[0]?.startDate || "",
+      endDate: user?.education[0]?.endDate || "",
+      score: user?.education[0]?.score || ""
     }
    )
   
@@ -67,27 +68,29 @@ useEffect(()=>{
       email: user?.email || "",
       name: user?.name || "",
       skills: user?.skills || [],
-      image: user?.image || "",
+      // image: user?.image || "",
       learned: user?.learned || [],
       education: user?.education || [],
       bio: user?.bio || ""
     })
   }, [user])
 
-  const handleSkill = () => {
-    if (!skills.trim()) {
-      toast.warning("Skill cannot be empty!");
-      return;
-    }
+  const handleSkill = (e) => {
+    e.preventDefault();
+    // if (!skills.trim()) {
+    //   toast.warning("Skill cannot be empty!");
+    //   return;
+    // }
     setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }))
     setSkills("")
   }
-  const handleLearn = () => {
-    if (!learned.trim()) {
-      toast.warning("Learned skill cannot be empty!");
-      return;
-    }
-    setForm((prev) => ({ ...prev, learned: [...prev.learned, learned] }))
+  const handleLearn = (e) => {
+        e.preventDefault();
+    // if (!learned.trim()) {
+    //   toast.warning("Learned skill cannot be empty!");
+    //   return;
+    // }
+    setForm((prev) => ({ ...prev, learned: [...prev.learned,learned] }))
     setLearned("")
   }
 
@@ -143,11 +146,11 @@ useEffect(()=>{
       formData.append("username",form.username)
       formData.append("email",form.email)
       formData.append("password",form.password)
-      formData.append("skills",form.skills)
+      formData.append("skills", JSON.stringify(form.skills));
       formData.append("bio",form.bio)
       formData.append("education",JSON.stringify(form.education))
       formData.append("image",form.image)
-      formData.append("learned",form.learned)
+      formData.append("learned", JSON.stringify(form.learned));
       // formData.append("education",form.education)
           for (let pair of formData.entries()) {
   console.log(pair[0] + ': ' + pair[1]);
@@ -177,6 +180,7 @@ useEffect(()=>{
     }
   }
 
+
   return (
     <div className='min-h-[100vh] bg-[#4CAF50] flex justify-center items-center flex-col'>
       <h1 className='mb-4'>Update User Details</h1>
@@ -205,21 +209,19 @@ useEffect(()=>{
               <Form.Label>New Password (optional)</Form.Label>
               <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Leave blank if not changing" />
 
-              <Form.Label>Profile Picture</Form.Label>
-              <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} />
+              {/* <Form.Label>Profile Picture</Form.Label>
+              <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} /> */}
             </Form.Group>
             <Button onClick={handleSubmit} disabled={isLoading}>{isLoading ? "Submitting..." : "Submit"} </Button>
-
-
-          </Tab>
+          </Tab>   
           <Tab eventKey="profile" title="Profile">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Skills</Form.Label>
-              <Form.Control type="text" value={skills} onChange={(e) => setSkills(e.target.value)} />
+              <Form.Control type="text" value={skills} onChange={(e) =>setSkills(e.target.value)} />
               <Button onClick={handleSkill}>Add</Button>
               <div>{user?.skills.map((skill)=>(
                 <ul>
-                  <li class="inline-block border border-2 bg-[#4CAF50] rounded-lg px-2 py-1" key = {skill} >{skill} X</li>
+                  <li class="inline-block border  bg-[#4CAF50] rounded-lg px-2 py-1" key = {skill} >{skill} X</li>
                 </ul>
               ))}</div>
             </Form.Group>
@@ -252,6 +254,11 @@ useEffect(()=>{
                   placeholder='Skills learned'
                   className='p-2 bg-white mb-2 rounded-lg'
                 />
+                   <div>{user?.learned.map((learn)=>(
+                <ul>
+                  <li class="inline-block border-2 bg-[#4CAF50] rounded-lg px-2 py-1" key = {learn} >{learn} X</li>
+                </ul>
+              ))}</div>
                 <Button variant="outline-success" onClick={handleLearn} disabled={isLoading}>{isLoading ? "Adding..." : "Add"}</Button>
               </form>
               <Button ariant="outline-success " onClick={handleEducation} disabled={isLoading}>{isLoading ? "Adding..." : "Add Education"}</Button>

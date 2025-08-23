@@ -19,29 +19,42 @@ export const registerUser =async(req,res)=>{ // bcoz this is a post request it h
    
     
     try{
+        let imageData=null
         const errors = validationResult(req)
         if(!errors.isEmpty()){
-             return res.status(400).json({ errors: errors.array() }); // image not cmong from the multer but multre hitt occurs 
+             return res.status(400).json({ message:"what errors",errors: errors.array() }); // image not cmong from the multer but multre hitt occurs 
         }
-    const {name,username,email,password,bio,skills,education,learned} = req.body;
-console.log(name,username,email,password,bio,skills,education,learned)
+    const {name,username,email,password,bio,education} = req.body;
+    const skills = req.body.skills ? JSON.parse(req.body.skills) : [];
+    const learned = req.body.learned ? JSON.parse(req.body.learned) : [];
+
+// console.log(name,username,email,password,bio,skills,education,learned)
     // const image = req.file ? req.file.path :undefined
-    console.log(req.file, "this is req file") // file is not coing to undesfined is getting printed 
-const localPath = req.file.path.replace(/\\/g, "/");
+    // console.log(req.file, "this is req file") // file is not coing to undesfined is getting printed 
 
-console.log(req.file.path, " this is file path");
-// const upload = await uploadOnCloudinary(localPath);
-
-if (!req.file || !req.file.path) {
-  return res.status(404).json({ message: "Image is missing" });
-}
-// Upload local file to Cloudinary
-
+    if (req.file && req.file.path)  {
+           
+const localPath = req.file.path.replace(/\\/g, "/") ;
 const upload = await uploadOnCloudinary(localPath);
 if (!upload) {
   return res.status(404).json({ message: "Image upload failed" });
+} 
+
+/// come back here and fix this up.......
+    console.log(upload,"this is upload")
+
+   imageData = {
+        url: upload.secure_url,
+        public_id: upload.public_id,
+      };
+    
+// console.log(req.file.path, " this is file path");
+// 
+}else{
+    image_url=" https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ";
 }
-    // console.log(image,"this is image")
+// Upload local file to Cloudinary
+// console.log(image,"this is image")
 
 
     const existuser = await User.findOne({ email   }) // first we check tht if th user exixts or not whetgher he already a login user
@@ -50,7 +63,6 @@ if (!upload) {
     res.status(404);
     throw new Error("user already present ")
     }
-    console.log(upload,"this is upload")
     const hashedPassword = await bcrypt.hash(password,10);
   const educationObj = JSON.parse(education);
     const user = await User.create({
@@ -60,7 +72,7 @@ if (!upload) {
         password:hashedPassword,
         bio,
         skills,
-        image:upload.secure_url, 
+        image:imageData, 
         educationObj,
         learned
     })

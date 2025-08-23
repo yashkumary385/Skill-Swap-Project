@@ -165,6 +165,11 @@ app.use("/users", getSpecificUserRoute)
 import getOtherUserRoute from "./routes/userRoutes.routes.js"
 app.use("/get/other", getOtherUserRoute)
 
+// deleting user skill
+
+import deleteSkillRoute from "./routes/userRoutes.routes.js"
+app.use("/delete", deleteSkillRoute)
+
 import createRoute from "./routes/service.routes.js"
 app.use("/api/service", createRoute)
 

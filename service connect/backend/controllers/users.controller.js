@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
 import path from "path"
-import uploadOnCloudinary from "../utils/cloudinary.js";
+import uploadOnCloudinary, { deleteFromCloudinary } from "../utils/cloudinary.js";
 import bcrypt from "bcrypt"
 
 //  export const getProfile = async(req,res)=>{
@@ -20,30 +20,36 @@ import bcrypt from "bcrypt"
 //     }
 //  }
   
+
+
+
+
  export const update = async(req,res)=>{
     const userId = req.user.id;
     console.log("user update route hit")
     // const {email,name} = req.body;
-
+    
     try {
            if(!userId){
     return res.status(404).json("user id is invalid")
     }
-    console.log(req.file,"this is file")
-    if( req.file){
-      // console.log(req.file.path)
-         const localFilePath = req.file.path;
-         console.log(localFilePath)
-  const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
-if (!upload) {
-  return res.status(404).json({ message: "Image upload failed" });
-}else{
-    if("image" in req.body){
-      updateFields.image = upload.secure_url
-    }
-}
-console.log(upload)
-    }
+//     if( req.file && req.file.path){
+//       // console.log(req.file.path)
+//     console.log(req.file,"this is file")
+
+//   const localFilePath = req.file.path.replace(/\\/g, "/");
+//          console.log(localFilePath)
+//   const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
+// if (!upload) {
+//   return res.status(404).json({ message: "Image upload failed" });
+// }
+// if("image" in req.file){
+// updateFields.image = upload.secure_url
+//     }
+// console.log(upload)
+    // }
+
+
     const updateFields = req.body;
       //   console.log(req.body,"old");
       //   console.log(req.body.education);
@@ -55,6 +61,14 @@ console.log(upload)
       const educationObj = JSON.parse(req.body.education);
       // console.log(educationObj, "this is obj ")
       updateFields.education = educationObj
+    }
+    if("skills" in req.body){
+      const skillsObj = JSON.parse(req.body.skills);
+      updateFields.skills = skillsObj
+    }
+    if("learned" in req.body){
+      const learnedObj = JSON.parse(req.body.learned);
+      updateFields.learned = learnedObj
     }
    
    //  console.log(req.body,"new");
@@ -72,6 +86,13 @@ console.log(upload)
  }
 
 
+
+
+
+
+
+
+// delete task here 
  export const deleteTask= async(req,res)=>{
     const userId = req.user.id;
         try {
@@ -134,5 +155,44 @@ export const getOtherUser = async(req,res)=>{
    
    }
 
+ 
+}
+
+
+// export const uploadImage = async(req,res)=>{
+// const userId = req.user.id;
+// const user = await User.findById(userId);
+// if(!user){
+//   return res.status(400).json("user not present")
+// }
+// let image_url;
+// const delete = deleteFromCloudinary(user.image)
+// // if(req.file && req.file.path){
+// //   const localFilePath = req.file.path.replace(/\\/g, "/");
+// //          console.log(localFilePath)
+// //   // const deleteImage = await upl
+// //   const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
+// // if (!upload) {
+// //   return res.status(404).json({ message: "Image upload failed" });
+// // }
+// // }
+// }
+
+
+
+export const deleteSkill = async(req,res)=>{
+  try {
+     const userId = req.user.id;
+  const {skill} = req.params
+     await User.updateOne(
+      {_id : userId},
+      {$pull: {"skills" : `${skill}`}},
+      {new:true}
+    )
+     return res.status(200).json({message:"skill deleted",update})
+  } catch (error) {
+    return res.status(404).json({message:"something went wrong",error:error.message})
+    
+  }
  
 }
