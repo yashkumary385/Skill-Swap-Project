@@ -18,7 +18,7 @@ const AcceptedReq = () => {
     useEffect(() => {
        const request = async () => {
             try {
-                const res = await axios.get("http://localhost:8000/accepted",
+                const res = await axios.get("http://localhost:8000/incoming/accepted",
                     {
                         headers: { Authorization: `Bearer ${token}` }
                     }
@@ -50,16 +50,16 @@ const AcceptedReq = () => {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-[#4CAF50] p-6 flex flex-row gap-2">
-             <div className='w-[50vw]'>
-                <h2 className="text-3xl font-bold text-white mb-6 flex items-center justify-center">Accepted Incoming Request</h2>
+            <div className="min-h-screen bg-[#4CAF50] p-4 md:p-6 flex flex-col md:flex-row gap-4">
+             <div className='w-full md:w-1/2'>
+                <h2 className="text-3xl font-bold text-white mb-6 text-center md:text-left">Accepted Incoming Request</h2>
 
-                <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+                <div className="flex flex-col gap-4 max-w-full mx-auto">
 
-                    {acceptedReq.length > 0 ?
-                        <ul>
+                    {acceptedReq.length > 0 ? 
+                        <ul className="w-full">
                             {acceptedReq.map((request) => (
-                                <Card key={request.swap._id} style={{ width: '40rem' }} className="mb-3">
+                                <Card key={request.swap._id} className="mb-3 w-full max-w-xl mx-auto">
                                     <Card.Body>
                                         <Card.Title>Swap Request</Card.Title>
 
@@ -91,18 +91,18 @@ const AcceptedReq = () => {
 
 
                         </ul> :
-                        <div> No request yet</div>
+                        <div className="text-white text-center"> No request yet</div>
                     }
                 </div>
                 </div>
-                <div className='w-[50vw]'>
-                <h2 className="text-3xl font-bold text-white mb-6 ml-2 flex items-center justify-center">Accepted Outgoing Request</h2>
-   <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+                <div className='w-full md:w-1/2'>
+                <h2 className="text-3xl font-bold text-white mb-6 text-center md:text-left">Accepted Outgoing Request</h2>
+   <div className="flex flex-col gap-4 max-w-full mx-auto">
 
                     {outAcceptedReq?.length > 0 ?
-                        <ul>
+                        <ul className="w-full">
                             {outAcceptedReq.map((request) => (
-                                <Card key={request.swap._id} style={{ width: '40rem' }} className="mb-3">
+                                <Card key={request.swap._id} className="mb-3 w-full max-w-xl mx-auto">
                                     <Card.Body>
                                         <Card.Title>Swap Request</Card.Title>
 
@@ -133,8 +133,8 @@ const AcceptedReq = () => {
 
 
                         </ul> :
-                        
-                        <div> No Request yet</div>
+
+                        <div className="text-white text-center"> No Request yet</div>
                     }
                 </div>
                 </div>

@@ -27,9 +27,8 @@ const userSchema = new mongoose.Schema({
       String
     ],
     image: {
-         url: String,
-    public_id: String,
-
+  
+    type:String
     }
     ,
     education:

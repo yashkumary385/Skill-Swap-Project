@@ -125,10 +125,10 @@ const SwapRequest = () => {
                 <div id="left" className='w-[50vw] mt-10' >
                     <div className='flex items-center justify-center'>
                     <div className='flex flex-col h-[85vh] border-4 border-black rounded-2xl w-[40vw] bg-gray-200 text-black gap-3 overflow-y-auto p-4'>
-                            <h1 className='pt-3'>Incoming Requests</h1>
+                            <h1 className='pt-3 flex items-center justify-center'>Incoming Requests</h1>
                             <ul>
                                 {
-                                    incomingReq.map((request) => (
+                                    incomingReq.length > 0 ? incomingReq.map((request) => (
                                         <li key={request._id}>
                                             <Card style={{ width: '18rem' }} className="mb-4">
                                                 <Card.Body>
@@ -170,7 +170,9 @@ const SwapRequest = () => {
 
 
                                         </li>
-                                    ))
+                                    )) : <div className='flex  h-full'>
+                                        <h3 className='text-2xl font-bold'>No Requests</h3>
+                                    </div>
                                 }
                             </ul>
                         </div>
@@ -183,7 +185,7 @@ const SwapRequest = () => {
                         <h1 className='pt-3 text-center'>Outgoing Requests</h1>
                         <ul className="space-y-4">
                             {
-                                outReq.map((request) => (
+                                outReq.length > 0 ? outReq.map((request) => (   
                                     <li key={request._id}>
                                         <Card className="w-full">
                                             <Card.Body>
@@ -200,25 +202,29 @@ const SwapRequest = () => {
                                             </Card.Body>
                                         </Card>
                                     </li>
-                                ))
+                                )) : <div className='flex h-full'>
+                                    <h3 className='text-2xl font-bold'>No Requests</h3>
+                                </div>
                             }
-                            <div className="flex flex-row gap-2 mt-4 items-center mb-3">
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                                    disabled={currentPage === 1}
-                                >
-                                    Previous
-                                </Button>
-                                <span className="text-white">Page {currentPage} of {totalPages}</span>
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
-                                >
-                                    Next
-                                </Button>
-                            </div>
+                            {outReq.length > 0 && (
+                                <div className="flex flex-row gap-2 mt-4 items-center mb-3">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Previous
+                                    </Button>
+                                    <span className="text-white">Page {currentPage} of {totalPages}</span>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Next
+                                    </Button>
+                                </div>
+                            )}
                         </ul>
                     </div>
                 </div>

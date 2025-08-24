@@ -5,15 +5,14 @@ function AboutUs() {
   return (
     <>
       <Header />
-      <div className='min-h-[100vh] bg-[#4CAF50] flex flex-row  '>
-        <div className='w-[50vw] flex items-center justify-center flex-col text-white '>
-          {/* // wrap up and div and give it w-full then it aligns */}
-          <div className="text-left w-full px-10">
+      <div className='min-h-[100vh] bg-[#4CAF50] flex flex-col md:flex-row  p-4'>
+        <div className='w-full md:w-[50vw] flex items-center justify-center flex-col text-white text-center md:text-left'>
+          <div className="text-center md:text-left w-full px-4">
             <h1 className="text-4xl font-bold mb-4">About Us</h1>
           </div>
 
-          <div className='font-bold text-lg mx-10 '>
-            <ul style={{ listStyleType: "disc" }}>
+          <div className='font-bold text-lg px-4 space-y-4'>
+            <ul style={{ listStyleType: "disc" }} className="text-left">
               <li>
                 <p>Skill Swap is a community-driven platform where people exchange services based on their talents — no money involved. Whether you're a web developer who needs photography, a graphic designer who wants guitar lessons, or a language tutor looking for help with a website, Skill Swap lets you **trade skills directly**.
 
@@ -24,8 +23,8 @@ function AboutUs() {
           </div>
 
         </div>
-        <div className='text-center flex items-center'>
-          <img src="/images/about1.png" className='rounded-lg' style={{ height: "50vh", width: "50vw" }} alt="" />
+        <div className='w-full md:w-[50vw] text-center flex items-center justify-center mt-8 md:mt-0'>
+          <img src="/images/about1.png" className='rounded-lg max-w-full h-auto' style={{ maxHeight: "50vh" }} alt="" />
         </div>
 
       </div>

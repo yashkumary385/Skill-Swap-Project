@@ -12,10 +12,10 @@ export function LandingPage() {
       <Header />
 
       {/* Hero Section */}
-      <div className="min-h-[45vh] bg-[#4CAF50] flex items-center justify-start flex-col gap-3">
-        <div className="w-[400px] bg-[#F9FAFB] flex flex-col items-center justify-center border-4 border-black text-bold mt-18">
-          <p className="text-7xl font-serif pt-4">Skill Swap</p>
-          <div className="text-4xl font-serif">
+      <div className="min-h-[45vh] bg-[#4CAF50] flex items-center justify-center flex-col gap-3 p-4">
+        <div className="w-full max-w-sm bg-[#F9FAFB] flex flex-col items-center justify-center border-4 border-black text-bold mt-18 p-4 text-center">
+          <p className="text-5xl sm:text-7xl font-serif pt-4">Skill Swap</p>
+          <div className="text-2xl sm:text-4xl font-serif">
             <p>Pay With Your Skills</p>
           </div>
         </div>
@@ -34,12 +34,12 @@ Ready to swap skills and grow together?”
 
       </div>
       {/* About Us Section */}
-      <div className="flex justify-start min-h-screen bg-[#4CAF50] pl-10 flex-col font-serif">
-        <h1 className="mb-5">About Us</h1>
+      <div className="flex justify-center md:justify-start min-h-screen bg-[#4CAF50] p-4 md:pl-10 flex-col font-serif">
+        <h1 className="mb-5 text-3xl font-bold text-white text-center md:text-left">About Us</h1>
 
-        <div className="font-bold text-lg mx-10 font-serif space-y-4">
+        <div className="font-bold text-lg space-y-4 w-full flex flex-col items-center md:items-start">
           {/* Card 1 */}
-          <Card style={{ width: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
+          <Card style={{ width: '100%', maxWidth: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
             <Card.Header>About Us</Card.Header>
             <Card.Body>
               <Card.Title>Skill Sharing</Card.Title>
@@ -56,7 +56,7 @@ Ready to swap skills and grow together?”
           </Card>
 
           {/* Card 2 */}
-          <Card style={{ width: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
+          <Card style={{ width: '100%', maxWidth: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
             <Card.Body>
               <Card.Title>Mutual Growth</Card.Title>
               <Card.Text>
@@ -67,7 +67,7 @@ Ready to swap skills and grow together?”
           </Card>
 
           {/* Card 3 */}
-          <Card style={{ width: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
+          <Card style={{ width: '100%', maxWidth: '75rem' , backgroundColor: "#388E3C" }} className="mb-3 text-white"   border="success">
             <Card.Body>
               <Card.Title>Community First</Card.Title>
               <Card.Text>
@@ -84,28 +84,28 @@ Ready to swap skills and grow together?”
       </div>
       {/* Our Services */}
      {/* About Us Section */}
-<div className="flex justify-start min-h-[70vh] bg-[#4CAF50] pl-10 flex-col font-serif">
-  <h1 className="mb-5">Services Offered</h1>
+<div className="flex justify-center md:justify-start min-h-[70vh] bg-[#4CAF50] p-4 md:pl-10 flex-col font-serif">
+  <h1 className="mb-5 text-3xl font-bold text-white text-center md:text-left">Services Offered</h1>
 
-  <CardGroup className="gap-3 ">
+  <CardGroup className="gap-3 flex-col sm:flex-row ">
     {/* Card 1 */}
 <Card
-  className="mb-3 text-white"
+  className="mb-3 text-white w-full "
   border="success"
   style={{ backgroundColor: "#388E3C" }} // darker green
 >
       <Card.Header>Services</Card.Header>
       <Card.Body>
         <Card.Title>Skill Exchange</Card.Title>
-        <Card.Text>
+       <Card.Text>
       Trade your talents directly with others. Whether it’s coding, teaching, photography, or design — swap skills without spending money.
-        </Card.Text>
+       </Card.Text>
       </Card.Body>
     </Card>
 
     {/* Card 2 */}
 <Card
-  className="mb-3 text-white"
+  className="mb-3 text-white w-full "
   border="success"
   style={{ backgroundColor: "#388E3C" }} // darker green
 >      <Card.Header>Profiles & Requests</Card.Header>
@@ -123,7 +123,7 @@ Ready to swap skills and grow together?”
 
     {/* Card 3 */}
 <Card
-  className="mb-3 mr-3 text-white"
+  className="mb-3 mr-3 text-white w-full "
   border="success"
   style={{ backgroundColor: "#388E3C" }} // darker green
 >      <Card.Header>Seamless Connection</Card.Header>

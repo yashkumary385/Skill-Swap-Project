@@ -210,6 +210,7 @@ export const outReq = async(req,res)=>{
 
 
 export const acceptedReq = async(req,res)=>{
+  console.log("what")
       try {
            const userId = req.user.id;
           let acceptedReq=[];
@@ -219,7 +220,7 @@ export const acceptedReq = async(req,res)=>{
       .populate('requesterService', 'title')
       .populate('recepientService', 'title')
 
-     console.log(incomingReq)
+     console.log(incomingReq," this is incoming request")
  
     for (const swap of incomingReq) {
       if (swap.status === "accepted") {

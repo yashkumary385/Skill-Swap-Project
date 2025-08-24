@@ -54,7 +54,8 @@ function Signup() {
         bio: "",
         education: [],
         learned: [],
-        image: ""
+        image: "",
+        username:""
 
 
     })
@@ -109,6 +110,7 @@ function Signup() {
         try {
             const formData = new FormData();
             formData.append("name",form.name)
+            formData.append("username",form.username)
             formData.append("email",form.email)
             formData.append("password",form.password)
             formData.append("bio",form.bio)
@@ -202,8 +204,8 @@ function Signup() {
 
     }
     return (
-        <div className="min-h-[100vh] bg-[#4CAF50] flex justify-center items-center font-serif">
-            <div className="w-[350px] p-6 flex flex-col items-center rounded-lg bg-[#F9FAFB] gap-6">
+        <div className="min-h-screen bg-[#4CAF50] flex justify-center items-center font-serif p-4">
+            <div className="w-full max-w-md p-6 flex flex-col items-center rounded-lg bg-[#F9FAFB] gap-6">
 
                 <div className="text-2xl font-bold">Signup</div>
                 <div className="flex items-center justify-center"><User className="w-6 h-6 text-gray-600" /></div>
@@ -214,21 +216,29 @@ function Signup() {
 
                     transition={false}
                     id="noanim-tab-example"
-                    className="mb-3 flex flex-row"
+                    className="mb-3 w-full"
+                    fill
                 >
                     <Tab eventKey="Credentails" title="Credentails">
 
 
 
 
-                        <form className="flex flex-col items-center justify-center gap-3 w-full"  >
+                        <form className="flex flex-col items-center justify-center gap-3 w-full p-2"  >
                             <div className="w-full relative">
                                 <div><User className="absolute top-2 left-2 w-6 h-6" /></div>
                                 <input type="text"
                                     value={form.name}
                                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                                     placeholder="Name"
-                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
+
+                                />
+                          <input type="text"
+                                    value={form.username}
+                                    onChange={(e) => setForm({ ...form, username: e.target.value })}
+                                    placeholder="UserName"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                 />
                             </div>
@@ -238,7 +248,7 @@ function Signup() {
                                     value={form.email}
                                     onChange={(e) => setForm({ ...form, email: e.target.value })}
                                     placeholder="Email"
-                                    className="border-2  border-[#4CAF50]  pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2  border-[#4CAF50]  pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
 
                                 />
@@ -250,69 +260,65 @@ function Signup() {
                                     value={form.password}
                                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                                     placeholder="Password"
-                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                 />
-                                <div className="absolute top-2 right-2" onClick={setVisibility}><Eye /></div>
+                                <div className="absolute top-2 right-2 cursor-pointer" onClick={setVisibility}><Eye /></div>
                             </div>
-                            <div>
+                            <div className="w-full">
                                 <label>Profile Image</label>
                                 <input
                                     type="file"
                                     placeholder="Select image"
-                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2 border-[#4CAF50] pl-2 pr-2 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
                                     accept="image/*"
 
                                     onChange={(e) => setForm({ ...form , image: e.target.files[0] })}
                                 />
 
                             </div>
-
+                            <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4 py-2">
+                                Signup
+                            </Button>
                         </form>
-                                                     <div className="mt-4 text-center">
+                                                     <div className="mt-4 text-center w-full">
           Have An Account ? <Link to="/Login" className="text-[#4CAF50] font-bold">Login</Link>
         </div>
                     </Tab>
                     <Tab eventKey="Details" title="Details">
-                        <form className="flex flex-col items-center justify-center gap-3 w-full">
+                        <form className="flex flex-col items-center justify-center gap-3 w-full p-2">
                             <div className="w-full relative">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6" /></div>
-                                <input type="text"
+                                <textarea
                                     value={form.bio}
                                     onChange={(e) => setForm({ ...form, bio: e.target.value })}
                                     placeholder="Bio"
-                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50] h-24"
 
-                                />
+                                ></textarea>
                             </div>
                             <div className="w-full relative ">
                                 {form.skills.length < 3 && <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>}
-                                {/* {form.skills.length  3 && */}
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type={form.skills.length === 3 ? "hidden" : "text"}
                                         value={skills}
                                         onChange={(e) => setSkills(e.target.value)}
                                         placeholder="Skills"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
-                                    <Button variant="outline-success" onClick={handleSkill}>Add</Button>
+                                    <Button variant="outline-success" onClick={handleSkill} className="w-full sm:w-auto">Add</Button>
                                 </div>
-                                {/* } */}
+                            
 
-
-                                {/* } */}
-
-
-                                <div className="">
-                                    <ul className="flex flex-row gap-2 pt-3 items-center justify-content">
+                                <div className="w-full">
+                                    <ul className="flex flex-wrap gap-2 pt-3 items-center justify-center sm:justify-start">
                                         {
                                             form.skills.map((skill, index) => (
                                                 <li key={index}>   <Button variant="outline-success" >{skill}</Button></li>
                                             ))
                                         }
-
 
 
                                     </ul>
@@ -322,28 +328,28 @@ function Signup() {
 
                     </Tab>
                     <Tab eventKey="Education" title="Education"  >
-                        <form className="flex flex-col items-center justify-center gap-3 w-full" onSubmit={handleEducation}>
+                        <form className="flex flex-col items-center justify-center gap-3 w-full p-2" onSubmit={handleEducation}>
                             <div className="w-full relative">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6" /></div>
                                 <input type="text"
                                     value={educationForm.instituition}
                                     onChange={(e) => SetEducationForm({ ...educationForm, instituition: e.target.value })}
                                     placeholder="Institute"
-                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                    className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                 />
                             </div>
                             <div className="w-full relative ">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
 
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type="text"
                                         value={educationForm.degree}
                                         onChange={(e) => SetEducationForm({ ...educationForm, degree: e.target.value })}
 
                                         placeholder="Degree"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
 
@@ -352,14 +358,14 @@ function Signup() {
                             <div className="w-full relative ">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
 
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type="number"
                                         value={educationForm.score}
                                         onChange={(e) => SetEducationForm({ ...educationForm, score: e.target.value === '' ? '' : Number(e.target.value) })}
 
                                         placeholder="Marks Obtained in Cgpa"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
 
@@ -368,14 +374,14 @@ function Signup() {
                             <div className="w-full relative ">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
 
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type="date"
                                         value={educationForm.startDate}
                                         onChange={(e) => SetEducationForm({ ...educationForm, startDate: e.target.value })}
 
                                         placeholder="Start Date"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
 
@@ -384,14 +390,14 @@ function Signup() {
                             <div className="w-full relative ">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
 
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type="date"
                                         value={educationForm.endDate}
                                         onChange={(e) => SetEducationForm({ ...educationForm, endDate: e.target.value })}
 
                                         placeholder="End Date"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
 
@@ -402,27 +408,26 @@ function Signup() {
                             <div className="w-full relative ">
                                 <div><ClipboardPenLine className="absolute top-2 left-2 w-6 h-6 " /></div>
 
-                                <div className="flex flex-row gap-3 ">
+                                <div className="flex flex-col sm:flex-row gap-3 w-full ">
                                     <input
                                         type="text "
                                         value={learned}
                                         onChange={(e) => setLearned(e.target.value)}
 
                                         placeholder="Skills Learned"
-                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100"
+                                        className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
-                                    <div> <Button variant="outline-success" onClick={handleLearn}>Add</Button></div>
+                                    <div> <Button variant="outline-success" onClick={handleLearn} className="w-full sm:w-auto">Add</Button></div>
 
                                 </div>
-                                <div className="">
-                                    <ul className="flex flex-row gap-2 pt-2 items-center justify-content">
+                                <div className="w-full">
+                                    <ul className="flex flex-wrap gap-2 pt-2 items-center justify-center sm:justify-start">
                                         {
                                             form.learned.map((learn, index) => (
                                                 <li key={index}>   <Button variant="outline-success" >{learn}</Button></li>
                                             ))
                                         }
-
 
 
                                     </ul>
@@ -431,29 +436,20 @@ function Signup() {
 
                             </div>
                             {/* { form.education.length === 0  && */}
-                            <Button variant="outline-success" type="submit" className="">Add Details</Button>
+                            <Button variant="outline-success" type="submit" className="w-full py-2">Add Details</Button>
                             {/* } */}
 
 
 
 
-
-
                         </form>
-                        <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4">
+                        <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4 py-2">
                             Signup
                         </Button>
                     </Tab>
          
 
                 </Tabs>
-
-
-
-
-
-
-
 
 
 

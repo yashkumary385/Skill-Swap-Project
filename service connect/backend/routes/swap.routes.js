@@ -7,7 +7,7 @@ router.get("/",verifyToken,getSwap)
 router.get("/incoming",verifyToken,myReq)
 router.get("/outgoing",verifyToken,outReq)
 router.put("/:id",verifyToken,setUpdates)
-router.get("/accepted",verifyToken,acceptedReq)
+router.get("/incoming/accepted",verifyToken,acceptedReq)
 router.get("/out/accepted",verifyToken,outAccepted)
 
 export default router;

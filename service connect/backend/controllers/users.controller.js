@@ -1,8 +1,9 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
 import path from "path"
-import uploadOnCloudinary, { deleteFromCloudinary } from "../utils/cloudinary.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 import bcrypt from "bcrypt"
+import { sendEmail } from "../utils/sendEmail.js";
 
 //  export const getProfile = async(req,res)=>{
 //     console.log('user route hit');
@@ -20,49 +21,45 @@ import bcrypt from "bcrypt"
 //     }
 //  }
   
-
-
-
-
  export const update = async(req,res)=>{
     const userId = req.user.id;
     console.log("user update route hit")
     // const {email,name} = req.body;
-    
+
     try {
            if(!userId){
     return res.status(404).json("user id is invalid")
     }
-//     if( req.file && req.file.path){
-//       // console.log(req.file.path)
-//     console.log(req.file,"this is file")
-
-//   const localFilePath = req.file.path.replace(/\\/g, "/");
-//          console.log(localFilePath)
-//   const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
-// if (!upload) {
-//   return res.status(404).json({ message: "Image upload failed" });
-// }
-// if("image" in req.file){
-// updateFields.image = upload.secure_url
-//     }
-// console.log(upload)
-    // }
-
-
-    const updateFields = req.body;
-      //   console.log(req.body,"old");
-      //   console.log(req.body.education);
-    if("password" in req.body ){
-        const hashedPassword = await bcrypt.hash(req.body.password,10);
-        updateFields.password = hashedPassword
+    console.log(req.file,"this is file")
+    if( req.file){
+      // console.log(req.file.path)
+         const localFilePath = req.file.path;
+         console.log(localFilePath)
+  const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
+if (!upload) {
+  return res.status(404).json({ message: "Image upload failed" });
+}else{
+    if("image" in req.body){
+      updateFields.image = upload.secure_url
     }
+}
+console.log(upload)
+    }
+    const updateFields = { ...req.body };
+
+        console.log(updateFields,"old");
+      //   console.log(req.body.education);
+      if (updateFields.password) {
+        updateFields.password = await bcrypt.hash(updateFields.password, 10);
+      }
+    
+    
     if("education" in req.body){
       const educationObj = JSON.parse(req.body.education);
       // console.log(educationObj, "this is obj ")
       updateFields.education = educationObj
     }
-    if("skills" in req.body){
+    if("skills" in req.body){ //  
       const skillsObj = JSON.parse(req.body.skills);
       updateFields.skills = skillsObj
     }
@@ -71,10 +68,12 @@ import bcrypt from "bcrypt"
       updateFields.learned = learnedObj
     }
    
-   //  console.log(req.body,"new");
-    const user = await User.findByIdAndUpdate(userId,updateFields,{
-        new:true
-    })
+    console.log(updateFields,"new");
+    const user = await User.findByIdAndUpdate(userId,updateFields,
+      { new: true, runValidators: true } // return updated doc + validate fields
+    ) // exclude password from response
+
+
     // const user = await User.findById(userId)
     return res.status(200).json(user)
 
@@ -86,13 +85,6 @@ import bcrypt from "bcrypt"
  }
 
 
-
-
-
-
-
-
-// delete task here 
  export const deleteTask= async(req,res)=>{
     const userId = req.user.id;
         try {
@@ -159,40 +151,86 @@ export const getOtherUser = async(req,res)=>{
 }
 
 
-// export const uploadImage = async(req,res)=>{
-// const userId = req.user.id;
-// const user = await User.findById(userId);
-// if(!user){
-//   return res.status(400).json("user not present")
-// }
-// let image_url;
-// const delete = deleteFromCloudinary(user.image)
-// // if(req.file && req.file.path){
-// //   const localFilePath = req.file.path.replace(/\\/g, "/");
-// //          console.log(localFilePath)
-// //   // const deleteImage = await upl
-// //   const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
-// // if (!upload) {
-// //   return res.status(404).json({ message: "Image upload failed" });
-// // }
-// // }
-// }
-
-
-
 export const deleteSkill = async(req,res)=>{
+ 
   try {
      const userId = req.user.id;
   const {skill} = req.params
-     await User.updateOne(
-      {_id : userId},
-      {$pull: {"skills" : `${skill}`}},
-      {new:true}
-    )
-     return res.status(200).json({message:"skill deleted",update})
+  console.log(skill)
+   const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { skills: skill } },
+      { new: true } // return updated document
+    );
+
+     return res.status(200).json({message:"skill deleted refresh to see",updatedUser})
   } catch (error) {
     return res.status(404).json({message:"something went wrong",error:error.message})
     
   }
  
+}
+
+
+
+
+
+export const deleteLearn= async(req,res)=>{
+  const confirm = window.confirm("Are you sure you want to delete the skill ?")
+  if(!confirm ) return ;
+  try {
+     const userId = req.user.id;
+  const {learn} = req.params
+  console.log(learn)
+   const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { learned: learn } },
+      { new: true } // return updated document
+    );
+     return res.status(200).json({message:"Learning deleted refresh to see",updatedUser})
+  } catch (error) {
+    return res.status(404).json({message:"something went wrong",error:error.message})
+    
+  }
+ 
+}
+
+export const forgotPassword =async(req,res)=>{
+  const {email , password,password1}= req.body;
+  console.log(email)
+  try {
+    if(password != password1){
+      return res.status(400).json({message: "entered password needs to be same"})
+  
+    }
+    if(!email){
+       return res.status(400).json({message: "email is required"})
+    }
+    const user = await User.findOne({email})
+    if(!user){
+       return res.status(400).json({message:"user not found"})
+    }
+    const userId = user._id;
+  const  hashedPassword = await bcrypt.hash(password, 10);
+  
+    const update= await User.findByIdAndUpdate(userId , 
+      { password: hashedPassword },   // <-- update object
+      { new: true } 
+    )
+    
+      await sendEmail(
+        email,
+        'Password Updated Succesfully',
+        `${user.name} now you can log in `
+         
+      );
+
+     return res.status(200).json({message:"Password Updated Succesfully"})  
+  } catch (error) {
+    return res.status(400).json({message:error})
+    
+  }
+ 
+
+
 }

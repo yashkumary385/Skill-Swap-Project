@@ -23,7 +23,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [skillDelete , setSkillDelete] = useState("")
+  const [learnDelete , setLearnDelete] = useState("")
     const [educationForm, setEducationForm] = useState( {
           instituition:"",
       degree:"",
@@ -38,7 +39,7 @@ const EditProfile = () => {
     name: "",
     username: "",
     email: "",
-    // image: "",
+    password: "",
     skills: [],
     bio: "",
     education:[],
@@ -59,7 +60,7 @@ useEffect(()=>{
 
   const [skills, setSkills] = useState("")
   const [learned, setLearned] = useState("")
-  const [password, setPassword] = useState(""); // New state for password
+  const [password, setPassword] = useState(null); // New state for password
 
   useEffect(() => {
     console.log(user)
@@ -68,6 +69,7 @@ useEffect(()=>{
       email: user?.email || "",
       name: user?.name || "",
       skills: user?.skills || [],
+      password:password,
       // image: user?.image || "",
       learned: user?.learned || [],
       education: user?.education || [],
@@ -82,6 +84,7 @@ useEffect(()=>{
     //   return;
     // }
     setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }))
+    toast.success("Skill added")
     setSkills("")
   }
   const handleLearn = (e) => {
@@ -91,6 +94,7 @@ useEffect(()=>{
     //   return;
     // }
     setForm((prev) => ({ ...prev, learned: [...prev.learned,learned] }))
+    toast.success("Learning added")
     setLearned("")
   }
 
@@ -145,7 +149,7 @@ useEffect(()=>{
       formData.append("name",form.name)
       formData.append("username",form.username)
       formData.append("email",form.email)
-      formData.append("password",form.password)
+      formData.append("password",password)
       formData.append("skills", JSON.stringify(form.skills));
       formData.append("bio",form.bio)
       formData.append("education",JSON.stringify(form.education))
@@ -180,101 +184,137 @@ useEffect(()=>{
     }
   }
 
+     const handleDelete=async()=>{
+      const confirm = window.confirm("Are you sure you want to delete the Skill?")
+      if(!confirm ) return ;
+        try {
+          const res = await axios.delete(`http://localhost:8000/deleteSkill/${skillDelete}`,{
+            headers: {Authorization :`Bearer ${token}`}
+          })
+          console.log(res);
+          toast.success(res.data.message)
+    setSkillDelete("")
+        } catch (error) {
+          console.log(error)
+        }
+     }
+     const handleLearnDelete=async()=>{
+      const confirm = window.confirm("Are you sure you want to delete the learning ?")
+      if(!confirm ) return ;
+      try {
+        const res = await axios.delete(`http://localhost:8000/deleteLearn/${learnDelete}`,{
+          headers: {Authorization :`Bearer ${token}`}
+        })
+        console.log(res);
+        toast.success(res.data.message)
+  setLearnDelete("")
+      } catch (error) {
+        console.log(error)
+      }
+   }
 
+  const handleSkillSet = (item)=>{
+    console.log(item)
+    setSkillDelete(item)
+   console.log(skillDelete)
+
+    handleDelete()
+  }
+  const handleLearnSet = (item)=>{
+    console.log(item)
+    setLearnDelete(item)
+   console.log(learnDelete)
+
+    handleLearnDelete()
+  }
+  
   return (
-    <div className='min-h-[100vh] bg-[#4CAF50] flex justify-center items-center flex-col'>
-      <h1 className='mb-4'>Update User Details</h1>
-      <div className='flex justify-center items-center flex-col h-[80.8vh] border-3 border-black rounded-2xl w-[30vw] bg-gray-200 text-black'>
-
+    <div className='min-h-screen bg-[#4CAF50] flex justify-center items-center flex-col p-4'>
+      <h1 className='mb-4 text-white text-center text-2xl md:text-3xl'>Update User Details</h1>
+      <div className='flex justify-center items-center flex-col h-auto border-3 border-black rounded-2xl w-full max-w-md md:max-w-lg bg-gray-200 text-black p-4'>
 
         <Tabs
           defaultActiveKey="home"
           id="uncontrolled-tab-example"
-          className="mb-3"
+          className="mb-3 w-full"
+          fill
         >
           <Tab eventKey="home" title="Home">
 
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>UserName</Form.Label>
-              <Form.Control type="text" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
+              <Form.Control type="text" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
 
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              <Form.Control type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
 
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              <Form.Control type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
               <Form.Label>New Password (optional)</Form.Label>
-              <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Leave blank if not changing" />
-
+              <Form.Control type="password" value={password} onChange={(e) =>setPassword(e.target.value)} placeholder="Leave blank if not changing" className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
               {/* <Form.Label>Profile Picture</Form.Label>
-              <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} /> */}
+              <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/> */}
             </Form.Group>
-            <Button onClick={handleSubmit} disabled={isLoading}>{isLoading ? "Submitting..." : "Submit"} </Button>
+            <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button>
           </Tab>   
           <Tab eventKey="profile" title="Profile">
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Skills</Form.Label>
-              <Form.Control type="text" value={skills} onChange={(e) =>setSkills(e.target.value)} />
-              <Button onClick={handleSkill}>Add</Button>
-              <div>{user?.skills.map((skill)=>(
-                <ul>
-                  <li class="inline-block border  bg-[#4CAF50] rounded-lg px-2 py-1" key = {skill} >{skill} X</li>
-                </ul>
-              ))}</div>
+              <div className="flex flex-col sm:flex-row gap-2 mb-2">
+                <Form.Control type="text" value={skills} onChange={(e) =>setSkills(e.target.value)} className="flex-grow focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
+                <Button onClick={handleSkill} className="w-full sm:w-auto">Add</Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {user?.skills.map((skill)=>(
+                  <div className="inline-block border bg-[#4CAF50] rounded-lg px-2 py-1 text-white cursor-pointer" onClick={()=>handleSkillSet(skill)} key = {skill} >{skill} X</div>
+                ))}
+              </div>
             </Form.Group>
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Bio</Form.Label>
-              <Form.Control type="text" value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} />
+              <Form.Control as="textarea" rows={3} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
             </Form.Group>
+            <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button>
           </Tab>
           <Tab eventKey="contact" title="Education">
             <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Instituition</Form.Label>
-              <Form.Control type="text" value={educationForm.instituition} onChange={(e) => setEducationForm((prev) => ({ ...prev, instituition: e.target.value }))} />
+              <Form.Label>Institution</Form.Label>
+              <Form.Control type="text" value={educationForm.instituition} onChange={(e) => setEducationForm((prev) => ({ ...prev, instituition: e.target.value }))} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
               <Form.Label>Degree</Form.Label>
-              <Form.Control type="text" value={educationForm.degree} onChange={(e) => setEducationForm((prev) => ({ ...prev, degree: e.target.value }))} />
+              <Form.Control type="text" value={educationForm.degree} onChange={(e) => setEducationForm((prev) => ({ ...prev, degree: e.target.value }))} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
               <Form.Label>Start Date</Form.Label>
-              <Form.Control type="date" value={educationForm.startDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, startDate: e.target.value }))} />
+              <Form.Control type="date" value={educationForm.startDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, startDate: e.target.value }))} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
               <Form.Label>End Date</Form.Label>
-              <Form.Control type="date" value={educationForm.endDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, endDate: e.target.value }))} />
+              <Form.Control type="date" value={educationForm.endDate} onChange={(e) => setEducationForm((prev) => ({ ...prev, endDate: e.target.value }))} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
 
               <Form.Label>CGPA</Form.Label>
-              <Form.Control type="text" value={educationForm.score} onChange={(e) => setEducationForm((prev) => ({ ...prev, score: e.target.value }))} />
-              <label >Learned</label>
-              <form className='flex flex-row gap-2'>
+              <Form.Control type="text" value={educationForm.score} onChange={(e) => setEducationForm((prev) => ({ ...prev, score: e.target.value }))} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
+              <label className="mt-3">Learned Skills</label>
+              <div className='flex flex-col sm:flex-row gap-2 mb-2'>
                 <input type="text"
                   value={learned}
                   onChange={(e) => setLearned(e.target.value)}
                   placeholder='Skills learned'
-                  className='p-2 bg-white mb-2 rounded-lg'
+                  className='p-2 bg-white mb-2 rounded-lg flex-grow border focus:outline-none focus:ring-2 focus:ring-[#4CAF50]'
                 />
-                   <div>{user?.learned.map((learn)=>(
-                <ul>
-                  <li class="inline-block border-2 bg-[#4CAF50] rounded-lg px-2 py-1" key = {learn} >{learn} X</li>
-                </ul>
-              ))}</div>
-                <Button variant="outline-success" onClick={handleLearn} disabled={isLoading}>{isLoading ? "Adding..." : "Add"}</Button>
-              </form>
-              <Button ariant="outline-success " onClick={handleEducation} disabled={isLoading}>{isLoading ? "Adding..." : "Add Education"}</Button>
+                <Button variant="outline-success" onClick={handleLearn} disabled={isLoading} className="w-full sm:w-auto">{isLoading ? "Adding..." : "Add"}</Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {user?.learned.map((learn)=>(
+                  <div className="inline-block border-2 bg-[#4CAF50] rounded-lg px-2 py-1 text-white" onClick={()=>handleLearnSet(learn)}  key = {learn} >{learn} X</div>
+                ))}
+              </div>
+              <Button variant="success" onClick={handleEducation} disabled={isLoading} className="w-full py-2">{isLoading ? "Adding..." : "Add Education"}</Button>
             </Form.Group>
+            <Button onClick={handleSubmit} disabled={isLoading} className="w-full mt-3 py-2">{isLoading ? "Submitting..." : "Submit"} </Button>
           </Tab>
         </Tabs>
-
-
-
-
-
-
-
-
-
-
 
       </div>
     </div>

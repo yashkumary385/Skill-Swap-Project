@@ -18,45 +18,36 @@ function generateWebToken (userId){
 export const registerUser =async(req,res)=>{ // bcoz this is a post request it has a json body
    
     
+    
     try{
-        let imageData=null
+        let image_url = null;
         const errors = validationResult(req)
         if(!errors.isEmpty()){
-             return res.status(400).json({ message:"what errors",errors: errors.array() }); // image not cmong from the multer but multre hitt occurs 
+             return res.status(400).json({ errors: errors.array() }); // image not cmong from the multer but multre hitt occurs 
         }
     const {name,username,email,password,bio,education} = req.body;
-    const skills = req.body.skills ? JSON.parse(req.body.skills) : [];
+    const skills = req.body.skills ? JSON.parse(req.body.skills) : [];//mn
     const learned = req.body.learned ? JSON.parse(req.body.learned) : [];
 
 // console.log(name,username,email,password,bio,skills,education,learned)
     // const image = req.file ? req.file.path :undefined
-    // console.log(req.file, "this is req file") // file is not coing to undesfined is getting printed 
+    console.log(req.file, "this is req file") // file is not coing to undesfined is getting printed 
 
-    if (req.file && req.file.path)  {
-           
-const localPath = req.file.path.replace(/\\/g, "/") ;
+console.log(req.file.path, " this is file path");
+// const upload = await uploadOnCloudinary(localPath);
+
+if (req.file || req.file.path) {
+const localPath = req.file.path.replace(/\\/g, "/");
 const upload = await uploadOnCloudinary(localPath);
 if (!upload) {
   return res.status(404).json({ message: "Image upload failed" });
-} 
-
-/// come back here and fix this up.......
+}
     console.log(upload,"this is upload")
 
-   imageData = {
-        url: upload.secure_url,
-        public_id: upload.public_id,
-      };
-    
-// console.log(req.file.path, " this is file path");
-// 
+image_url = upload.secure_url;
 }else{
-    image_url=" https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ";
+    image_url ="https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"
 }
-// Upload local file to Cloudinary
-// console.log(image,"this is image")
-
-
     const existuser = await User.findOne({ email   }) // first we check tht if th user exixts or not whetgher he already a login user
     if(existuser){
     //   return res.status(400).json({message:"user already exists"})
@@ -72,7 +63,7 @@ if (!upload) {
         password:hashedPassword,
         bio,
         skills,
-        image:imageData, 
+        image:image_url, 
         educationObj,
         learned
     })
@@ -116,7 +107,6 @@ export const loginUser =async(req,res)=>{
     return res.status(404).json({message:"login unsuccessfull ",error:error.message})
     }
 }
-
 
 
 

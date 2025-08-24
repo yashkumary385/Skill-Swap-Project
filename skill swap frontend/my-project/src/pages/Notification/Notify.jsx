@@ -32,15 +32,15 @@ const NotificationPage = () => {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#4CAF50] p-6">
-        <h1 className="text-3xl font-bold text-white mb-6">Notifications</h1>
+      <div className="min-h-screen bg-[#4CAF50] p-4 sm:p-6">
+        <h1 className="text-3xl font-bold text-white mb-6 text-center sm:text-left">Notifications</h1>
 
-        <div className="flex flex-col gap-4 max-w-2xl mx-auto">
+        <div className="flex flex-col gap-4 max-w-2xl mx-auto w-full">
           
 { notifications.length > 0 ?
 <ul>
         {notifications.map((note) => (
-  <Card key={note._id} style={{ width: '40rem' }} className="mb-3">
+  <Card key={note._id} className="mb-3 w-full">
     <Card.Body>
       <Card.Text className="text-black">
         {note.message}
@@ -54,7 +54,7 @@ const NotificationPage = () => {
 
            
             </ul>:
-            <div>No Notifications To Show</div>
+            <div className="text-white text-center">No Notifications To Show</div>
 }
         </div>
       </div>
