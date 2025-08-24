@@ -1,5 +1,4 @@
-import React from 'react'
-import { Computer } from 'lucide-react'
+
 import { Header } from '../../components/Navbar/Navbar'
 import Card from 'react-bootstrap/Card'
 import CardGroup from 'react-bootstrap/CardGroup';
@@ -74,7 +73,7 @@ Ready to swap skills and grow together?”
                 Whether you're a coder seeking design help, a musician wanting
                 to learn photography, or simply someone passionate about
                 sharing knowledge, Skill Swap is the space where collaboration
-                replaces currency. It's not just about services — it’s about
+                replaces currency. It's not just about services — it's about
                 building a community where talent, time, and passion are the new
                 economy.
               </Card.Text>

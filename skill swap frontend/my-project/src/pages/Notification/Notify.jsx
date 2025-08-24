@@ -13,7 +13,7 @@ const NotificationPage = () => {
   useEffect(()=>{
       const notify = async()=>{
     try {
-        const res = await axios.get("http://localhost:8000/notification",
+        const res = await axios.get("http://localhost:8000/notification/all",
             {
                 headers:{Authorization :`Bearer ${token}`}
             }

@@ -1,7 +1,5 @@
 import Service from "../models/Service.js";
-import { upload } from "../middlewares/multer.middleware.js";
 import User from "../models/User.js";
-import fs from "fs"
 
 
 
@@ -9,14 +7,10 @@ import fs from "fs"
 export const createService = async(req,res)=>{
      
  const userId = req.user.id;
- console.log("create service route hittt")
 
-     const image = req.file ? `/uploads/${req.file.filename}` : null;
-
-    const {user,title,description,type,cateogory} = req.body
+    const {title,description,type,cateogory} = req.body
     try{
       const userEmail = await User.findById(userId)
-      // console.log('');
       
    
     if(!userId){
@@ -44,7 +38,6 @@ catch(error){
 export const getService = async(req,res)=>{
    
     try{
-      const userId = req.user.id;
     const {type,search,cateogory} = req.query; // query is the query parameters
    const page = parseInt(req.query.page);
    const limit = parseInt(req.query.limit);
@@ -61,32 +54,21 @@ export const getService = async(req,res)=>{
         query.cateogory = cateogory.toLowerCase()
     }
     const skip = (page - 1 )*limit; // skips the number of results before 
-    // if(search){ // If you want to match the search term in either title or description, use $or:
-    //     // check
-    //     query.$or=[
-    //   {title:{ $regex :search , $options:"i"}},
-    // {description:{ $regex :search , $options:"i"}}
-    // ];
-    // }
     if (search) {
   query.$or = [
     { title: { $regex: search,$options: 'i' } },
     { description: { $regex: search, $options: 'i' } }
   ];
-//   query=  { title: { $regex: search, $options: 'i' } }
 }
-    // console.log(query);
-    // console.log(JSON.stringify(query, null, 2));
     const services = await Service.find(query).populate("user","email name").skip(skip).limit(limit).sort(sortBy)   // populate user is from the token
 
     const total = await Service.countDocuments(services); 
     const totalPages = Math.ceil(total/limit)
 
-    console.log(total);
+    
         
 
-    //A Service.find({}) means: if nothins passed query remains empty and return all services
-    // const services = await Service.find({})
+   
 
     return res.status(200).json({message:"The services are",total,totalPages,services})
     }
@@ -101,7 +83,6 @@ export const getService = async(req,res)=>{
 
  export const updateService = async(req,res)=>{
     // only that user who has created the service can edit the service no other user can .
-    console.log("update service route has being hit");
       const userId = req.user.id;
       const taskId = req.params.id
       try {
@@ -125,17 +106,9 @@ export const getService = async(req,res)=>{
         description:req.body.description,
         type:req.body.type,
         cateogory :req.body.cateogory.toLowerCase(),
-        // email:userEmail.email,
-        // image:`/upload/${image}`
+        
    })
 
-    // console.log(service);
-    // if(!service)
-    // {
-    // return res.status(404).json({message:"error occurred"})
-
-
-    // }
     
     return res.status(200).json({message:"service updated",service})
         
@@ -147,9 +120,7 @@ export const getService = async(req,res)=>{
  // delete the service 
 
  export const deleteService = async(req,res)=>{
-  console.log("delete route hitt")
     const taskId = req.params.id;
-    const userId = req.user.id;
 
 
     try {
@@ -158,7 +129,7 @@ export const getService = async(req,res)=>{
         
     }
     const service = await Service.findByIdAndDelete(taskId)
-    // await Service.deleteMany({user:userId})
+    
     return res.status(200).json({message:"service deleted",service})
     } catch (error) {
     return res.status(403).json({message:"something was wrong",error:error.message})
@@ -174,18 +145,15 @@ export const getService = async(req,res)=>{
 
 
  export const getUsersService = async(req,res)=>{
-   console.log("get users service route is hit")
     try{
       const userId = req.user.id;
        let sortBy ={createdAt : -1}; 
-      // console.log(userId)
     
     const services = await Service.find({user:userId}).populate("user","email name").sort(sortBy)
     const total = await Service.countDocuments(services); 
 
    
-    //A Service.find({}) means: if nothins passed query remains empty and return all services
-    // const services = await Service.find({})
+  
 
     return res.status(200).json({message:"The services are",total,services})
     }
@@ -200,7 +168,6 @@ export const getService = async(req,res)=>{
 
 
 export const getNotUserService = async(req,res)=>{
-  console.log("not users route")
   const user_id = req.user.id;
    const page = parseInt(req.query.page);
    const limit = parseInt(req.query.limit);
@@ -209,10 +176,9 @@ export const getNotUserService = async(req,res)=>{
 
   try {
       if(!user_id){
-    console.log("error occured")
+ 
     return res.status(404).json({message:"there is some problem"})
   }
-  // const userServices = await Service.find({user_id})
     const skip = (page - 1 )*limit; // skips the number of results before 
 
   const Notservices = await Service.find({

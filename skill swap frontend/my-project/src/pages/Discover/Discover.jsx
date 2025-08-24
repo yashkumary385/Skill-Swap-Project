@@ -6,10 +6,9 @@ import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import { User, Mail, ArrowUpRight } from 'lucide-react';
 import { toast } from 'react-toastify';
-import UserProfileWrapper from '../Profile/UserProfileWrapper';
 import { useNavigate } from 'react-router-dom';
 function Discover() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const [services, setServices] = useState([]);
   const navigate = useNavigate();
 

@@ -1,6 +1,5 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
-import path from "path"
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import bcrypt from "bcrypt"
 import { sendEmail } from "../utils/sendEmail.js";
@@ -156,7 +155,7 @@ export const deleteSkill = async(req,res)=>{
   try {
      const userId = req.user.id;
   const {skill} = req.params
-  console.log(skill)
+  console.log(skill," this is the incoming skill")
    const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $pull: { skills: skill } },
@@ -176,8 +175,7 @@ export const deleteSkill = async(req,res)=>{
 
 
 export const deleteLearn= async(req,res)=>{
-  const confirm = window.confirm("Are you sure you want to delete the skill ?")
-  if(!confirm ) return ;
+ 
   try {
      const userId = req.user.id;
   const {learn} = req.params
@@ -213,7 +211,7 @@ export const forgotPassword =async(req,res)=>{
     const userId = user._id;
   const  hashedPassword = await bcrypt.hash(password, 10);
   
-    const update= await User.findByIdAndUpdate(userId , 
+     await User.findByIdAndUpdate(userId , 
       { password: hashedPassword },   // <-- update object
       { new: true } 
     )

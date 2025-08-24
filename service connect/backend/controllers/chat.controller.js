@@ -3,7 +3,7 @@ import Message from "../models/Messages.js";
 export const chatMessage =  async(req,res)=>{
     try {
         const chatId = req.params.chatId;
-        console.log(chatId)
+        // console.log(chatId)
 if(!chatId){
     return res.status(400).json({message : "Chat Id not provided"})
 }

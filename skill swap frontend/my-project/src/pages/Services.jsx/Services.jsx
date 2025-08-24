@@ -6,7 +6,6 @@ import { useAuth } from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 const Services = () => {
   const { user, token } = useAuth();
@@ -25,7 +24,7 @@ const Services = () => {
     cateogory: "",
     type: ""
   })
-  const [serviceId, setServiceId] = useState("")
+  
   const serviceRef = useRef(null)
   const fetchServices = async () => {
     try {
@@ -62,6 +61,7 @@ const Services = () => {
         type: ""
       })
       // console.log(services)
+      toast.success("Service Created Succesfully")
       fetchServices()
     } catch (error) {
 

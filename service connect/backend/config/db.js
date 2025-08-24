@@ -1,15 +1,12 @@
 import mongoose from "mongoose"
-import dotenv from "dotenv"
-// dotenv.config()
-const connectDb =async()=>{ // doesnt handles http request not an api route handler .
-    try{
-   const conn = await mongoose.connect(process.env.MONGODB_URI)
-    console.log(`mongo db connected ${conn.connection.host}`);
+const connectDb = async () => { // doesnt handles http request not an api route handler .
+    try {
+        const conn = await mongoose.connect(process.env.MONGODB_URI)
+        console.log(`mongo db connected ${conn.connection.host}`);
     }
-    catch(err){
+    catch (err) {
         // console.log('db cant be connected');
-            console.error("MongoDB connection failed:", err.message);
-
+        console.error("MongoDB connection failed:", err.message);
         process.exit(1)
     }
 }

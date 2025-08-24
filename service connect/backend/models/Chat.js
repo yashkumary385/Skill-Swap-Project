@@ -16,9 +16,5 @@ const ChatSchema = new mongoose.Schema(
   }
 );
 
-// // 🚀 Always delete before recreating
-// if (mongoose.connection.models['Chat']) {
-//   delete mongoose.connection.models['Chat'];
-// }
 
 export default mongoose.model("Chat", ChatSchema);

@@ -6,7 +6,7 @@ import { User, Eye, Mail, Lock, ClipboardPenLine } from "lucide-react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import {  toast, Bounce } from 'react-toastify';
 import { Link } from "react-router-dom";
 
 const validateEmail = (email) => {
@@ -86,25 +86,25 @@ function Signup() {
     const handleSignup = async (e) => {
         e.preventDefault();
 
-        // if (!form.name || !form.email || !form.password) {
-        //     toast.warning("Name, Email, and Password are required!");
-        //     return;
-        // }
+        if (!form.name || !form.email || !form.password) {
+            toast.warning("Name, Email, and Password are required!");
+            return;
+        }
 
-        // if (form.name.length < 3) {
-        //     toast.warning("Name must be at least 3 characters long.");
-        //     return;
-        // }
+        if (form.name.length < 3) {
+            toast.warning("Name must be at least 3 characters long.");
+            return;
+        }
 
-        // if (!validateEmail(form.email)) {
-        //     toast.warning("Please enter a valid email address!");
-        //     return;
-        // }
+        if (!validateEmail(form.email)) {
+            toast.warning("Please enter a valid email address!");
+            return;
+        }
 
-        // if (!validatePassword(form.password)) {
-        //     toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
-        //     return;
-        // }
+        if (!validatePassword(form.password)) {
+            toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+            return;
+        }
 
         console.log(form)
         try {

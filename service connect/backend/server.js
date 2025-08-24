@@ -9,10 +9,16 @@ import User from "./models/User.js"
 
 import { Server } from "socket.io"
 import http from "http"
+
+
+// Load env file depending on NODE_ENV
 dotenv.config({
-    path: "./.env"
-})
-connectDb();
+  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development",
+});
+
+console.log("Running in:", process.env.NODE_ENV);
+console.log("DB URL:", process.env.MONGODB_URI);
+
 
 
 const app = express();
@@ -59,7 +65,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("typing", async ({ sender, chatId }) => {
-        console.log("yesss")
+        // console.log("yesss")
         const chat = await Chat.findById(chatId)
         if (!chat) return;
         chat.users.forEach(async(user) => {
@@ -75,7 +81,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("Not-typing", async({ sender, chatId }) => {
-        console.log("nooo")
+        // console.log("nooo")
           const chat = await Chat.findById(chatId)
           chat.users.forEach(async(user)=>{
               let userId = user.toString();
@@ -120,8 +126,6 @@ io.on("connection", (socket) => {
 
     })
 })
-
-
 //
 app.use(express.json());
 
@@ -257,13 +261,13 @@ app.use("/", chatRoutes)
 app.use(errorHandler)
 
 
-const PORT = process.env.PORT || 3001;
+const PORT= process.env.PORT || 3001;
 try {
-    server.listen(PORT, (req, res) => {
+    server.listen( PORT => {
         console.log(`server is running on port ${PORT}`);
     })
 } catch (error) {
-    console.log('server not responding');
+    console.log('server not responding',error);
 }
 // console.log('"hiii');
 

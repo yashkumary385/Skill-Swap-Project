@@ -4,10 +4,9 @@ import { sendEmail } from "../utils/sendEmail.js";
 import Notification from "../models/Notification.js";
 import Chat from "../models/Chat.js"// adjust path to your folder
 // import Cha
-
+/// SEE THIS IS THE MOST IMPORTANT ONE NOW
 export const createSwapRequest = async(req,res)=>{
     const {requesterServiceId , recepientServiceId ,status} = req.body; // here we are taking the service's id 
-    // console.log(requesterServiceId);
     const userId = req.user.id;
    // person cant make a swap for the same service of the recepient he has made the swap for .
    //You're trying to prevent a user from requesting a swap on the same recipient's service multiple times,
@@ -35,13 +34,12 @@ export const createSwapRequest = async(req,res)=>{
       recepientService,
       status
     });
-//    console.log(swapRequest);
-// console.log(recepientService.email);
-    const notify =  await Notification.create({
+
+    await Notification.create({
     user : recepientService.user._id ,
     message:`The request made by you for the service ${recepientService.title} `,
    })  
-    const notify1 =  await Notification.create({
+    await Notification.create({
     user : requesterService.user._id ,
     message:`The request made to you for the service ${recepientService.title} by ${requesterService.user.name} and email ${requesterService.email}  inexchange of you service ${requesterService.title} `,
    })  
@@ -53,7 +51,6 @@ export const createSwapRequest = async(req,res)=>{
    res.status(200).json({
   swap
    })
-  //  console.log(notify);
     } catch (error) {
         return res.status(404).json({message:"there is a problem",error:error.message})
     }
@@ -62,7 +59,6 @@ export const createSwapRequest = async(req,res)=>{
 // Get all swap results
 
 export const getSwap = async(req,res)=>{
-    console.log('get swap is hit');
     
     try {
         const swap= await SwapService.find({}) .populate('requester', 'name email')
@@ -78,8 +74,7 @@ export const getSwap = async(req,res)=>{
 }
 // get incoming request 
 export const myReq = async(req,res)=>{ 
-    console.log("bitttchh");
-    let request =[]
+    let request =[];
     
     try{
      const userId = req.user.id;
@@ -110,12 +105,9 @@ export const setUpdates = async(req,res)=>{ //status update or acceoting request
 const { status } = req.body;
 const  userId = req.user.id;
 const io = req.app.get("io");
-    console.log(swapId);
-    console.log(userId ,"this is the user id "); // who is accepting or rejecting is the recepent 
     
     
     const swap = await SwapService.findById(swapId)
-    console.log(swap);
     if (!swap) return res.status(404).json({ message: "Swap not found" });
 
     if (swap.recepient.toString() !== userId){ // userid is from the jwt so it is a string
@@ -140,11 +132,12 @@ if (!chat) {
   });
 }
 
-      // await sendEmail(
-      //   swap.requester.email,
-      //   'Your Request Was Accepted!',
-      //   `Great news! Your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was accepted.`
-      // );
+      await sendEmail(
+        swap.requester.email,
+        'Your Request Was Accepted!',
+        `Great news! Your request to swap your service  was accepted.`
+      );
+
       // send the chat id to the fronend 
       [swap.requester , swap.recepient].forEach((user)=>{
       io.to(user.toString()).emit("swap-accepted",{
@@ -156,14 +149,14 @@ if (!chat) {
        res.status(200).json({ message: `Request ${status}`, swap , chat:chat._id});
     }
      
-    // if (status === 'rejected') {
-    //   await sendEmail(
-    //     swap.requester.email,
-    //     'Your Request Was Declined',
-    //     `Unfortunately, your request to swap your service "${swap.requesterService.title}" for "${swap.recepientService.title}" was declined.`
-    //   );
-    //   res.status(200).json({message:`Request ${status}`})
-    // }
+    if (status === 'rejected') {
+      await sendEmail(
+        swap.requester.email,
+        'Your Request Was Declined',
+        `Unfortunately, your request to swap your service was declined.`
+      );
+      res.status(200).json({message:`Request ${status}`})
+    }
   
         
     } catch (error) {
@@ -175,7 +168,6 @@ if (!chat) {
 
 // request that i send 
 export const outReq = async(req,res)=>{
-    // console.log("bitttchh");
        const page = parseInt(req.query.page);
 
        const limit = parseInt(req.query.limit);
@@ -194,7 +186,7 @@ export const outReq = async(req,res)=>{
        const total = await SwapService.countDocuments({requester : userId}); 
           const totalPages = Math.ceil(total/limit)
       
-    console.log(total);
+
   
    return res.status(200).json({outgoingReq,total,totalPages })
 
@@ -210,22 +202,19 @@ export const outReq = async(req,res)=>{
 
 
 export const acceptedReq = async(req,res)=>{
-  console.log("what")
       try {
            const userId = req.user.id;
           let acceptedReq=[];
-    //  const outgoingReq = await SwapService.find({requester: userId})
+  
      const incomingReq = await SwapService.find({recepient: userId}).populate('requester', 'name email')
      .populate('recepient', 'name email')
       .populate('requesterService', 'title')
       .populate('recepientService', 'title')
 
-     console.log(incomingReq," this is incoming request")
  
     for (const swap of incomingReq) {
       if (swap.status === "accepted") {
         const chat = await Chat.find({ swapId: swap._id });
-        console.log(chat);
         acceptedReq.push({ swap, chat });
       }
     }
@@ -244,19 +233,18 @@ export const outAccepted = async(req,res)=>{
            try {
              const outgoingReq = await SwapService.find({requester: userId}).populate('requester', 'name email')
       .populate('recepient', 'name email')
-      // .populate("requesterServiceDetails" ,"recepientServiceDetails" )
+  
       .populate('requesterService', 'title') 
-      // .populate('recepientService', 'title')
+      
       .populate('recepientService', 'title')
 
    for (const swap of outgoingReq) {
       if (swap.status === "accepted") {
         const chat = await Chat.find({ swapId: swap._id });
-        console.log(chat);
         outAcceptedReq.push({ swap, chat });
       }
     }
-res.status(200).json({outAcceptedReq})
+           res.status(200).json({outAcceptedReq})
 
            } catch (error) {
         return res.status(404).json({error:error.message})

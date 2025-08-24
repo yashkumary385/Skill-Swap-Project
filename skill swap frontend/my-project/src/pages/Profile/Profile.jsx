@@ -2,14 +2,13 @@ import React from 'react'
 import { useAuth } from '../../context/useAuth.js';
 import { Card } from 'react-bootstrap';
 import Header from '../../components/Navbar/Navbar';
-import { Mail, User, SquareArrowUpRight, UserCircle } from 'lucide-react';
+import { Mail, User, UserCircle } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
-import EditProfile from '../EditProfile/EditProfile';
 import { useNavigate } from 'react-router-dom';
 
 const Profile = ({ externalUser }) => {
-    const { user: authUser, loading } = useAuth();
+    const { user: authUser} = useAuth();
     const user = externalUser || authUser
     const navigate = useNavigate()
     const navigateTo = () => {

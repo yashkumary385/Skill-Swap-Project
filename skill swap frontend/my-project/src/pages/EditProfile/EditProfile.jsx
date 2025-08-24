@@ -8,7 +8,7 @@ import { useAuth} from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // const validateEmail = (email) => {
@@ -258,7 +258,7 @@ useEffect(()=>{
               {/* <Form.Label>Profile Picture</Form.Label>
               <Form.Control type="file" onChange={(e) => setForm({ ...form, image: e.target.files[0] })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/> */}
             </Form.Group>
-            <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button>
+            {/* <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button> */}
           </Tab>   
           <Tab eventKey="profile" title="Profile">
             <Form.Group controlId="formFile" className="mb-3">
@@ -277,7 +277,7 @@ useEffect(()=>{
               <Form.Label>Bio</Form.Label>
               <Form.Control as="textarea" rows={3} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} className="w-full focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"/>
             </Form.Group>
-            <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button>
+            {/* <Button onClick={handleSubmit} disabled={isLoading} className="w-full py-2">{isLoading ? "Submitting..." : "Submit"} </Button> */}
           </Tab>
           <Tab eventKey="contact" title="Education">
             <Form.Group controlId="formFile" className="mb-3">

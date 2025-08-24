@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from 'react'
+import  { useEffect, useState,useRef } from 'react'
 import socket from "../../Socket.js"
 import { useAuth } from '../../context/useAuth.js';
 import { useParams } from 'react-router-dom';
@@ -21,14 +21,6 @@ const Chat = () => {
 
   // },[])
 // mark as read
-const markAsRead = (sender, messageId, chatId) => {
-  // console.log(sender,messageId,chatId)
-  socket.emit("message-read",{
-    sender,
-    chatId,
-    messageId,
-  });
-};
 
 // useEffect(() => {
 //   if (messages?.length > 0 && user?._id) {
@@ -70,9 +62,9 @@ const markAsRead = (sender, messageId, chatId) => {
     },[])
 
 
-    socket.on("typing", ({chatId,userId,sender,name})=>{
+    socket.on("typing", ({userId,sender,name})=>{
       if(sender !== userId){
-        console.log(name)
+        // console.log(name)
       console.log(userId)
       
        setPerson(name.name)
@@ -80,7 +72,7 @@ const markAsRead = (sender, messageId, chatId) => {
       setTyping(true)
       }
     })
-    socket.on("Not-typing", ({userId,sender,chatId})=>{
+    socket.on("Not-typing", ({userId,sender})=>{
       console.log(userId)
         if(sender !== userId){
         console.log("nooo")
@@ -89,7 +81,7 @@ const markAsRead = (sender, messageId, chatId) => {
     })
 
 
-    socket.on("message-read", ({messageId,chatId,reader})=>{
+    socket.on("message-read", ({messageId,reader})=>{
       setMessages((prev)=>{
         prev.map((msg)=>{
         

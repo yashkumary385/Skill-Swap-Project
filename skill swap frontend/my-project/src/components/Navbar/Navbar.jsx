@@ -1,22 +1,16 @@
-import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth.js';
 import { useNavigate } from 'react-router-dom';
 import { Bell } from 'lucide-react';
+import { NavLink } from "react-router-dom";
 
-
-import React from 'react'
 
 
 export const Header = () =>{
 const navigate = useNavigate()
-    const location = useLocation();
     const {user , logout} = useAuth();
-    const isLanding = location.pathname === "/" ;
 
     const handleLogout = ()=>{
       const confirm = window.confirm("Are you sure You want to logout ?")
@@ -35,18 +29,32 @@ const navigate = useNavigate()
         {
 user ?
 
-        <Nav className="ms-auto align-items-center flex gap-3">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/profile">Profile</Nav.Link>
-          <Nav.Link href="/services">Services</Nav.Link>
-       <button onClick={handleLogout}>Logout</button>
-          <Nav.Link className="" href="/discover" >Discover</Nav.Link>
-          <Nav.Link  href="/swaprequests" >Swap Requests</Nav.Link>
-          <Nav.Link  href="/acceptedReq" ><div> Requests</div></Nav.Link>
-          <Nav.Link  href="/notifications" ><div><Bell/></div></Nav.Link>
-          
-          
-        </Nav>
+<Nav className="ms-auto align-items-center flex gap-3">
+<Nav.Link as={NavLink} to="/" end>
+  Home
+</Nav.Link>
+<Nav.Link as={NavLink} to="/profile">
+  Profile
+</Nav.Link>
+<Nav.Link as={NavLink} to="/services">
+  Services
+</Nav.Link>
+<Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
+  Logout
+</Nav.Link>
+<Nav.Link as={NavLink} to="/discover">
+  Discover
+</Nav.Link>
+<Nav.Link as={NavLink} to="/swaprequests">
+  Swap Requests
+</Nav.Link>
+<Nav.Link as={NavLink} to="/acceptedReq">
+  <div>Your Requests</div>
+</Nav.Link>
+<Nav.Link as={NavLink} to="/notifications">
+  <div><Bell /></div>
+</Nav.Link>
+</Nav>
         : 
             <Nav className="ms-auto align-items-center flex gap-3">
           <Nav.Link href="/">Home</Nav.Link>

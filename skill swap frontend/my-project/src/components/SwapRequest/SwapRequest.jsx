@@ -5,17 +5,18 @@ import { useAuth } from '../../context/useAuth.js';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
-import { useFetcher, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+import socket from '../../Socket.js';
 
 const SwapRequest = () => {
     const [outReq, setOutReq] = useState([])
     const navigate = useNavigate()
     const [incomingReq, setIncomingtReq] = useState([])
-    const { token , user } = useAuth();
+    const { token } = useAuth();
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
-    const [acceptedChats , setAcceptedChats] = useState({}); // keeping the request id of the sawp as the key nand chatID as the value
+    const acceptedChats = {}; // keeping the request id of the sawp as the key nand chatID as the value
     
     const handleIncomingRequest = async () => {
         try {
@@ -28,14 +29,14 @@ const SwapRequest = () => {
             )
             console.log(res);
             setIncomingtReq(res.data.request)
-            incomingReq.forEach((req)=>{
-            //     if(req.status === "accepted"){
-            // setAcceptedChats((prev) =>( {...prev,[id]:chatId})) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
-            //     }
-            })
+            // incomingReq.forEach((req)=>{
+            // //     if(req.status === "accepted"){
+            // // setAcceptedChats((prev) =>( {...prev,[id]:chatId})) //  make it accepted tomorrow and work on this . have to create a contrller to store all the accepted rrequestde and get them here 
+            // //     }
+            // })
        
         } catch (error) {
-
+console.log(error)
         }
     }
     useEffect(() => {
@@ -84,7 +85,6 @@ const SwapRequest = () => {
             setAcceptedReq((prev) => [...prev, id])
             console.log(id);
             handleIncomingRequest()
-           
           socket.emit("swap-accepted", ({message})=>{
             toast.success(message);
           })

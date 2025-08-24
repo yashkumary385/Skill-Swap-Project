@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose"
+import mongoose from "mongoose"
 import User from "../models/User.js";
 
 const serviceSchema = new mongoose.Schema({

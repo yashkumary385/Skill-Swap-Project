@@ -3,7 +3,7 @@ import { useAuth } from '../../context/useAuth.js';
 import Button from 'react-bootstrap/Button';
 import { useNavigate, Link } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
@@ -44,27 +44,25 @@ function Login() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-  // const showModal=()=>[
-  //   setShowModal(true)
-  // ]
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // if (!email || !password) {
-    //   toast.warning("Email and Password are required!");
-    //   return;
-    // }
+    if (!email || !password) {
+      toast.warning("Email and Password are required!");
+      return;
+    }
 
-    // if (!validateEmail(email)) {
-    //     toast.warning("Please enter a valid email address!");
-    //     return;
-    // }
+    if (!validateEmail(email)) {
+        toast.warning("Please enter a valid email address!");
+        return;
+    }
 
-    // if (!validatePassword(password)) {
-    //     toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
-    //     return;
-    // }
+    if (!validatePassword(password)) {
+        toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        return;
+    }
 
     try {
       const result = await login(email, password)
