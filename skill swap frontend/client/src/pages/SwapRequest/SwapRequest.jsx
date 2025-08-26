@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../Navbar/Navbar'
-import axios from 'axios'
-import { useAuth } from '../../context/useAuth.js';
+import Header from '../../components/Navbar/Navbar.jsx'
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import {  useNavigate } from 'react-router-dom';
 import socket from '../../Socket.js';
+import { acceptRequest, myIncoming, myOutgoingRequest, rejectRequest } from '../../api/api.js';
 
 const SwapRequest = () => {
     const [outReq, setOutReq] = useState([])
     const navigate = useNavigate()
     const [incomingReq, setIncomingtReq] = useState([])
-    const { token } = useAuth();
     const [acceptedReq, setAcceptedReq] = useState([])
     const [currentPage, setCurrentPage] = useState(1); // for pagination
     const [totalPages, setTotalPages] = useState(1);
@@ -20,13 +18,7 @@ const SwapRequest = () => {
     
     const handleIncomingRequest = async () => {
         try {
-            const res = await axios.get("http://localhost:8000/requests/incoming",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
+            const res = await myIncoming();
             console.log(res);
             setIncomingtReq(res.data.request)
             // incomingReq.forEach((req)=>{
@@ -47,13 +39,7 @@ console.log(error)
     useEffect(() => {
         const handleOutgoingRequest = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/outRequest/outgoing?limit=3&page=${currentPage}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                )
+                const res = await myOutgoingRequest(currentPage)
                 console.log(res);
                 setOutReq(res.data.outgoingReq)
                 console.log(outReq)
@@ -71,13 +57,7 @@ console.log(error)
     const handleAccept = async (id) => {
         console.log(id);
         try {
-            const res = await axios.put(`http://localhost:8000/update/${id}`, {
-                status: "accepted"
-            },
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            )
+            const res = await acceptRequest(id,"accepted")
             console.log(res);
             console.log(res.data.swap);
         // from the data from the backend
@@ -99,13 +79,7 @@ console.log(error)
         if(!confirm) return;
         console.log(id);
         try {
-            const res = await axios.put(`http://localhost:8000/update/${id}`, {
-                status: "rejected"
-            },
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            )
+            const res = await rejectRequest(id,"rejected")
             console.log(res);
             console.log(res.data.swap);
             toast.success("Swap Rejected")

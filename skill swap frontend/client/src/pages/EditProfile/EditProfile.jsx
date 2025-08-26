@@ -6,21 +6,20 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { useAuth} from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteLearn, deleteSkill, editProfile } from '../../api/api.js';
 
-// const validateEmail = (email) => {
-//   const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
-//   return re.test(String(email).toLowerCase());
-// };
+const validateEmail = (email) => {
+  const re = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+  return re.test(String(email).toLowerCase());
+};
 
-// const validatePassword = (password) => {
-//   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-//   return re.test(password);
-// };
+const validatePassword = (password) => {
+  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return re.test(password);
+};
 
 const EditProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +34,7 @@ const EditProfile = () => {
     })// setting this through input .
 
   const navigate = useNavigate();
-  const { user, setUser, token } = useAuth();
+  const { user, setUser } = useAuth();
   const [form, setForm] = useState({
     name: "",
     username: "",
@@ -123,25 +122,25 @@ useEffect(()=>{
   }
 
   const handleSubmit = async () => {
-    // if (!form.name || !form.username || !form.email) {
-    //   toast.warning("Name, Username, and Email are required!");
-    //   return;
-    // }
+    if (!form.name || !form.username || !form.email) {
+      toast.warning("Name, Username, and Email are required!");
+      return;
+    }
 
-    // if (form.name.length < 3) {
-    //   toast.warning("Name must be at least 3 characters long.");
-    //   return;
-    // }
+    if (form.name.length < 3) {
+      toast.warning("Name must be at least 3 characters long.");
+      return;
+    }
 
-    // if (!validateEmail(form.email)) {
-    //   toast.warning("Please enter a valid email address!");
-    //   return;
-    // }
+    if (!validateEmail(form.email)) {
+      toast.warning("Please enter a valid email address!");
+      return;
+    }
 
-    // if (password && !validatePassword(password)) {
-    //   toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
-    //   return;
-    // }
+    if (password && !validatePassword(password)) {
+      toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+      return;
+    }
 
     try {
       console.log(form.education)
@@ -180,26 +179,24 @@ useEffect(()=>{
     }
   }
 
-     const handleDelete=async()=>{
+     const handleDelete=async(item)=>{
       const confirm = window.confirm("Are you sure you want to delete the Skill?")
       if(!confirm ) return ;
         try {
-          const res = await deleteSkill(skillDelete)
+          const res = await deleteSkill(item)
           console.log(res);
           toast.success(res.data.message)
-    setSkillDelete("")
         } catch (error) {
           console.log(error)
         }
      }
-     const handleLearnDelete=async()=>{
+     const handleLearnDelete=async(item)=>{
       const confirm = window.confirm("Are you sure you want to delete the learning ?")
       if(!confirm ) return ;
       try {
-        const res = await deleteLearn(learnDelete)
+        const res = await deleteLearn(item)
         console.log(res);
         toast.success(res.data.message)
-  setLearnDelete("")
       } catch (error) {
         console.log(error)
       }
@@ -210,14 +207,18 @@ useEffect(()=>{
     setSkillDelete(item)
    console.log(skillDelete)
 
-    handleDelete()
+    handleDelete(item)
+    setSkillDelete("")
+
   }
   const handleLearnSet = (item)=>{
     console.log(item)
     setLearnDelete(item)
    console.log(learnDelete)
 
-    handleLearnDelete()
+    handleLearnDelete(item)
+  // setLearnDelete("")
+
   }
   
   return (

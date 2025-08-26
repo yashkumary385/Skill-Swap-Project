@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import axios from "axios"
 import { User, Eye, Mail, Lock, ClipboardPenLine } from "lucide-react";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import 'react-toastify/dist/ReactToastify.css';
 import {  toast, Bounce } from 'react-toastify';
 import { Link } from "react-router-dom";
+import { signup } from "../../api/api";
 
 const validateEmail = (email) => {
     // Regular expression for a basic email validation
@@ -124,10 +124,7 @@ function Signup() {
 }
 
 
-            const res = await axios.post("http://localhost:8000/api/auth/register", 
-               
-                formData
-            )
+            const res = await signup(formData)
             console.log(res)
             toast.success("Signup successful!");
             setTimeout(() => {

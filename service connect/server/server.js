@@ -141,122 +141,148 @@ app.use(
 // Routes
 app.use('/upload', express.static((process.cwd(), 'upload')));
 //register route 
-import registerRoute from "./routes/auth.routes.js"
-app.use("/api/auth", registerRoute)
+// import registerRoute from "./routes/auth.routes.js"
+// app.use("/api/auth", registerRoute)
 
 
-import loginRoute from "./routes/auth.routes.js";
-app.use("/api/auth", loginRoute)
+// import loginRoute from "./routes/auth.routes.js";
+// app.use("/api/auth", loginRoute)
 
 // import getuser
-import getUserRoute from "./routes/userRoutes.routes.js"
-app.use("/getUser", getUserRoute)
+// import getUserRoute from "./routes/userRoutes.routes.js"
+// app.use("/getUser", getUserRoute)
 
 // import 
-import updateRoute from "./routes/userRoutes.routes.js"
-app.use("/updateUser", updateRoute)
+// import updateRoute from "./routes/userRoutes.routes.js"
+// app.use("/updateUser", updateRoute)
 
-import deleteRouter from "./routes/userRoutes.routes.js"
-app.use("/delete", deleteRouter)
+// import deleteRouter from "./routes/userRoutes.routes.js"
+// app.use("/delete", deleteRouter)
 
-import getAllRoute from "./routes/userRoutes.routes.js"
-app.use("/getAll", getAllRoute)
+// import getAllRoute from "./routes/userRoutes.routes.js"
+// app.use("/getAll", getAllRoute)
 
-import getSpecificUserRoute from "./routes/userRoutes.routes.js"
-app.use("/users", getSpecificUserRoute)
+// import getSpecificUserRoute from "./routes/userRoutes.routes.js"
+// app.use("/users", getSpecificUserRoute)
 
 
-import getOtherUserRoute from "./routes/userRoutes.routes.js"
-app.use("/get/other", getOtherUserRoute)
+// import getOtherUserRoute from "./routes/userRoutes.routes.js"
+// app.use("/get/other", getOtherUserRoute)
 
 // deleting user skill
 
-import deleteSkillRoute from "./routes/userRoutes.routes.js"
-app.use("/deleteSkill", deleteSkillRoute)
+// import deleteSkillRoute from "./routes/userRoutes.routes.js"
+// app.use("/deleteSkill", deleteSkillRoute)
 
-// deleting user leraned
+// // deleting user leraned
 
-import deleteLearnRoute from "./routes/userRoutes.routes.js"
-app.use("/deleteLearn", deleteLearnRoute)
-
-
-// forgot password 
-import forgotPassswordRoute from "./routes/userRoutes.routes.js"
-app.use("/", forgotPassswordRoute)
+// import deleteLearnRoute from "./routes/userRoutes.routes.js"
+// app.use("/deleteLearn", deleteLearnRoute)
 
 
-import createRoute from "./routes/service.routes.js"
-app.use("/api/service", createRoute)
+// // forgot password 
+// import forgotPassswordRoute from "./routes/userRoutes.routes.js"
+// app.use("/", forgotPassswordRoute)
+
+
+// import createRoute from "./routes/service.routes.js"
+// app.use("/api/service", createRoute)
 
 
 import getServiceRoute from "./routes/service.routes.js"
 app.use("/getServices", getServiceRoute)
 
 
-import getUserServiceRoute from "./routes/service.routes.js"
-app.use("/getUserService", getUserServiceRoute)
+// import getUserServiceRoute from "./routes/service.routes.js"
+// app.use("/getUserService", getUserServiceRoute)
 
 
 
 
-import getNotUserServiceRoute from "./routes/service.routes.js"
-app.use("/get", getNotUserServiceRoute)
+// import getNotUserServiceRoute from "./routes/service.routes.js"
+// app.use("/get", getNotUserServiceRoute)
 
 
 
 
 
-import updateServiceRoute from "./routes/service.routes.js"
-app.use("/updateService", updateServiceRoute)
+// import updateServiceRoute from "./routes/service.routes.js"
+// app.use("/updateService", updateServiceRoute)
 
 
-import deleteServiceRoute from "./routes/service.routes.js"
-app.use("/deleteService", deleteServiceRoute)
+// import deleteServiceRoute from "./routes/service.routes.js"
+// app.use("/deleteService", deleteServiceRoute)
 
 // import uploadRoute from "./routes/upload.routes.js"
 // app.use("/uploadImage",uploadRoute)
 
 
-import createSwapRoute from "./routes/swap.routes.js"
-app.use("/api/swap", createSwapRoute)
+// import createSwapRoute from "./routes/swap.routes.js"
+// app.use("/api/swap", createSwapRoute)
 
 
 
 import getSwapRoute from "./routes/swap.routes.js"
 app.use("/getSwap", getSwapRoute)
 
-import reqRoute from "./routes/swap.routes.js"
-app.use("/requests", reqRoute)
+// import reqRoute from "./routes/swap.routes.js"
+// app.use("/requests", reqRoute)
 
 
 
-import outRoute from "./routes/swap.routes.js"
-app.use("/outRequest", outRoute)
+// import outRoute from "./routes/swap.routes.js"
+// app.use("/outRequest", outRoute)
 
-import reqUpdate from "./routes/swap.routes.js"
-app.use("/update", reqUpdate) // to accept
+// import reqUpdate from "./routes/swap.routes.js"
+// app.use("/update", reqUpdate) // to accept
 
 
 // notication
 
-import notifyRoute from "./routes/notification.routes.js"
-app.use("/notification", notifyRoute)
+// import notifyRoute from "./routes/notification.routes.js"
+// app.use("/notification", notifyRoute)
 
 
-import markReadRoute from "./routes/notification.routes.js"
-// import errorHandler from "./middlewares/errorHandler.midlleware.js";
-app.use("/markasread", markReadRoute)
+// import markReadRoute from "./routes/notification.routes.js"
+// // import errorHandler from "./middlewares/errorHandler.midlleware.js";
+// app.use("/markasread", markReadRoute)
 
-import acceptedReqRoute from "./routes/swap.routes.js"
-app.use("/", acceptedReqRoute)
+// import acceptedReqRoute from "./routes/swap.routes.js"
+// app.use("/", acceptedReqRoute)
 
-import outAcceptedReqRoute from "./routes/swap.routes.js"
-app.use("/", outAcceptedReqRoute)
+// import outAcceptedReqRoute from "./routes/swap.routes.js"
+// app.use("/", outAcceptedReqRoute)
 
+
+// auth Routes
+import authRoutes from "./routes/auth.routes.js"
+app.use("/api/auth", authRoutes);
+
+
+//user routes
+import userRoutes from "./routes/userRoutes.routes.js";
+app.use("/api/users", userRoutes);
+
+// service Routes
+import serviceRoutes from "./routes/service.routes.js";
+app.use("/api/services", serviceRoutes);
+
+
+// swap routes
+import swapRoutes from "./routes/swap.routes.js";
+app.use("/api/swaps", swapRoutes);
+
+// notification routes
+import notificationRoutes from "./routes/notification.routes.js";
+app.use("/api/notifications", notificationRoutes);
 
 // chat routes
 import chatRoutes from "./routes/chat.routes.js"
-app.use("/", chatRoutes)
+app.use("/api/chats", chatRoutes)
+
+
+
+
 
 app.use(errorHandler)
 

@@ -36,13 +36,13 @@ export const createSwapRequest = async(req,res)=>{
       status
     });
      const reqUser = await User.findById(userId);
-     
+   
     await Notification.create({
-    user : recepientService.user._id ,
-    message:`The request made by you for the serviceby ${recepientService.title} `,
+    user :  requesterService.user._id  ,
+    message:`The request made by you for the service  ${recepientService.title} `,
    })  
     await Notification.create({
-    user : requesterService.user._id ,
+    user :recepientService.user._id  ,
     message:`The request made to you for the service ${recepientService.title} by ${reqUser.name} and email ${requesterService.email}  inexchange of you service ${requesterService.title} `,
    })  
    const user = await User.findById(recepientService.user._id)
@@ -125,6 +125,8 @@ console.log(swap)
    const user = await User.findById(swap.requester);
 
    await swap.save();
+     
+     
 
     if (status === 'accepted') { // i am sending the requester mail i am the recepient 
    let chat = await Chat.findOne({ swapId: swap._id });
@@ -135,6 +137,15 @@ if (!chat) {
     messages: [],
   });
 }
+    await Notification.create({
+    user : swap.requester ,
+    message:`The request made by you has been accepted check skill swap for more info`,
+   })  
+    await Notification.create({
+    user : swap.recepient  ,
+    message:`You Accepted The Request Made To You `,
+   })  
+
 
       await sendEmail(
         user.email,
@@ -153,14 +164,14 @@ if (!chat) {
        res.status(200).json({ message: `Request ${status}`, swap , chat:chat._id});
     }
      
-    if (status === 'rejected') {
-      await sendEmail(
-        user.email,
-        'Your Request Was Declined',
-        `Unfortunately, your request to swap your service was declined.`
-      );
-      res.status(200).json({message:`Request ${status}`})
-    }
+    // if (status === 'rejected') {
+    //   await sendEmail(
+    //     user.email,
+    //     'Your Request Was Declined',
+    //     `Unfortunately, your request to swap your service was declined.`
+    //   );
+    //   res.status(200).json({message:`Request ${status}`})
+    // }
   
         
     } catch (error) {

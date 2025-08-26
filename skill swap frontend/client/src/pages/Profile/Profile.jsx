@@ -6,6 +6,7 @@ import { Mail, User, UserCircle } from 'lucide-react';
 import Button from 'react-bootstrap/Button';
 import Accordion from 'react-bootstrap/Accordion';
 import { useNavigate } from 'react-router-dom';
+import { deleteProfile } from '../../api/api.js';
 
 const Profile = ({ externalUser }) => {
     const { user: authUser} = useAuth();
@@ -15,6 +16,13 @@ const Profile = ({ externalUser }) => {
         navigate('/editProfile')
     }
     const isOwnProfile = !externalUser;
+
+    const handleDelete =async ()=>{
+        const confirm = window.confirm("Are you sure you want to delete profile it wont be recovered again ?")
+        if (!confirm) return;
+        await deleteProfile();
+        navigate("/login")
+    }
     return (
         <>
             <Header />
@@ -43,13 +51,11 @@ const Profile = ({ externalUser }) => {
                         </div>
                     </div>
 
-                    {/* Bio Section */}
                     <div className="pt-4 sm:text-left">
                         <div className="text-2xl font-bold mb-2">Bio</div>
                         <div className="text-lg font-md">{user?.bio}</div>
                     </div>
 
-                    {/* Skills Section */}
                     <div className=" sm:text-left">
                         <div className="text-2xl font-bold mb-2">Skills</div>
                         <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
@@ -108,10 +114,13 @@ const Profile = ({ externalUser }) => {
                 </div>
 {isOwnProfile &&
 
-                <div id="right" className='w-full lg:w-[40vw] flex pt-4 lg:pt-20 px-4 lg:pl-10 flex-col items-center lg:items-start' >
+                <div id="right" className='w-full lg:w-[40vw] flex pt-4 lg:pt-20 px-4 lg:pl-10 flex-col items-center lg:items-start gap-3' >
                     <div className="flex items-center gap-2">
                         <Button variant="secondary" onClick={navigateTo} className="w-full lg:w-auto">Update Profile ✎</Button>
 
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button variant="danger" onClick={handleDelete} className="w-full lg:w-auto">Delete Profile x</Button>
                     </div>
                 </div>
 }

@@ -176,7 +176,7 @@ export const deleteSkill = async(req,res)=>{
 
 
 export const deleteLearn= async(req,res)=>{
- 
+ console.log("hiuu")
   try {
      const userId = req.user.id;
   const {learn} = req.params

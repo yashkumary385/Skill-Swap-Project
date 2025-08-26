@@ -1,10 +1,8 @@
-import { createContext, useEffect, useState } from "react";
-export const AuthContext = createContext();
-import axios from "axios"
+import {  useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { joinUserRoom } from "../Socket";
 import { getCurrentUser, loginUser } from "../api/api";
-
+import { AuthContext } from "./AuthContext";
 
 
 
@@ -88,3 +86,5 @@ return (
         </AuthContext.Provider>
 )
 }
+
+

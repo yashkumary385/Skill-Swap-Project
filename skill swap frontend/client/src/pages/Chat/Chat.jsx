@@ -2,13 +2,12 @@ import  { useEffect, useState,useRef } from 'react'
 import socket from "../../Socket.js"
 import { useAuth } from '../../context/useAuth.js';
 import { useParams } from 'react-router-dom';
-import axios from "axios"
 import Header from '../../components/Navbar/Navbar.jsx';
 import { getChat } from '../../api/api.js';
 
    
 const Chat = () => {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const { chatId } = useParams();
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState("")
@@ -144,7 +143,7 @@ const handleTyping = (e)=>{
             </div>
           ))}
           { typing && 
-          <div>{person} is typing...</div>
+          <div >{person} is typing...</div>
           }
         </div>
         

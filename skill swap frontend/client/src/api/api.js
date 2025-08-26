@@ -1,5 +1,5 @@
-import axios from "axios";
 import { getToken } from "../context/useAuth";
+import axios from "axios"
 const API_URL = import.meta.env.VITE_API_URL;
 const api = axios.create({
   baseURL: API_URL,
@@ -12,14 +12,14 @@ api.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-// Swap request Api
-export const getIncomingAcceptedRequest = ()=> api.get("/incoming/accepted")
-export const getOutgoingAcceptedRequest = ()=> api.get("/out/accepted")
+// accepted request Api's
+export const getIncomingAcceptedRequest = ()=> api.get("/swaps/incoming/accepted")
+export const getOutgoingAcceptedRequest = ()=> api.get("/swaps/out/accepted")
 
 
 // Auth Api's
 export const loginUser =(email,password) =>{
- return  api.post("/api/auth/login",{email,password})
+ return  api.post("/auth/login",{email,password})
 }
 export const getCurrentUser = ()=>{
 return   api.get("/users/current-user")
@@ -27,16 +27,19 @@ return   api.get("/users/current-user")
 
 // Chat Api's
 export const getChat = (chatId) =>{
-  return api.get(`/message/chat/${chatId}`)
+  return api.get(`/chats/message/${chatId}`)
 }
 
 // Discover Api's
-export const getMyServices = ()=> api.get("/getUserService/users")
+export const getMyServices = ()=> api.get("/services/getuserservices")
+
 export const getNotMyServices = (currentPage)=>{ 
-return  api.get(`/get/notUser?limit=5&page=${currentPage}`)
+return  api.get(`/services/notuserservices?limit=5&page=${currentPage}`)
 }
-export const createService = (requesterId,  recepientId)=>{
-  return api.post("/api/swap/create",{
+
+
+export const createSwap = (requesterId,  recepientId)=>{
+  return api.post("/swaps/create",{
     requesterServiceId:requesterId,
     recepientServiceId:recepientId,
     status:"pending"
@@ -45,7 +48,7 @@ export const createService = (requesterId,  recepientId)=>{
 
 // EditProfile Api's
 export const editProfile = (formData) =>{
-return api.put("/updateUser",formData,{
+return api.put("/users/update",formData,{
   headers:{"Content-Type" : "multipart/form-data",
 
   },
@@ -54,17 +57,17 @@ return api.put("/updateUser",formData,{
 
 export const deleteSkill = (skillDelete)=>{
   console.log(skillDelete)
-  return api.delete(`/deleteSkill/${skillDelete}`)
+  return api.delete(`/users/${skillDelete}`)
 }
 export const deleteLearn = (learnDelete)=>{
   console.log(learnDelete)
 
-  return api.delete(`/deleteLearn/${learnDelete}`)
+  return api.delete(`/users/learned/${learnDelete}`)
 }
 
 // Login page 
 export const forgotPassword = (email,newpassword,confirmpassword)=>{
-  return api.patch("/resetPassword",{
+  return api.patch("/users/resetPassword",{
           email:email,
           password:newpassword,
           password1:confirmpassword
@@ -73,12 +76,67 @@ export const forgotPassword = (email,newpassword,confirmpassword)=>{
 
 // profile  wrapper
 export const userProfile = (id)=>{
-  return api.get(`/get/other/${id}`)
+  return api.get(`/users/${id}`)
 }
+
+// profile Api's
+export const deleteProfile = ()=>{
+  return api.delete("/users/deleteProfile")
+}
+
 
 
 // service api's
 export const fetchMyServices = ()=>{
-  return api.get("/getUserService/users")
+  return api.get("/services/getuserservices")
 }
+
+export const createService = (id,title,description,cateogory,type)=>{
+return api.post("/services/create",{ 
+        user: id,
+        title:title,
+        description: description,
+        cateogory:cateogory,
+        type:type
+
+})
+}
+
+export const updateService = (id,data)=>{
+  return api.put(`/services/updateservice/${id}`,data)
+}
+
+export const deleteService = (id)=>{
+return api.delete(`/services/deleteService/${id}`)
+}
+// Signup Api's
+export const signup =(formData)=>{
+  return api.post("api/auth/register",formData,{
+      headers:{"Content-Type" : "multipart/form-data",
+
+  },
+})
+  }
+
+
+  // swap requests
+  export const myIncoming = ()=>{
+    return api.get("/swaps/incoming")
+  }
+
+  export const  myOutgoingRequest = (currentPage)=>{
+return api.get(`/swaps/outgoing?limit=3&page=${currentPage}`)
+  }
+
+  export const acceptRequest = (id,status)=>{
+    return api.put(`/swaps/update/${id}`,{status})
+  }
+  export const rejectRequest = (id,status)=>{
+    return api.put(`/swaps/update/${id}`,{status})
+  }
+
+  // notification Api's
+  export const notification = ()=>{
+    return api.get("/notifications/all")
+  }
 export default api;

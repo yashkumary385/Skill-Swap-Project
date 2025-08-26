@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Navbar/Navbar';
 import Card from 'react-bootstrap/Card';
-import axios from 'axios';
-import { useAuth } from '../../context/useAuth.js';
+import { notification } from '../../api/api.js';
 
 
 const NotificationPage = () => {
   // Dummy notifications for layout demo
   const [notifications , setNotifications] = useState([]);
-  const {token} = useAuth();
 
   useEffect(()=>{
       const notify = async()=>{
     try {
-        const res = await axios.get("http://localhost:8000/notification/all",
-            {
-                headers:{Authorization :`Bearer ${token}`}
-            }
-        )
+        const res = await notification()
         setNotifications(res.data.notification)
         console.log(res);
     } catch (error) {

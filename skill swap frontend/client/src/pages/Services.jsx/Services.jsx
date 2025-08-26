@@ -5,11 +5,10 @@ import Card from 'react-bootstrap/Card';
 import { useAuth } from '../../context/useAuth.js';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import { fetchMyServices } from '../../api/api.js';
+import { createService, deleteService, fetchMyServices, updateService } from '../../api/api.js';
 
 const Services = () => {
-  const { user, token } = useAuth();
+  const { user } = useAuth();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -42,15 +41,7 @@ const Services = () => {
 
   const handleService = async () => {
     try {
-      const res = await axios.post("http://localhost:8000/api/service/create", {
-        user: user._id,
-        title: form.title,
-        description: form.description,
-        cateogory: form.cateogory,
-        type: form.type
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await createService(user._id,form.title,form.description,form.cateogory,form.type)
       // console.log(res.data.createdService);
       setServices((prev) => ([...prev, res.data.createdService]))
       setForm({
@@ -93,17 +84,15 @@ const Services = () => {
   }
 
 
-  const handleUpdate = async (currentUpdateservice) => {
+  const handleUpdate = async (currentUpdateService) => {
     try {
-      const res = await axios.put(`http://localhost:8000/updateService/${currentUpdateservice._id}`, {
+      const res = await updateService(currentUpdateService._id,{
         title: servicesUpdateForm.title,
         description: servicesUpdateForm.description,
         cateogory: servicesUpdateForm.cateogory,
         type: servicesUpdateForm.type
         // editForm
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+    })
       console.log(res);
       fetchServices()
       setServices((prev) => [...prev, res.data.service]) // beacuse we are adding the service here
@@ -128,9 +117,8 @@ const Services = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:8000/deleteService/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await deleteService(id)
+    
       console.log(res);
 
       fetchServices()

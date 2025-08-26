@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/Navbar/Navbar';
 import Card from 'react-bootstrap/Card';
-import axios from 'axios';
-import { useAuth } from '../../context/useAuth.js';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import { getIncomingAcceptedRequest, getOutgoingAcceptedRequest } from '../../api/api.js';
@@ -12,7 +10,6 @@ const AcceptedReq = () => {
     // Dummy notifications for layout demo
     const [acceptedReq, setAcceptedReq] = useState([]);
     const [outAcceptedReq, setOutAcceptedReq] = useState([]); 
-    const { token } = useAuth();
 
     const navigate = useNavigate()
     useEffect(() => {
@@ -104,8 +101,8 @@ const AcceptedReq = () => {
                                         </Card.Subtitle>
 
                                         <Card.Text>
-                                            <strong>Email:</strong> {request.swap.requester?.email} <br />
-                                            <strong>They Offered:</strong> {request.swap.requesterService?.title} <br />
+                                            <strong>Email:</strong> {request.swap.recepient?.email} <br />
+                                            <strong>They Offered:</strong> {request.swap.recepientService?.title} <br />
                                             <strong>Requested Your Service:</strong> {request.swap.recepientService?.title || request.swap.recepientService} <br />
                                             <strong>Status:</strong> {request?.swap?.status} <br />
                                             <strong>Date:</strong> {new Date(request.swap.createdAt).toLocaleString()}

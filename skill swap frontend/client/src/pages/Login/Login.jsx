@@ -6,7 +6,6 @@ import { Lock, Mail } from "lucide-react";
 import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-bootstrap/Modal';
-import axios from "axios";
 import { forgotPassword } from "../../api/api.js";
 
 
@@ -22,17 +21,17 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 };
 
-const validatePassword = (password) => {
-  // Regular expression for password validation
-  // It checks for:
-  // (?=.*[a-z]) : At least one lowercase letter
-  // (?=.*[A-Z]) : At least one uppercase letter
-  // (?=.*\d) : At least one digit
-  // (?=.*[@$!%*?&]) : At least one special character from the set @$!%*?&
-  // [A-Za-z\d@$!%*?&]{8,} : Minimum of 8 characters, consisting of letters, digits, and the allowed special characters
-  const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  return re.test(password);
-};
+// const validatePassword = (password) => {
+//   // Regular expression for password validation
+//   // It checks for:
+//   // (?=.*[a-z]) : At least one lowercase letter
+//   // (?=.*[A-Z]) : At least one uppercase letter
+//   // (?=.*\d) : At least one digit
+//   // (?=.*[@$!%*?&]) : At least one special character from the set @$!%*?&
+//   // [A-Za-z\d@$!%*?&]{8,} : Minimum of 8 characters, consisting of letters, digits, and the allowed special characters
+//   const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//   return re.test(password);
+// };
 
 function Login() {
   const { login } = useAuth();
@@ -50,15 +49,15 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // if (!email || !password) {
-    //   toast.warning("Email and Password are required!");
-    //   return;
-    // }
+    if (!email || !password) {
+      toast.warning("Email and Password are required!");
+      return;
+    }
 
-    // if (!validateEmail(email)) {
-    //     toast.warning("Please enter a valid email address!");
-    //     return;
-    // }
+    if (!validateEmail(email)) {
+        toast.warning("Please enter a valid email address!");
+        return;
+    }
 
     // if (!validatePassword(password)) {
     //     toast.warning("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");

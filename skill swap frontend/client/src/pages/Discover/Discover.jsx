@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Navbar/Navbar'
-import { useAuth } from '../../context/useAuth.js';
 import Card from 'react-bootstrap/Card';
-import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import { User, Mail, ArrowUpRight } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { createService, getMyServices, getNotMyServices } from '../../api/api.js';
+import { createSwap, getMyServices, getNotMyServices } from '../../api/api.js';
 function Discover() {
-  const { token } = useAuth();
   const [services, setServices] = useState([]);
   const navigate = useNavigate();
 
@@ -70,7 +67,7 @@ function Discover() {
   const handleRequest = async () => {
     console.log()
     try {
-      const res = await createService(requesterId,recepientId)
+      const res = await createSwap(requesterId,recepientId)
       setRequestedServices((prev) => [...prev, recepientId]);
       console.log(res);
       toast.success("Swap Created Succesfully")
