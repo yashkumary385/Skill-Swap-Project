@@ -192,8 +192,8 @@ app.use('/upload', express.static((process.cwd(), 'upload')));
 // app.use("/api/service", createRoute)
 
 
-import getServiceRoute from "./routes/service.routes.js"
-app.use("/getServices", getServiceRoute)
+// import getServiceRoute from "./routes/service.routes.js"
+// app.use("/getServices", getServiceRoute)
 
 
 // import getUserServiceRoute from "./routes/service.routes.js"
@@ -225,8 +225,8 @@ app.use("/getServices", getServiceRoute)
 
 
 
-import getSwapRoute from "./routes/swap.routes.js"
-app.use("/getSwap", getSwapRoute)
+// import getSwapRoute from "./routes/swap.routes.js"
+// app.use("/getSwap", getSwapRoute)
 
 // import reqRoute from "./routes/swap.routes.js"
 // app.use("/requests", reqRoute)
@@ -255,6 +255,17 @@ app.use("/getSwap", getSwapRoute)
 
 // import outAcceptedReqRoute from "./routes/swap.routes.js"
 // app.use("/", outAcceptedReqRoute)
+
+
+// healthcheck route
+// Example in Express.js
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: Date.now() });
+});
+
+
+
+
 
 
 // auth Routes

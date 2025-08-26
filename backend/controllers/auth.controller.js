@@ -68,6 +68,8 @@ catch(error){
 export const loginUser =async(req,res)=>{
  console.log("login hitt")
         const {email ,  password } = req.body
+        console.log(email);
+        
 
     try {
 
