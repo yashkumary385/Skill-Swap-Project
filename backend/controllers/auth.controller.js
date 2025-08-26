@@ -14,56 +14,84 @@ function generateWebToken (userId){
 }
 
 
-export const registerUser =async(req,res)=>{ // bcoz this is a post request it has a json body
-   
-    
-    
-    try{
-        let image_url = null;
-        
-    const {name,username,email,password,bio,education} = req.body;
-    const skills = req.body.skills ? JSON.parse(req.body.skills) : [];//mn
-    const learned = req.body.learned ? JSON.parse(req.body.learned) : [];
+export const registerUser = async (req, res) => {
+  try {
+    let image_url = null;
 
-if (req.file || req.file.path) {
-const localPath = req.file.path.replace(/\\/g, "/");
-const upload = await uploadOnCloudinary(localPath);
-if (!upload) {
-  return res.status(404).json({ message: "Image upload failed" });
-}
+    const { name, username, email, password, bio, education } = req.body;
 
-image_url = upload.secure_url;
-}else{
-    image_url ="https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"
-}
-    const existuser = await User.findOne({ email   }) // first we check tht if th user exixts or not whetgher he already a login user
-    if(existuser){
-    res.status(404);
-    throw new Error("user already present ")
+    // Parse safely (all values are strings in form-data)
+    let skills = [];
+    if (req.body.skills) {
+      try {
+        skills = JSON.parse(req.body.skills);
+      } catch {
+        return res.status(400).json({ error: "Invalid JSON in skills field" });
+      }
     }
-    const hashedPassword = await bcrypt.hash(password,10);
-  const educationObj = JSON.parse(education);
+
+    let learned = [];
+    if (req.body.learned) {
+      try {
+        learned = JSON.parse(req.body.learned);
+      } catch {
+        return res.status(400).json({ error: "Invalid JSON in learned field" });
+      }
+    }
+
+    let educationObj = {};
+    if (education) {
+      try {
+        educationObj = JSON.parse(education);
+      } catch {
+        return res.status(400).json({ error: "Invalid JSON in education field" });
+      }
+    }
+
+    // Handle image (optional)
+    if (req.file && req.file.path) {
+      const localPath = req.file.path.replace(/\\/g, "/");
+      const upload = await uploadOnCloudinary(localPath);
+      if (!upload) {
+        return res.status(404).json({ message: "Image upload failed" });
+      }
+      image_url = upload.secure_url;
+    } else {
+      image_url = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg";
+    }
+
+    // Check if user exists
+    const existuser = await User.findOne({ email });
+    if (existuser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
     const user = await User.create({
-        name,
-        username,
-        email,
-        password:hashedPassword,
-        bio,
-        skills,
-        image:image_url, 
-        educationObj,
-        learned
-    })
-  
-    const createdUser = await User.findById(user._id).select("-password") // through this we hide the password in the api 
+      name,
+      username,
+      email,
+      password: hashedPassword,
+      bio,
+      skills,
+      image: image_url,
+      educationObj,
+      learned,
+    });
 
-   return res.status(200).json({message:"user created succesfully",user:createdUser})
-}
-catch(error){
-    return res.status(404).json({error:error.message})
-}
+    const createdUser = await User.findById(user._id).select("-password");
 
-}
+    return res.status(200).json({
+      message: "User created successfully",
+      user: createdUser,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
 
 export const loginUser =async(req,res)=>{
  console.log("login hitt")

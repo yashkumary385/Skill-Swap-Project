@@ -118,7 +118,11 @@ function Signup() {
             formData.append("education",JSON.stringify(form.education))
             formData.append("learned",JSON.stringify(form.learned))
             // formData.append("education",form.education)
-            formData.append("image", form.image)
+
+         if (form.image) {
+  formData.append("image", form.image);
+}
+
             for (let pair of formData.entries()) {
   console.log(pair[0] + ': ' + pair[1]);
 }
