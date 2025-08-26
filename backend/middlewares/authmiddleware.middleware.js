@@ -2,18 +2,22 @@ import jwt from "jsonwebtoken"
 
 export const verifyToken = async(req,res,next)=>{
     console.log("verify token hit");
-    
+    const jwtsecret = process.env.JWT_SECRET;
 const authHeader = req.headers.authorization; 
     try{
 if(!authHeader || !authHeader.startsWith("Bearer ")){
     return res.status(404).json("Invalid")
+}
+console.log("JWT secret at login:", process.env.JWT_SECRET);
+if (!process.env.JWT_SECRET) {
+    return res.status(500).json({ error: "JWT secret not found!" });
 }
 
 const token = authHeader.split(' ')[1];
 
 const decodeId= jwt.verify(token
 
-,process.env.JWT_SECRET)
+,jwtsecret)
 
 // Attach user to request (without password)
 req.user = decodeId// wea added the deatilas to the req and we send it on to the controller to show the details
