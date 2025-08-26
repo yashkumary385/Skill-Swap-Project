@@ -6,7 +6,7 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 
 function generateWebToken (userId){
     const token = jwt.sign({id:userId},
-        process.env.JWT_SEcRET,{
+        process.env.JWT_SECRET,{
             expiresIn:"7d"
         }
     )

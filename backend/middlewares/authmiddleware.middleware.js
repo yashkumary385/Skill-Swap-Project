@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken"
 export const verifyToken = async(req,res,next)=>{
     console.log("verify token hit");
     const jwtsecret = process.env.JWT_SECRET;
+    console.log(jwtsecret)
 const authHeader = req.headers.authorization; 
     try{
 if(!authHeader || !authHeader.startsWith("Bearer ")){
