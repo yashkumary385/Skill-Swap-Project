@@ -12,9 +12,12 @@ import http from "http"
 
 
 // Load env file depending on NODE_ENV
-dotenv.config({
-  path: process.env.NODE_ENV === "production" ? ".env.production" : ".env.development",
-});
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: ".env.development" });
+}
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 connectDb()
 console.log("Running in:", process.env.NODE_ENV);
 console.log("DB URL:", process.env.MONGODB_URI);
