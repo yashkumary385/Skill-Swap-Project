@@ -20,69 +20,83 @@ import { sendEmail } from "../utils/sendEmail.js";
 //     }
 //  }
   
- export const update = async(req,res)=>{
-    const userId = req.user.id;
-    console.log("user update route hit")
-    // const {email,name} = req.body;
+ // adjust path if needed
 
-    try {
-           if(!userId){
-    return res.status(404).json("user id is invalid")
-    }
-    console.log(req.file,"this is file")
-    if( req.file){
-      // console.log(req.file.path)
-         const localFilePath = req.file.path;
-         console.log(localFilePath)
-  const upload = await uploadOnCloudinary(localFilePath); /// file alredya there i dont know what happens next
-if (!upload) {
-  return res.status(404).json({ message: "Image upload failed" });
-}else{
-    if("image" in req.body){
-      updateFields.image = upload.secure_url
-    }
-}
-console.log(upload)
-    }
+export const update = async (req, res) => {
+  const userId = req.user?.id;
+  console.log("User update route hit");
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is invalid" });
+  }
+
+  try {
+ 
     const updateFields = { ...req.body };
 
-        console.log(updateFields,"old");
-      //   console.log(req.body.education);
-      if (updateFields.password) {
-        updateFields.password = await bcrypt.hash(updateFields.password, 10);
+
+    if (req.file) {
+      console.log("File received:", req.file);
+
+      const localFilePath = req.file.path;
+      const upload = await uploadOnCloudinary(localFilePath);
+
+      if (upload?.secure_url) {
+        updateFields.image = upload.secure_url;
+      } else {
+        return res.status(500).json({ message: "Image upload failed" });
       }
-    
-    
-    if("education" in req.body){
-      const educationObj = JSON.parse(req.body.education);
-      // console.log(educationObj, "this is obj ")
-      updateFields.education = educationObj
     }
-    if("skills" in req.body){ //  
-      const skillsObj = JSON.parse(req.body.skills);
-      updateFields.skills = skillsObj
+
+    if (updateFields.password) {
+      updateFields.password = await bcrypt.hash(updateFields.password, 10);
     }
-    if("learned" in req.body){
-      const learnedObj = JSON.parse(req.body.learned);
-      updateFields.learned = learnedObj
-    }
+
    
-    console.log(updateFields,"new");
-    const user = await User.findByIdAndUpdate(userId,updateFields,
-      { new: true, runValidators: true } // return updated doc + validate fields
-    ) // exclude password from response
-
-
-    // const user = await User.findById(userId)
-    return res.status(200).json(user)
-
-    } catch (error) 
-    {
-    return res.status(404).json({error:error.message})
-        
+    if (req.body?.education) {
+      try {
+        updateFields.education = JSON.parse(req.body.education);
+      } catch (err) {
+        console.log("Invalid education JSON:", err.message);
+      }
     }
- }
 
+    if (req.body?.skills) {
+      try {
+        updateFields.skills = JSON.parse(req.body.skills);
+      } catch (err) {
+        console.log("Invalid skills JSON:", err.message);
+      }
+    }
+
+    if (req.body?.learned) {
+      try {
+        updateFields.learned = JSON.parse(req.body.learned);
+      } catch (err) {
+        console.log("Invalid learned JSON:", err.message);
+      }
+    }
+
+    console.log("Final update fields:", updateFields);
+
+    
+    const user = await User.findByIdAndUpdate(
+      userId,
+      updateFields,
+      { new: true, runValidators: true }
+    ).select("-password"); // exclude password in response
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(user);
+
+  } catch (error) {
+    console.error("Update error:", error);
+    return res.status(500).json({ error: error.message });
+  }
+};
 
  export const deleteTask= async(req,res)=>{
     const userId = req.user.id;

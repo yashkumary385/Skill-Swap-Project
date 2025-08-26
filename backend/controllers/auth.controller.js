@@ -20,7 +20,6 @@ export const registerUser = async (req, res) => {
 
     const { name, username, email, password, bio, education } = req.body;
 
-    // Parse safely (all values are strings in form-data)
     let skills = [];
     if (req.body.skills) {
       try {
@@ -48,7 +47,6 @@ export const registerUser = async (req, res) => {
       }
     }
 
-    // Handle image (optional)
     if (req.file && req.file.path) {
       const localPath = req.file.path.replace(/\\/g, "/");
       const upload = await uploadOnCloudinary(localPath);
@@ -60,16 +58,13 @@ export const registerUser = async (req, res) => {
       image_url = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg";
     }
 
-    // Check if user exists
     const existuser = await User.findOne({ email });
     if (existuser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const user = await User.create({
       name,
       username,
