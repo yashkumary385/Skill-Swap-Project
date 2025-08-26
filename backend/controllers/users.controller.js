@@ -21,82 +21,48 @@ import { sendEmail } from "../utils/sendEmail.js";
 //  }
   
  // adjust path if needed
-
+// pu this to github and test
 export const update = async (req, res) => {
-  const userId = req.user?.id;
-  console.log("User update route hit");
-
-  if (!userId) {
-    return res.status(400).json({ message: "User ID is invalid" });
-  }
+  const userId = req.user.id;
+  console.log("user update route hit");
 
   try {
- 
-    const updateFields = { ...req.body };
-
-
-    if (req.file) {
-      console.log("File received:", req.file);
-
-      const localFilePath = req.file.path;
-      const upload = await uploadOnCloudinary(localFilePath);
-
-      if (upload?.secure_url) {
-        updateFields.image = upload.secure_url;
-      } else {
-        return res.status(500).json({ message: "Image upload failed" });
-      }
+    if (!userId) {
+      return res.status(404).json("user id is invalid");
     }
 
+    // Copy all fields directly from request body
+    let updateFields = { ...req.body };
+
+    // Hash password if present
     if (updateFields.password) {
       updateFields.password = await bcrypt.hash(updateFields.password, 10);
     }
 
-   
-    if (req.body?.education) {
-      try {
-        updateFields.education = JSON.parse(req.body.education);
-      } catch (err) {
-        console.log("Invalid education JSON:", err.message);
-      }
+    // Parse JSON strings sent from frontend
+    if (updateFields.education) {
+      updateFields.education = JSON.parse(updateFields.education);
+    }
+    if (updateFields.skills) {
+      updateFields.skills = JSON.parse(updateFields.skills);
+    }
+    if (updateFields.learned) {
+      updateFields.learned = JSON.parse(updateFields.learned);
     }
 
-    if (req.body?.skills) {
-      try {
-        updateFields.skills = JSON.parse(req.body.skills);
-      } catch (err) {
-        console.log("Invalid skills JSON:", err.message);
-      }
-    }
+    console.log("Final updateFields:", updateFields);
 
-    if (req.body?.learned) {
-      try {
-        updateFields.learned = JSON.parse(req.body.learned);
-      } catch (err) {
-        console.log("Invalid learned JSON:", err.message);
-      }
-    }
-
-    console.log("Final update fields:", updateFields);
-
-    
-    const user = await User.findByIdAndUpdate(
-      userId,
-      updateFields,
-      { new: true, runValidators: true }
-    ).select("-password"); // exclude password in response
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const user = await User.findByIdAndUpdate(userId, updateFields, {
+      new: true,
+      runValidators: true,
+    });
 
     return res.status(200).json(user);
-
   } catch (error) {
-    console.error("Update error:", error);
     return res.status(500).json({ error: error.message });
   }
 };
+
 
  export const deleteTask= async(req,res)=>{
     const userId = req.user.id;
