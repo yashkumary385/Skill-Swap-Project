@@ -1,6 +1,10 @@
 
 import {io} from "socket.io-client"
-const socket = io("http://localhost:8000")
+
+const socket = io(import.meta.env.VITE_SOCKET_URL, {
+  path: "/socket.io/",              // fixed path
+  transports: ["websocket"],
+});
 export const joinUserRoom =(userId)=>{
     socket.emit("register-user", userId); // this registers the user and give it the socket id or the room name s
     console.log(userId);

@@ -48,6 +48,7 @@ export const createSwap = (requesterId,  recepientId)=>{
 
 // EditProfile Api's
 export const editProfile = (formData) =>{
+  console.log(formData)
 return api.put("/users/update",formData,{
   headers:{"Content-Type" : "multipart/form-data",
 

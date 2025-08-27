@@ -153,14 +153,12 @@ useEffect(()=>{
       formData.append("skills", JSON.stringify(form.skills));
       formData.append("bio",form.bio)
       formData.append("education",JSON.stringify(form.education))
-      formData.append("image",form.image)
       formData.append("learned", JSON.stringify(form.learned));
       // formData.append("education",form.education)
           for (let pair of formData.entries()) {
   console.log(pair[0] + ': ' + pair[1]);
 }
       const res = await editProfile(formData)
-        
       console.log(res);
       setUser(res.data)
       toast.success("Profile updated successfully!");

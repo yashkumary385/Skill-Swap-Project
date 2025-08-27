@@ -22,46 +22,56 @@ import { sendEmail } from "../utils/sendEmail.js";
   
  // adjust path if needed
 // pu this to github and test
-export const update = async (req, res) => {
-  const userId = req.user.id;
-  console.log("user update route hit");
 
+
+
+export const update = async (req, res) => {
   try {
+    const userId = req.user.id; // assuming you set req.user in auth middleware
+
     if (!userId) {
-      return res.status(404).json("user id is invalid");
+      return res.status(400).json({ message: "User ID is invalid" });
     }
 
-    // Copy all fields directly from request body
-    let updateFields = { ...req.body };
+    console.log("Incoming fields:", req.fields); // express-formidable puts form-data here
 
-    // Hash password if present
+    const updateFields = { ...req.fields };
+
+    // hash password if present
     if (updateFields.password) {
       updateFields.password = await bcrypt.hash(updateFields.password, 10);
     }
 
-    // Parse JSON strings sent from frontend
-    if (updateFields.education) {
-      updateFields.education = JSON.parse(updateFields.education);
-    }
-    if (updateFields.skills) {
-      updateFields.skills = JSON.parse(updateFields.skills);
-    }
-    if (updateFields.learned) {
-      updateFields.learned = JSON.parse(updateFields.learned);
+    // parse JSON string fields
+    if (req.fields.skills) {
+      updateFields.skills = JSON.parse(req.fields.skills);
     }
 
-    console.log("Final updateFields:", updateFields);
+    if (req.fields.education) {
+      updateFields.education = JSON.parse(req.fields.education);
+    }
 
-    const user = await User.findByIdAndUpdate(userId, updateFields, {
-      new: true,
-      runValidators: true,
-    });
+    if (req.fields.learned) {
+      updateFields.learned = JSON.parse(req.fields.learned);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      updateFields,
+      { new: true, runValidators: true }
+    ).select("-password");
 
     return res.status(200).json(user);
   } catch (error) {
+    console.error("Update error:", error);
     return res.status(500).json({ error: error.message });
   }
 };
+
+
+
+
+
 
 
  export const deleteTask= async(req,res)=>{

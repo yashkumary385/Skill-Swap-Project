@@ -14,25 +14,29 @@ function generateWebToken (userId){
 }
 
 
+
+
 export const registerUser = async (req, res) => {
   try {
     let image_url = null;
 
-    const { name, username, email, password, bio, education } = req.body;
+    // Read all fields from req.fields (formidable)
+    const { name, username, email, password, bio, education } = req.fields;
 
+    // Parse JSON fields
     let skills = [];
-    if (req.body.skills) {
+    if (req.fields.skills) {
       try {
-        skills = JSON.parse(req.body.skills);
+        skills = JSON.parse(req.fields.skills);
       } catch {
         return res.status(400).json({ error: "Invalid JSON in skills field" });
       }
     }
 
     let learned = [];
-    if (req.body.learned) {
+    if (req.fields.learned) {
       try {
-        learned = JSON.parse(req.body.learned);
+        learned = JSON.parse(req.fields.learned);
       } catch {
         return res.status(400).json({ error: "Invalid JSON in learned field" });
       }
@@ -47,8 +51,9 @@ export const registerUser = async (req, res) => {
       }
     }
 
-    if (req.file && req.file.path) {
-      const localPath = req.file.path.replace(/\\/g, "/");
+    // Handle optional file upload
+    if (req.files && req.files.image && req.files.image.path) {
+      const localPath = req.files.image.path.replace(/\\/g, "/");
       const upload = await uploadOnCloudinary(localPath);
       if (!upload) {
         return res.status(404).json({ message: "Image upload failed" });
@@ -58,13 +63,16 @@ export const registerUser = async (req, res) => {
       image_url = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg";
     }
 
+    // Check if user exists
     const existuser = await User.findOne({ email });
     if (existuser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create user
     const user = await User.create({
       name,
       username,

@@ -70,7 +70,7 @@ function Discover() {
       const res = await createSwap(requesterId,recepientId)
       setRequestedServices((prev) => [...prev, recepientId]);
       console.log(res);
-      toast.success("Swap Created Succesfully")
+      toast.success("Swap Requested Succesfully")
     } catch (error) {
       console.log(error)
       if (error.response?.data?.message) {

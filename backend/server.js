@@ -6,6 +6,8 @@ import cors from "cors"
 import Chat from "./models/Chat.js"
 import Message from "./models/Messages.js"
 import User from "./models/User.js"
+import formidableMiddleware from "express-formidable";
+
 
 import { Server } from "socket.io"
 import http from "http"
@@ -25,6 +27,9 @@ console.log("DB URL:", process.env.MONGODB_URI);
 
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(formidableMiddleware());
+
 
 
 // server setup
