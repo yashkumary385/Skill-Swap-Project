@@ -23,7 +23,6 @@ export function LandingPage() {
             <Card className="text-center">
       <Card.Body>
         <Card.Title>Hello {user?.name} 👋</Card.Title>
-        <Card.Title>Hello {user?.email} 👋</Card.Title>
 
         <Card.Text>
 Ready to swap skills and grow together?” 

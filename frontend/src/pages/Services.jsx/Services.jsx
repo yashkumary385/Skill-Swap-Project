@@ -160,6 +160,7 @@ const Services = () => {
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Type</Form.Label>
               <select id="myDropdown" name="mySelection" onChange={(e) => setForm({ ...form, type: e.target.value })} className="border-2 border-black w-full p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#4CAF50]">
+                <option value="">Select Type Of Request</option>
                 <option value="request">Request</option>
                 <option value="offer">Offer</option>
               </select>

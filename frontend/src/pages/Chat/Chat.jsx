@@ -126,7 +126,6 @@ const handleTyping = (e)=>{
     <div className="min-h-screen bg-[#4CAF50] flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-2 sm:p-4">
         <h2 className="p-2 sm:p-3 text-xl font-semibold text-center">Chat Room</h2>
-        <h4 className="p-2 sm:p-3 text-xl font-semibold text-center">Chat With {person}</h4>
         
         <div className="h-[60vh] md:h-[500px] overflow-y-scroll border border-gray-300 rounded p-2">
           {messages.map((m, idx) => (
