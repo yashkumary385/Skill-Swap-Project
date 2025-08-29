@@ -4,6 +4,7 @@ console.log("multerrrr hitttttt nowwwwwww ");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'upload/')
+    console.log(req.file)
     
     
   },

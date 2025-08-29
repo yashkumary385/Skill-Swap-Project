@@ -168,8 +168,7 @@ function Signup() {
             notify();
             return;
         } else {
-            // setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }));
-            setForm((prev) => ({ ...prev, skills: [...prev.skills,skills] }))
+            setForm((prev) => ({ ...prev, skills: [...prev.skills, skills] }))
 
         }
         setSkills("")
@@ -189,13 +188,13 @@ function Signup() {
         // SetEducation((prev)=>[...education , educationForm ])
         // SetEducation((prev) => [{...prev, educationForm}])
         setForm(prev => ({ ...prev, education: updatedEducation }));
-        // SetEducationForm({
-        //     instituition: "",
-        //     degree: "",
-        //     startDate: "",
-        //     endDate: "",
-        //     score: ""
-        // }); // i will see about this if any error occurs 
+        SetEducationForm({
+            instituition: "",
+            degree: "",
+            startDate: "",
+            endDate: "",
+            score: ""
+        }); // i will see about this if any error occurs 
     }
     const handleLearn = (e) => {
         e.preventDefault();
@@ -204,6 +203,7 @@ function Signup() {
         setLearned("")
 
     }
+
     return (
         <div className="min-h-screen bg-[#4CAF50] flex justify-center items-center font-serif p-4">
             <div className="w-full max-w-md p-6 flex flex-col items-center rounded-lg bg-[#F9FAFB] gap-6">
@@ -235,7 +235,11 @@ function Signup() {
                                     className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                 />
-                          <input type="text"
+                            </div>
+                            <div className="w-full relative">
+                                <div><User className="absolute top-2 left-2 w-6 h-6" /></div>
+
+                                <input type="text"
                                     value={form.username}
                                     onChange={(e) => setForm({ ...form, username: e.target.value })}
                                     placeholder="UserName"
@@ -278,13 +282,11 @@ function Signup() {
                                 />
 
                             </div>
-                            <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4 py-2">
-                                Signup
-                            </Button>
+
                         </form>
-                                                     <div className="mt-4 text-center w-full">
-          Have An Account ? <Link to="/Login" className="text-[#4CAF50] font-bold">Login</Link>
-        </div>
+                        <div className="mt-4 text-center w-full">
+                            Have An Account ? <Link to="/Login" className="text-[#4CAF50] font-bold">Login</Link>
+                        </div>
                     </Tab>
                     <Tab eventKey="Details" title="Details">
                         <form className="flex flex-col items-center justify-center gap-3 w-full p-2">
@@ -309,9 +311,9 @@ function Signup() {
                                         className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
-                                    <Button variant="outline-success" onClick={handleSkill} className="w-full sm:w-auto">Add</Button>
+                                    <Button variant="outline-success" onClick={handleSkill} className="w-full sm:w-auto">Add Skill</Button>
                                 </div>
-                            
+
 
                                 <div className="w-full">
                                     <ul className="flex flex-wrap gap-2 pt-3 items-center justify-center sm:justify-start">
@@ -419,7 +421,7 @@ function Signup() {
                                         className="border-2 border-[#4CAF50] pl-12 pr-10 py-2 w-full rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#4CAF50]"
 
                                     />
-                                    <div> <Button variant="outline-success" onClick={handleLearn} className="w-full sm:w-auto">Add</Button></div>
+                                    <div> <Button variant="outline-success" onClick={handleLearn} className="w-full sm:w-auto">Add Learned Skill</Button></div>
 
                                 </div>
                                 <div className="w-full">
@@ -436,21 +438,19 @@ function Signup() {
 
 
                             </div>
-                            {/* { form.education.length === 0  && */}
-                            <Button variant="outline-success" type="submit" className="w-full py-2">Add Details</Button>
-                            {/* } */}
-
-
 
 
                         </form>
-                        <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4 py-2">
-                            Signup
-                        </Button>
+
+
+
                     </Tab>
-         
+
 
                 </Tabs>
+                <Button onClick={handleSignup} variant="outline-success" className="w-full mt-4 py-2">
+                    Signup
+                </Button>
 
 
 

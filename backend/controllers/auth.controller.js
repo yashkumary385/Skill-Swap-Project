@@ -16,27 +16,38 @@ function generateWebToken (userId){
 
 
 
+
+
 export const registerUser = async (req, res) => {
   try {
-    let image_url = null;
+    let image_url =
+      "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg";
 
-    // Read all fields from req.fields (formidable)
-    const { name, username, email, password, bio, education } = req.fields;
+    // ✅ Upload image if present
+    if (req.file?.path) {
+      const localPath = req.file.path.replace(/\\/g, "/");
+      const upload = await uploadOnCloudinary(localPath);
+      if (upload?.secure_url) {
+        image_url = upload.secure_url;
+      }
+    }
 
-    // Parse JSON fields
+    // ✅ Parse fields from body
+    const { name, username, email, password, bio, education } = req.body;
+
     let skills = [];
-    if (req.fields.skills) {
+    if (req.body.skills) {
       try {
-        skills = JSON.parse(req.fields.skills);
+        skills = JSON.parse(req.body.skills);
       } catch {
         return res.status(400).json({ error: "Invalid JSON in skills field" });
       }
     }
 
     let learned = [];
-    if (req.fields.learned) {
+    if (req.body.learned) {
       try {
-        learned = JSON.parse(req.fields.learned);
+        learned = JSON.parse(req.body.learned);
       } catch {
         return res.status(400).json({ error: "Invalid JSON in learned field" });
       }
@@ -47,32 +58,22 @@ export const registerUser = async (req, res) => {
       try {
         educationObj = JSON.parse(education);
       } catch {
-        return res.status(400).json({ error: "Invalid JSON in education field" });
+        return res
+          .status(400)
+          .json({ error: "Invalid JSON in education field" });
       }
     }
 
-    // Handle optional file upload
-    if (req.files && req.files.image && req.files.image.path) {
-      const localPath = req.files.image.path.replace(/\\/g, "/");
-      const upload = await uploadOnCloudinary(localPath);
-      if (!upload) {
-        return res.status(404).json({ message: "Image upload failed" });
-      }
-      image_url = upload.secure_url;
-    } else {
-      image_url = "https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg";
-    }
-
-    // Check if user exists
+    // ✅ Check if user exists
     const existuser = await User.findOne({ email });
     if (existuser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    // Hash password
+    // ✅ Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // ✅ Create user
     const user = await User.create({
       name,
       username,
@@ -92,9 +93,11 @@ export const registerUser = async (req, res) => {
       user: createdUser,
     });
   } catch (error) {
+    console.error("Register error:", error);
     return res.status(500).json({ error: error.message });
   }
 };
+
 
 export const loginUser =async(req,res)=>{
  console.log("login hitt")

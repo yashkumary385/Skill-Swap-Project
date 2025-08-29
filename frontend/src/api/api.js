@@ -112,6 +112,8 @@ return api.delete(`/services/deleteService/${id}`)
 }
 // Signup Api's
 export const signup =(formData)=>{
+  console.log(formData)
+  
   return api.post("/auth/register",formData,{
       headers:{"Content-Type" : "multipart/form-data",
 

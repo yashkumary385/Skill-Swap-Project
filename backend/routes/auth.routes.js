@@ -5,6 +5,6 @@ import formidableMiddleware from "express-formidable";
 
 const router = express.Router();
 router.post("/register",
-    upload.single("image"),formidableMiddleware(),registerUser),
+    upload.single("image"),registerUser),
 router.post("/login",loginUser)
 export default router
