@@ -1,9 +1,15 @@
 import multer from "multer";
 import path from "path"
+import fs from "fs"
 console.log("multerrrr hitttttt nowwwwwww ");
+
+const uploadDir = "upload";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true }); // this make upload stay on render
+}
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'upload/')
+    cb(null, uploadDir)
     console.log(req.file)
     
     
